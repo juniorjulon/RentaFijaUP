@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Semana 4 · Riesgo de Tasa de Interés II: Medidas de Riesgo Basadas en la Curva y Empíricas · Renta Fija 2026-II</title>
+<meta name="description" content="One-pager de la semana 4 del curso Renta Fija 1F0115, Universidad del Pacífico, semestre 2026-II."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/onepager.css"/>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<header class="doc-header">
+  <div class="header-inner">
+    <a class="back-btn no-print" href="index.html#s4"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.25 8H2.75M6.75 4l-4 4 4 4"/></svg> Mapa del curso</a>
+    <h1 class="header-title">Riesgo de Tasa de Interés II: Medidas de Riesgo Basadas en la Curva y Empíricas</h1>
+    <p class="header-sub"><b>Semana 4</b><b>Duración efectiva, key rate durations y análisis de componentes principales</b></p>
+    <nav class="header-pills" aria-label="Secciones del documento"><a href="#resumen" class="pill accent">Resumen</a><a href="#keywords" class="pill accent">Keywords</a><a href="#conceptos" class="pill accent">Conceptos clave</a><a href="#onepager" class="pill accent">One-pager</a><span class="pills-rule" aria-hidden="true"></span><a href="#module-01" class="pill quiet">01 Effective Duration &amp; Convexity</a><a href="#module-02" class="pill quiet">02 Key Rate Duration</a><a href="#module-03" class="pill quiet">03 Duración Empírica</a><a href="#module-04" class="pill quiet">04 Spread Duration &amp; DTS</a><a href="#module-05" class="pill quiet">05 Síntesis: Cuadro Comparativo y Errores</a></nav>
+  </div>
+</header>
+
+<div class="wrapper">
+
+<!-- ═══════════ RESUMEN ═══════════ -->
+<section class="section-block" id="resumen">
+  <div class="section-header"><span class="section-title">Resumen</span></div>
+  <div class="section-body">
+    <p class="lead">La duration modificada asume movimientos paralelos de toda la curva, supuesto que la realidad empírica rechaza constantemente (1994, 1998, 2008). Esta semana extiende el análisis de riesgo de tasa a movimientos no paralelos. La Effective Duration reemplaza a modified duration para bonos con opcionalidad o flujos inciertos (MBS, callable bonds), calculándose numéricamente por finite differences. Las Key Rate Durations (KRDs) descomponen la sensibilidad en exposiciones a puntos específicos de la curva (2y, 5y, 10y, 30y), capturando riesgos de twist y butterfly que la duration simple ignora. El análisis PCA revela que tres factores explican ~98% de los movimientos históricos de la curva.</p>
+  </div>
+</section>
+
+<!-- ═══════════ KEYWORDS ═══════════ -->
+<section class="section-block" id="keywords">
+  <div class="section-header"><span class="section-title">Keywords</span></div>
+  <div class="section-body">
+    <div class="kw-list"><span class="badge badge-blue">Effective Duration</span><span class="badge badge-blue">Key Rate Duration (KRD)</span><span class="badge badge-blue">Parallel Shift</span><span class="badge badge-blue">Twist / Steepening / Flattening</span><span class="badge badge-outline">Butterfly</span><span class="badge badge-outline">PCA (Principal Component Analysis)</span><span class="badge badge-outline">Finite Differences</span><span class="badge badge-outline">Benchmark Yield Curve</span><span class="badge badge-outline">Dollar Duration</span><span class="badge badge-gray">Bear Steepening</span><span class="badge badge-gray">Bull Flattening</span><span class="badge badge-gray">Rate Shock Scenarios</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ CONCEPTOS CLAVE ═══════════ -->
+<section class="section-block" id="conceptos">
+  <div class="section-header"><span class="section-title">Conceptos clave</span></div>
+  <div class="section-body">
+    <ul class="concepts"><li><strong>Effective Duration:</strong> <span class="math-block">\[D_{\text{eff}} = \frac{P_{-\Delta y} - P_{+\Delta y}}{2\cdot P_0\cdot\Delta y}\]</span> Calculada numéricamente; no asume flujos fijos. Indispensable para bonos callable, MBS y FRNs.</li><li><strong>Key Rate Durations:</strong> suma de todas las KRDs ≈ Macaulay Duration. Cada KRD mide la sensibilidad ante un movimiento de 100bps en ese plazo específico, dejando el resto constante.</li><li><strong>PCA de la curva:</strong> factor 1 = nivel (parallel shift, ~90% varianza), factor 2 = pendiente (twist, ~7%), factor 3 = curvatura (butterfly, ~2%). Para cubrir riesgo de forma completa se necesitan los 3 factores.</li><li><strong>Contexto histórico:</strong> Taper Tantrum (2013) → bear steepening; ZIRP post-2008 → curva muy inclinada; 2022-2023 → inversión extrema. Cada episodio destruyó portafolios "duration-hedged" con un solo factor.</li></ul>
+    <div class="applies"><div class="apply"><h4>Aplicación práctica</h4><ul><li>Calcular effective duration de un callable bond con árbol binomial</li><li>Descomponer exposure de portafolio en KRDs por punto de curva</li><li>Simular impacto de bear steepening vs. bull flattening</li></ul></div><div class="apply"><h4>Conexiones del curso</h4><ul><li>S3: Modified Duration como caso especial (parallel only)</li><li>S5: La curva y sus movimientos son el input de KRDs</li><li>S7: Effective Duration indispensable para bonos con opciones embebidas</li><li>S14: KRDs en construcción y gestión de portafolios</li></ul></div></div>
+  </div>
+</section>
+
+<!-- ═══════════ ONE-PAGER ═══════════ -->
+<div class="module-divider" id="onepager">
+  <div class="module-num"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div>
+  <div class="module-title-block">
+    <h2>One-pager</h2>
+    <p>Desarrollo completo del tema, módulo por módulo</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 01 · EFFECTIVE DURATION Y CONVEXITY
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-01">
+  <div class="module-num">01</div>
+  <div class="module-title-block">
+    <h2>Effective Duration y Effective Convexity</h2>
+    <p>Bonos con opciones · Curva benchmark como factor de riesgo · Convexidad negativa y positiva</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 1.1 Limitaciones de Modified Duration -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">1.1</span>
+    <span class="section-title">¿Por qué la Modified Duration Falla para Bonos con Opciones?</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-3">
+      <div class="concept-card accent-red">
+        <div class="cc-label red">Callable Bond</div>
+        <div class="cc-def">
+          \(P_{callable} = P_{straight} - P_{call\,option}\)<br><br>
+          Al caer las tasas, el alza del precio queda <strong>limitada por el call price</strong>. La modified duration sobrestima el beneficio.
+        </div>
+      </div>
+      <div class="concept-card accent-green">
+        <div class="cc-label green">Putable Bond</div>
+        <div class="cc-def">
+          \(P_{putable} = P_{straight} + P_{put\,option}\)<br><br>
+          Al subir las tasas, el put <strong>trunca la caída de precio</strong>. El inversor puede vender al put price.
+        </div>
+      </div>
+      <div class="concept-card accent-gold">
+        <div class="cc-label gold">MBS / Prepagables</div>
+ <div class="cc-def">Tasas bajas → prepagos acelerados. Tasas altas → prepagos lentos. <strong>Flujos de caja path-dependent</strong>, no existe un único YTM bien definido.</div>
+      </div>
+    </div>
+    <div class="rule-callout red" >
+      <strong>Problema central:</strong> La Modified Duration asume <strong>flujos de caja fijos</strong> descontados a un YTM único. Para bonos con opciones, los flujos cambian con las tasas → Modified Duration puede sobrestimar o subestimar significativamente el riesgo.
+    </div>
+  </div>
+</div>
+
+<!-- 1.2 Cálculo de Effective Duration -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">1.2</span>
+    <span class="section-title">Effective Duration: Sensibilidad a la Curva Benchmark</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Effective Duration</div>
+          <div class="f-eq">$$\text{EffDur} = \frac{V_{-} - V_{+}}{2\,V_{0}\,\Delta\text{Curve}}$$</div>
+          <div class="f-vars">
+            <span>V₀</span> = precio base (curva inicial) &nbsp;|&nbsp;
+            <span>V₋</span> = precio con curva ↓ ΔCurve &nbsp;|&nbsp;
+            <span>V₊</span> = precio con curva ↑ ΔCurve &nbsp;|&nbsp;
+            <span>ΔCurve</span> = shock paralelo en decimal (ej. 0.001 = 10 bp)
+          </div>
+        </div>
+
+        <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Proceso de Cálculo (4 Pasos)</div>
+        <div class="step-flow" style="flex-direction:column;gap:4px">
+          <div class="step-item" style="border-right:none;border-bottom:2px solid white;border-radius:6px 6px 0 0">
+            <div class="step-n">PASO 01</div><div class="step-txt">Calibrar modelo de valorización a la curva base.</div>
+          </div>
+          <div class="step-item" style="border-right:none;border-bottom:2px solid white">
+            <div class="step-n">PASO 02</div><div class="step-txt">Shift down −ΔCurve → recalcular flujos y descuentos → obtener <strong>V₋</strong>.</div>
+          </div>
+          <div class="step-item" style="border-right:none;border-bottom:2px solid white">
+            <div class="step-n">PASO 03</div><div class="step-txt">Shift up +ΔCurve → recalcular flujos y descuentos → obtener <strong>V₊</strong>.</div>
+          </div>
+          <div class="step-item" style="border-right:none;border-radius:0 0 6px 6px">
+            <div class="step-n">PASO 04</div><div class="step-txt">Aplicar fórmula EffDur con V₋, V₊, V₀ y ΔCurve.</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Modified vs Effective Duration</div>
+        <div class="cmp-strip" >
+          <div class="cmp-cell neutral">
+            <div class="cmp-head">Modified Duration</div>
+            <div class="cmp-rule" >Flujos de caja <strong>no cambian</strong></div>
+            <p>Usa cambios en el <strong>YTM del bono</strong>. Supone curva plana.</p>
+          </div>
+          <div class="cmp-cell up">
+            <div class="cmp-head">Effective Duration</div>
+            <div class="cmp-rule" >Flujos <strong>pueden cambiar</strong></div>
+            <p>Usa cambios en la <strong>curva benchmark</strong>. Mantiene spread (OAS) constante.</p>
+          </div>
+        </div>
+
+        <div class="rule-callout" >
+          <strong>Intuición:</strong> El callable bond actúa como un bono de largo plazo a tasas altas (call out of the money) y como un bono de corto plazo a tasas bajas (call likely). La EffDur captura este patrón <em>state-dependent</em>.
+        </div>
+
+        <div class="rule-callout gold" >
+          <strong>Regla práctica:</strong> Para bonos <em>sin</em> opciones, EffDur ≈ ModDur. Para callables/putables/MBS, siempre use EffDur. Para CMOs, ModDur ≈ 7 pero EffDur puede ser ≈ 20.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 1.3 Effective Convexity + Ejemplos -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">1.3</span>
+    <span class="section-title">Effective Convexity, Estimación de Precio y Ejemplos Numéricos</span>
+  </div>
+  <div class="section-body">
+
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Effective Convexity</div>
+          <div class="f-eq">$$\text{EffCon} = \frac{V_{-} + V_{+} - 2V_{0}}{V_{0}\,(\Delta\text{Curve})^{2}}$$</div>
+          <div class="f-vars">Mismos insumos que EffDur. <span style="color:var(--gray)">Valor negativo → cóncava</span> (callable/MBS en tasas bajas). Valor positivo → convexa.</div>
+        </div>
+
+        <div class="formula-box" >
+          <div class="f-label">Cambio de Precio (Taylor 2º Orden)</div>
+          <div class="f-eq">$$\frac{\Delta P}{P} \approx -\text{EffDur}\cdot\Delta\text{Curve} + \tfrac{1}{2}\,\text{EffCon}\cdot(\Delta\text{Curve})^{2}$$</div>
+          <div class="f-vars">1er término = efecto lineal (duration) &nbsp;|&nbsp; 2do término = corrección por curvatura (pequeño para shifts modestos, material para shifts grandes).</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Convexidad por Tipo de Bono</div>
+        <div class="cmp-strip cmp-strip-3" >
+          <div class="cmp-cell up">
+            <div class="cmp-head">Option-Free</div>
+            <div class="cmp-rule">Siempre +</div>
+            <p>Ganancia ante ↓ tasas &gt; pérdida ante ↑ tasas iguales.</p>
+          </div>
+          <div class="cmp-cell down">
+            <div class="cmp-head">Callable / MBS</div>
+            <div class="cmp-rule">Puede ser −</div>
+            <p>Call price = <strong>techo</strong>: pérdida ante ↑ &gt; ganancia ante ↓ tasas.</p>
+          </div>
+          <div class="cmp-cell flat">
+            <div class="cmp-head">Putable</div>
+            <div class="cmp-rule">Siempre +</div>
+            <p>Put price = <strong>piso</strong>: downside truncado, upside libre.</p>
+          </div>
+        </div>
+
+        <div class="ex-box">
+ <div class="ex-title">Ejercicio · EffDur=10.5, EffCon=97.3, ΔCurve=−200bp</div>
+          <div class="ex-body">
+            Efecto duration: −10.5 × (−0.02) = <strong>+21.00%</strong><br>
+            Efecto convexity: ½ × 97.3 × (0.02)² = <strong>+1.95%</strong>
+          </div>
+ <div class="ex-result">%ΔP ≈ +22.95%, la convexidad mejora la estimación +1.95% vs solo duration (+21.00%)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner-divider"></div>
+
+    <!-- 3-bond numerical table -->
+ <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Ejemplo Numérico, Tres Tipos de Bonos (ΔCurve = ±10 bp)</div>
+    <table class="ref-table" >
+      <thead>
+        <tr>
+          <th>Bono</th>
+          <th>V₀</th>
+          <th>V₋ (−10bp)</th>
+          <th>V₊ (+10bp)</th>
+          <th>EffDur</th>
+          <th>EffCon</th>
+          <th>Interpretación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Option-Free</strong></td>
+          <td class="mono">98.8396</td>
+          <td class="mono">99.3019</td>
+          <td class="mono">98.3797</td>
+          <td class="val-blue">4.67</td>
+          <td class="val-blue">+24.84</td>
+          <td>Convexidad positiva normal</td>
+        </tr>
+        <tr>
+          <td><strong>Callable</strong></td>
+          <td class="mono">97.6551</td>
+          <td class="mono">98.0923</td>
+          <td class="mono">97.2132</td>
+          <td class="val-blue">4.50</td>
+          <td class="val-red">−47.46</td>
+          <td>Call price actúa como techo → convexidad negativa</td>
+        </tr>
+        <tr>
+          <td><strong>Putable</strong></td>
+          <td class="mono">100.4410</td>
+          <td class="mono">100.7707</td>
+          <td class="mono">100.1343</td>
+          <td class="val-blue">3.17</td>
+          <td class="val-green">+228.32</td>
+          <td>Put price = piso → convexidad muy positiva</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Callable ±200bp asymmetry -->
+ <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Callable Bond, El Efecto de la Convexidad Negativa (EffDur=4, EffCon=−30, ±200bp)</div>
+    <div class="grid-2">
+      <div class="ex-box">
+        <div class="ex-title">Escenario 1: ΔCurve = +200bp (Subida de Tasas)</div>
+        <div class="ex-body">
+          %ΔP = −4 × 0.02 + ½ × (−30) × (0.02)²<br>
+          = −0.08 + 0.5 × (−30) × 0.0004<br>
+          = −0.08 − 0.006
+        </div>
+        <div class="result-banner loss">= −8.6% (Pérdida)</div>
+      </div>
+      <div class="ex-box">
+        <div class="ex-title">Escenario 2: ΔCurve = −200bp (Caída de Tasas)</div>
+        <div class="ex-body">
+          %ΔP = −4 × (−0.02) + ½ × (−30) × (−0.02)²<br>
+          = +0.08 − 0.006
+        </div>
+        <div class="result-banner gain">= +7.4% (Ganancia)</div>
+      </div>
+    </div>
+    <div class="rule-callout red">
+      <strong>Convexidad negativa → asimetría desfavorable:</strong> Pérdida (8.6%) &gt; Ganancia (7.4%). El call price actúa como techo limitando la apreciación. Mayor riesgo en escenarios de caída de tasas.
+    </div>
+
+    <div class="inner-divider"></div>
+
+    <!-- SVG Price-Yield chart -->
+    <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Curva Precio-Yield: Option-Free vs Callable vs Putable</div>
+    <div class="chart-wrap">
+      <svg viewBox="0 0 760 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+        <line x1="60" y1="20" x2="60" y2="185" stroke="#CED5DD" stroke-width="1"/>
+        <line x1="60" y1="185" x2="720" y2="185" stroke="#CED5DD" stroke-width="1"/>
+        <line x1="60" y1="60"  x2="720" y2="60"  stroke="var(--off)" stroke-width="1"/>
+        <line x1="60" y1="100" x2="720" y2="100" stroke="var(--off)" stroke-width="1"/>
+        <line x1="60" y1="140" x2="720" y2="140" stroke="var(--off)" stroke-width="1"/>
+        <text x="390" y="210" text-anchor="middle" font-family="Open Sans, Tahoma, sans-serif" font-size="11" fill="var(--muted)">Yield →</text>
+        <text x="18" y="100" text-anchor="middle" font-family="Open Sans, Tahoma, sans-serif" font-size="11" fill="var(--muted)" transform="rotate(-90,18,100)">Precio →</text>
+        <line x1="60" y1="75" x2="720" y2="75" stroke="var(--mid)" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+        <text x="723" y="78" font-family="Open Sans, Tahoma, sans-serif" font-size="9" fill="var(--mid)">Call Price</text>
+        <line x1="60" y1="158" x2="720" y2="158" stroke="var(--mid)" stroke-width="1" stroke-dasharray="6,4" opacity="0.5"/>
+        <text x="723" y="161" font-family="Open Sans, Tahoma, sans-serif" font-size="9" fill="var(--mid)">Put Price</text>
+        <path d="M 80,32 C 160,45 260,80 360,115 C 460,148 560,168 700,178" fill="none" stroke="#1E3771" stroke-width="2.5"/>
+        <path d="M 80,72 C 140,73 200,74 260,80 C 330,90 400,115 480,142 C 560,164 620,172 700,178" fill="none" stroke="var(--mid)" stroke-width="2.5" stroke-dasharray="8,3"/>
+        <path d="M 80,32 C 160,46 260,82 360,117 C 420,134 480,147 540,155 C 600,160 650,161 700,162" fill="none" stroke="var(--mid)" stroke-width="2.5" stroke-dasharray="4,4"/>
+        <text x="82" y="26" font-family="Open Sans, Tahoma, sans-serif" font-size="10" fill="#1E3771" font-weight="600">Option-Free</text>
+        <text x="82" y="67" font-family="Open Sans, Tahoma, sans-serif" font-size="10" fill="var(--mid)" font-weight="600">Callable (neg. convexity zone)</text>
+        <text x="480" y="145" font-family="Open Sans, Tahoma, sans-serif" font-size="10" fill="var(--mid)" font-weight="600">Putable</text>
+        <rect x="80" y="35" width="180" height="42" rx="4" fill="rgba(0,84,176,.18)" opacity="0.4"/>
+        <text x="170" y="53" text-anchor="middle" font-family="Open Sans, Tahoma, sans-serif" font-size="9" fill="var(--navy)">Negative convexity</text>
+        <text x="170" y="65" text-anchor="middle" font-family="Open Sans, Tahoma, sans-serif" font-size="9" fill="var(--navy)">(price compression)</text>
+        <rect x="500" y="140" width="160" height="30" rx="4" fill="rgba(0,84,176,.10)" opacity="0.5"/>
+        <text x="580" y="153" text-anchor="middle" font-family="Open Sans, Tahoma, sans-serif" font-size="9" fill="var(--mid)">Price floor</text>
+        <text x="580" y="165" text-anchor="middle" font-family="Open Sans, Tahoma, sans-serif" font-size="9" fill="var(--mid)">(put truncates loss)</text>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 02 · KEY RATE DURATION
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-02">
+  <div class="module-num">02</div>
+  <div class="module-title-block">
+    <h2>Key Rate Duration (KRD)</h2>
+    <p>Shaping risk · Sensibilidad a puntos específicos de la curva · Nivel, pendiente, curvatura</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 2.1 Limitaciones del desplazamiento paralelo -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.1</span>
+    <span class="section-title">¿Por qué el Parallel Shift No Siempre es Realista? Shaping Risk</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="concept-card" >
+          <div class="cc-label">El Supuesto de Parallel Shift</div>
+          <div class="cc-def">La duración tradicional asume que <strong>todos los yields se mueven por la misma cantidad</strong>. Falla cuando los bonos abarcan un amplio rango de vencimientos.</div>
+        </div>
+        <div class="concept-card accent-gold">
+          <div class="cc-label gold">Shaping Risk (Yield-Curve Risk)</div>
+          <div class="cc-def">Riesgo de que los yields en <strong>diferentes vencimientos se muevan por diferentes cantidades</strong>, cambiando la pendiente y curvatura de la curva aunque el nivel promedio no cambie.</div>
+        </div>
+        <div class="rule-callout gold" >
+          <strong>Evidencia empírica (PCA):</strong> Los cambios históricos de la curva se describen por <strong>3 factores principales</strong>: Level (≈90%), Slope (pendiente), y Curvature (curvatura). Los shifts puramente paralelos son infrecuentes.
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Los 3 Factores de la Curva</div>
+        <table class="ref-table">
+          <thead><tr><th>Factor</th><th>Descripción</th><th>Medición</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Level (Nivel)</strong></td><td>Movimiento paralelo de toda la curva</td><td>Cambio promedio en todos los yields</td></tr>
+            <tr><td><strong>Slope (Pendiente)</strong></td><td>Spread entre largo y corto plazo</td><td>Term spread: 10Y − 1M</td></tr>
+            <tr><td><strong>Curvature (Curvatura)</strong></td><td>Butterfly: intermedios vs extremos</td><td>\(r_{corto} - 2r_{medio} + r_{largo}\)</td></tr>
+          </tbody>
+        </table>
+        <div class="ex-box" >
+          <div class="ex-title">Ejemplo: Shaping Risk en acción</div>
+          <div class="ex-body">Un portafolio duration-hedged (zero corto vs bono largo) aún experimentó pérdidas porque la curva se empinó: el yield de largo plazo subió más que el de corto plazo. La duration total era cero, pero el KRD largo era grande.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2.2 Definición y Cálculo de KRD -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.2</span>
+    <span class="section-title">Definición, Fórmula, Aditividad y Ejemplos</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Key Rate Duration (KRD<sub>k</sub>)</div>
+          <div class="f-eq">$$KRD_k = \frac{V_{-}^{(k)} - V_{+}^{(k)}}{2\,V_0\,\Delta y_k}$$</div>
+          <div class="f-vars">
+            <span>V₋⁽ᵏ⁾</span> = precio con yield en Tₖ desplazado −Δyₖ, demás yields constantes<br>
+            <span>V₊⁽ᵏ⁾</span> = precio con yield en Tₖ desplazado +Δyₖ, demás yields constantes<br>
+            Yields entre key rates: interpolación lineal.
+          </div>
+        </div>
+        <div class="formula-box" >
+          <div class="f-label">Aditividad y Cambio de Precio</div>
+          <div class="f-eq">$$\text{EffDur} \approx \sum_k KRD_k \qquad \frac{\Delta P}{P} \approx -\sum_k KRD_k\,\Delta y_k$$</div>
+          <div class="f-vars">Suma de KRDs = Effective Duration total. Permite estimar el impacto de cualquier movimiento no-paralelo.</div>
+        </div>
+        <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Key Rates Típicos</div>
+        <div class="badge-row">
+          <span class="badge badge-pale">3M</span><span class="badge badge-pale">1Y</span>
+          <span class="badge badge-blue">2Y</span><span class="badge badge-pale">3Y</span>
+          <span class="badge badge-blue">5Y</span><span class="badge badge-pale">7Y</span>
+          <span class="badge badge-blue">10Y</span><span class="badge badge-pale">20Y</span>
+          <span class="badge badge-blue">30Y</span>
+        </div>
+        <p style="color:var(--muted)">Práctica habitual: conjunto reducido de <strong>2Y, 5Y, 10Y, 30Y</strong>.</p>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">KRD Profile: Barbell vs Bullet (EffDur ≈ 4.26 para ambos)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <div style="font-weight:700;color:var(--mid);letter-spacing:.5px">BARBELL (2Y + 30Y)</div>
+            <div style="display:flex;gap:3px;align-items:flex-end;height:70px;border-bottom:1.5px solid var(--steel)">
+              <div style="flex:1;background:rgba(30,55,113,.20);border-radius:3px 3px 0 0;height:55%"></div>
+              <div style="flex:1;background:rgba(30,55,113,.20);border-radius:3px 3px 0 0;height:12%"></div>
+              <div style="flex:1;background:rgba(30,55,113,.20);border-radius:3px 3px 0 0;height:10%"></div>
+              <div style="flex:1;background:#1E3771;border-radius:3px 3px 0 0;height:75%"></div>
+            </div>
+            <div style="display:flex;gap:3px">
+              <div style="flex:1;text-align:center;color:var(--muted)">2Y</div>
+              <div style="flex:1;text-align:center;color:var(--muted)">5Y</div>
+              <div style="flex:1;text-align:center;color:var(--muted)">10Y</div>
+              <div style="flex:1;text-align:center;color:var(--muted)">30Y</div>
+            </div>
+          </div>
+          <div>
+            <div style="font-weight:700;color:var(--mid);letter-spacing:.5px">BULLET (5Y)</div>
+            <div style="display:flex;gap:3px;align-items:flex-end;height:70px;border-bottom:1.5px solid var(--steel)">
+              <div style="flex:1;background:rgba(0,84,176,.18);border-radius:3px 3px 0 0;height:8%"></div>
+              <div style="flex:1;background:var(--mid);border-radius:3px 3px 0 0;height:90%"></div>
+              <div style="flex:1;background:rgba(0,84,176,.18);border-radius:3px 3px 0 0;height:10%"></div>
+              <div style="flex:1;background:rgba(0,84,176,.18);border-radius:3px 3px 0 0;height:5%"></div>
+            </div>
+            <div style="display:flex;gap:3px">
+              <div style="flex:1;text-align:center;color:var(--muted)">2Y</div>
+              <div style="flex:1;text-align:center;color:var(--muted)">5Y</div>
+              <div style="flex:1;text-align:center;color:var(--muted)">10Y</div>
+              <div style="flex:1;text-align:center;color:var(--muted)">30Y</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ex-box">
+ <div class="ex-title">Ejercicio · Portfolio 50% zero 5Y (yield 5%) + 50% bono 10Y (yield 6%)</div>
+          <div class="ex-body">
+            ModDur zero 5Y: 5/1.05 = 4.762 → KRD₅ = 4.762 × 0.5 = <strong>2.381</strong><br>
+            ModDur bono 10Y: 10/1.06 = 9.434 → KRD₁₀ = 9.434 × 0.5 = <strong>4.717</strong><br>
+            EffDur total = 2.381 + 4.717 = <strong>7.098</strong><br>
+            <em>Escenario:</em> yield 5Y +50bp, yield 10Y −25bp<br>
+            5Y: −2.381×(0.005) = −1.19% &nbsp;|&nbsp; 10Y: −4.717×(−0.0025) = +1.18%
+          </div>
+ <div class="ex-result">Cambio neto ≈ −0.01%, efectos casi cancelan. Portafolio inmunizado a este shift específico.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner-divider"></div>
+
+    <!-- Portfolio de zeros -->
+ <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Ejercicio, Portfolio de Zeros (4 Key Rates)</div>
+    <div class="grid-2">
+      <table class="ref-table">
+        <thead><tr><th>Key Rate</th><th>Peso</th><th>Duration ≈ Maturity</th><th>KRD</th></tr></thead>
+        <tbody>
+          <tr><td><strong>2Y</strong></td><td>20%</td><td>2</td><td class="val-blue">0.4</td></tr>
+          <tr><td><strong>10Y</strong></td><td>40%</td><td>10</td><td class="val-blue">4.0</td></tr>
+          <tr><td><strong>20Y</strong></td><td>25%</td><td>20</td><td class="val-blue">5.0</td></tr>
+          <tr><td><strong>30Y</strong></td><td>15%</td><td>30</td><td class="val-blue">4.5</td></tr>
+        </tbody>
+      </table>
+      <div>
+        <div class="formula-inline">$$\text{Duration Total} = \sum KRD_i = 0.4+4.0+5.0+4.5 = \mathbf{13.9}$$</div>
+        <div class="rule-callout" >
+          <strong>Nota:</strong> Para zeros, la duration ≈ su vencimiento (MacDur = maturity). Mayor exposición al key rate de <strong>20Y (KRD=5.0)</strong>, seguido por 10Y (KRD=4.0). Verificación: 0.2×2 + 0.4×10 + 0.25×20 + 0.15×30 = <strong>13.9</strong> ✓
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2.3 Steepening vs Flattening -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.3</span>
+    <span class="section-title">Análisis de Escenarios: Steepening, Flattening y Barbell vs Bullet</span>
+  </div>
+  <div class="section-body">
+
+    <div class="grid-2" >
+      <div>
+ <div style="font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:1px">Steepening, Spread Largo-Corto se Amplía</div>
+        <div class="cmp-strip">
+          <div class="cmp-cell up">
+            <div class="cmp-head">Bull Steepening</div>
+            <div class="cmp-rule" >Tasas cortas ↓ más que largas</div>
+            <p>Portafolios con KRD concentrado en el <strong>corto plazo se benefician</strong>.</p>
+          </div>
+          <div class="cmp-cell down">
+            <div class="cmp-head">Bear Steepening</div>
+            <div class="cmp-rule" >Tasas largas ↑ más que cortas</div>
+            <p>Mercado "vende" el largo plazo. Portafolios con KRD largo <strong>sufren</strong>.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+ <div style="font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:1px">Flattening, Spread Largo-Corto se Comprime</div>
+        <div class="cmp-strip">
+          <div class="cmp-cell flat">
+            <div class="cmp-head">Bull Flattening</div>
+            <div class="cmp-rule" >Tasas largas ↓ más que cortas</div>
+            <p>Típico en rally de bonos. Portafolios con KRD largo <strong>se benefician</strong>.</p>
+          </div>
+          <div class="cmp-cell down">
+            <div class="cmp-head">Bear Flattening</div>
+            <div class="cmp-rule" >Tasas cortas ↑ más que largas</div>
+            <p>Banco central sube tasas. Portafolios con KRD corto <strong>sufren más</strong>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barbell vs Bullet numerical -->
+ <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Ejercicio, Barbell vs Bullet en Escenario de Steepening (EffDur = 6.0 para ambos)</div>
+    <div class="grid-2">
+      <div class="ex-box">
+ <div class="ex-title">Portfolio A · Barbell (KRD₂ᵧ=3.0, KRD₁₀ᵧ=0, KRD₃₀ᵧ=3.0)</div>
+        <div class="ex-body">
+          Escenario: 2Y −25bp, 10Y sin cambio, 30Y +50bp<br>
+          %ΔP = −3.0×(−0.0025) − 0×0 − 3.0×(0.0050)<br>
+          = +0.0075 − 0.0150
+        </div>
+        <div class="result-banner loss">= −0.75%</div>
+      </div>
+      <div class="ex-box">
+ <div class="ex-title">Portfolio B · Bullet (KRD₂ᵧ=0, KRD₁₀ᵧ=6.0, KRD₃₀ᵧ=0)</div>
+        <div class="ex-body">
+          Escenario: 2Y −25bp, 10Y sin cambio, 30Y +50bp<br>
+          %ΔP = −0×(−0.0025) − 6.0×0 − 0×(0.0050)<br>
+          = 0
+        </div>
+        <div class="result-banner gain">= 0.00%</div>
+      </div>
+    </div>
+    <div class="rule-callout green">
+      <strong>Conclusión:</strong> Portfolio B (bullet) se desempeña mejor (0% vs −0.75%). Misma duration total pero perfiles de KRD radicalmente diferentes. El bullet no tiene exposición a los extremos de la curva que se mueven en el steepening.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 03 · DURACIÓN EMPÍRICA
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-03">
+  <div class="module-num">03</div>
+  <div class="module-title-block">
+    <h2>Duración Empírica vs. Duración Analítica</h2>
+    <p>Regresión histórica · Flight-to-quality · Bonos corporativos high-yield</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">3.1</span>
+    <span class="section-title">Medidas Analíticas, Metodología Empírica y Cuándo Usar Cada Medida</span>
+  </div>
+  <div class="section-body">
+
+    <!-- Analytic duration review -->
+    <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Revisión: Medidas Analíticas de Duración</div>
+    <div class="grid-3" >
+      <div class="concept-card">
+        <div class="cc-label">Macaulay Duration</div>
+        <div class="cc-def">
+          \(\displaystyle D_{Mac} = \frac{\sum t \cdot PV(CF_t)}{\sum PV(CF_t)}\)<br>
+          Promedio ponderado del tiempo hasta el recibo de los flujos de caja.
+        </div>
+      </div>
+      <div class="concept-card accent-mid">
+        <div class="cc-label mid">Modified Duration</div>
+        <div class="cc-def">
+          \(\displaystyle D_{Mod} = \frac{D_{Mac}}{1 + y/m}\)<br>
+          Cambio % aproximado en precio ante +100bp en YTM. <strong>Flujos fijos.</strong>
+        </div>
+      </div>
+      <div class="concept-card accent-green">
+        <div class="cc-label green">Effective Duration</div>
+        <div class="cc-def">
+          \(\displaystyle EffDur = \frac{V_- - V_+}{2V_0 \Delta\text{Curve}}\)<br>
+          Reprice bajo shifts de la curva benchmark. <strong>Flujos pueden cambiar.</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="cmp-strip" >
+      <div class="cmp-cell neutral">
+        <div class="cmp-head">Duración Analítica</div>
+        <div class="cmp-rule">Derivada del modelo de valoración</div>
+        <p>Asume que el spread del bono es <em>constante</em> cuando la curva benchmark se mueve. Responde: "¿qué pasaría si las tasas cambian, <em>ceteris paribus</em>?"</p>
+      </div>
+      <div class="cmp-cell gold-bg">
+        <div class="cmp-head">Duración Empírica</div>
+        <div class="cmp-rule">Estimada con datos históricos</div>
+        <p>Captura la relación <em>observada</em> incluyendo la co-variación spread-tasa. Responde: "¿qué ha pasado <em>históricamente</em> cuando las tasas se mueven?"</p>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+ <div class="f-label">Regresión · Duración Empírica</div>
+          <div class="f-eq">$$R_t = \alpha + \beta\,\Delta y_t + \varepsilon_t \qquad D_{emp} = -\beta$$</div>
+          <div class="f-vars">
+            <span>R_t</span> = retorno total del bono en período t<br>
+            <span>Δy_t</span> = cambio en la tasa benchmark (ej. Treasury)<br>
+            <span>−β</span> = Duración Empírica estimada (valor absoluto de la pendiente)
+          </div>
+        </div>
+
+        <div class="ex-box" >
+ <div class="ex-title">Ejercicio · Regresión (β = −7.2), Tasas suben +50bp</div>
+          <div class="ex-body">
+            Duración empírica: D_emp = |−7.2| = <strong>7.2 años</strong><br>
+            %ΔP = β × Δyield = −7.2 × (0.005)
+          </div>
+          <div class="ex-result">%ΔP = −3.6%</div>
+          <div class="ex-body" style="color:var(--muted)">
+            Si la analytical duration fuera 9, la diferencia (9 − 7.2 = 1.8) representa el efecto promedio de los movimientos de spread que históricamente compensaron parcialmente los movimientos de tasas.
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">¿Cuándo Usar Cada Medida?</div>
+        <table class="ref-table" >
+          <thead><tr><th>Instrumento</th><th>Medida recomendada</th><th>Razón</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Treasuries / Soberanos</strong></td><td>Analítica</td><td>Sin spread; la curva ES el factor de riesgo</td></tr>
+            <tr><td><strong>IG Corporativos</strong></td><td>Analítica (+ SDur)</td><td>Spread relativamente estable</td></tr>
+            <tr><td><strong>High-Yield / Distressed</strong></td><td><strong>Empírica</strong></td><td>Equity risk domina; spread co-mueve con tasas</td></tr>
+            <tr><td><strong>Crisis / Flight-to-Quality</strong></td><td><strong>Empírica</strong></td><td>Correlación negativa tasas-spreads → analítica sobrestima beneficio</td></tr>
+          </tbody>
+        </table>
+
+        <div class="ex-box">
+ <div class="ex-title">Ejemplo · Flight-to-Quality: Analytical Duration = 6, ΔTreasury = −100bp, ΔSpread = +150bp</div>
+          <div class="ex-body">
+            <strong>Usando analytical duration</strong> (asume spread constante):<br>
+            %ΔP = −6 × (−0.01) = <strong style="color:var(--mid)">+6.0% (predicción)</strong><br><br>
+            <strong>Realidad:</strong> Δy_total = −100bp + 150bp = +50bp<br>
+            %ΔP = −6 × (0.005) = <strong style="color:var(--mid)">−3.0% (realidad)</strong>
+          </div>
+          <div class="result-banner loss">Error: +6% predicho vs −3% real → diferencia de 9 puntos porcentuales</div>
+        </div>
+        <div class="rule-callout red" >
+          <strong>Regla:</strong> En crisis risk-off, yields gobierno ↓ + spreads corporativos ↑ → la analytical duration sobrestima el beneficio. En risk-on, yields gobierno ↑ + spreads ↓ → sobrestima las pérdidas.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 04 · SPREAD DURATION & DTS
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-04">
+  <div class="module-num">04</div>
+  <div class="module-title-block">
+    <h2>Spread Duration y Duration Times Spread (DTS)</h2>
+    <p>Sensibilidad al spread · Riesgo de crédito · Floaters · Descomposición del riesgo total · DTS</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 4.1 Definición y Cálculo -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">4.1</span>
+    <span class="section-title">Definición, Cálculo y Tipos de Instrumentos</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Spread Duration (SDur)</div>
+          <div class="f-eq">$$\text{SDur} \approx -\frac{1}{P_0}\frac{\partial P}{\partial s} = \frac{P_- - P_+}{2\,P_0\,\Delta s}$$</div>
+          <div class="f-vars">
+            <span>s</span> = spread del bono sobre la curva Treasury<br>
+            <span>P₋</span> = precio con spread −Δs (Treasury constante)<br>
+            <span>P₊</span> = precio con spread +Δs (Treasury constante)<br>
+            SDur de 1.4 → precio cambia ≈ 1.4% ante +100bp de spread.
+          </div>
+        </div>
+
+        <div class="ex-box" >
+ <div class="ex-title">Ejercicio · Bono corp. 25Y, cupón 6%, P₀=70.357, spread=150bp, Δs=±10bp</div>
+          <div class="ex-body">
+            P₋ (spread −10bp) = 71.1104 &nbsp;|&nbsp; P₀ = 70.3570 &nbsp;|&nbsp; P₊ (spread +10bp) = 69.6164<br><br>
+            \(\text{SDur} = \dfrac{71.1104 - 69.6164}{2 \times 70.3570 \times 0.001} = \dfrac{1.4940}{0.1407}\)
+          </div>
+          <div class="ex-result">SDur = 10.62 → si el spread se amplía 50bp: %ΔP ≈ −10.62 × 0.005 = −5.31%</div>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Spread Duration por Tipo de Instrumento</div>
+        <table class="ref-table" >
+          <thead><tr><th>Instrumento</th><th>SDur vs EffDur de tasa</th><th>Nota</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Treasury</strong></td><td>SDur ≈ 0</td><td>No tiene spread sobre sí mismo</td></tr>
+            <tr><td><strong>Fixed-rate Corp.</strong></td><td>SDur ≈ EffDur</td><td>Flujos fijos; misma sensibilidad a tasas y spreads</td></tr>
+            <tr><td><strong>Floating-rate (FRN)</strong></td><td>SDur &gt;&gt; IR Duration</td><td>IR dur. ≈ tiempo hasta próximo reset; SDur = sensibilidad al quoted margin</td></tr>
+            <tr><td><strong>Agency MBS</strong></td><td>SDur significativa</td><td>Spread de prepago + spread de liquidez</td></tr>
+          </tbody>
+        </table>
+
+        <div class="ex-box">
+ <div class="ex-title">Ejercicio · Floating-rate bond, SDur = 1.4, Δmargen = +100bp (deterioro crediticio)</div>
+          <div class="ex-body">
+            Para FRN: interest rate duration ≈ 0 (frequent reset). Solo SDur es relevante.<br>
+            %ΔP = −SDur × Δmargin = −1.4 × 0.01
+          </div>
+          <div class="result-banner loss">= −1.4%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4.2 Portfolio + Descomposición -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">4.2</span>
+    <span class="section-title">Portfolio Spread Duration y Descomposición del Riesgo Total</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Portfolio Spread Duration</div>
+          <div class="f-eq">$$\text{SDur}_{port} = \sum_i w_i \times \text{SDur}_i$$</div>
+          <div class="f-vars"><span>wᵢ</span> = peso de mercado del bono i &nbsp;|&nbsp; <span>SDurᵢ</span> = spread duration del bono i</div>
+        </div>
+
+        <div class="formula-box" >
+          <div class="f-label">Descomposición del Cambio de Precio Total</div>
+          <div class="f-eq">$$\frac{\Delta P}{P} \approx -\underbrace{\text{EffDur}\cdot\Delta y^{bench}}_{\text{riesgo de tasa}} - \underbrace{\text{SDur}\cdot\Delta s}_{\text{riesgo de spread}}$$</div>
+          <div class="f-vars">
+            <span>Δy^bench</span> = cambio en la curva Treasury (riesgo de tasa de interés)<br>
+            <span>Δs</span> = cambio en el spread (riesgo de crédito / liquidez)
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="ex-box">
+ <div class="ex-title">Ejercicio · Portfolio con widening de 100bp en corporativos y MBS</div>
+          <div class="ex-body">
+            38% corporativos, SDur = 4.85 → contribución: 0.38 × 4.85 = <strong>1.843</strong><br>
+            29% agency MBS, SDur = 5.17 → contribución: 0.29 × 5.17 = <strong>1.499</strong><br>
+            33% Treasuries, SDur ≈ 0 → contribución: <strong>0.000</strong><br>
+            SDur portfolio = 1.843 + 1.499 + 0.000
+          </div>
+          <div class="ex-result">SDur port = 3.34 → pérdida aprox. 3.34% ante +100bp de spread en todos los sectores</div>
+        </div>
+
+        <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Aplicaciones en Gestión de Riesgo</div>
+        <div class="grid-3" style="gap:8px">
+          <div class="concept-card" style="padding:10px 12px">
+            <div class="cc-label">Hedging Selectivo</div>
+            <div class="cc-def" >Cubrir riesgo de tasa (Treasuries, swaps) <strong>preservando</strong> exposición de spread deseada.</div>
+          </div>
+          <div class="concept-card accent-mid" style="padding:10px 12px">
+            <div class="cc-label mid">Descomposición</div>
+            <div class="cc-def" >Medir cuánta volatilidad del portafolio viene de spreads vs benchmark.</div>
+          </div>
+          <div class="concept-card accent-gold" style="padding:10px 12px">
+            <div class="cc-label gold">Construcción</div>
+            <div class="cc-def" >Diseñar pesos para alcanzar SDur objetivo relativo a un benchmark index.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4.3 DTS -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">4.3</span>
+    <span class="section-title">Duration Times Spread (DTS): Medida de Riesgo de Crédito Relativo</span>
+  </div>
+  <div class="section-body">
+
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Duration Times Spread (DTS)</div>
+          <div class="f-eq">$$DTS = \text{Spread Duration} \times \text{Current Spread}$$</div>
+          <div class="f-vars">
+            DTS mide la exposición al riesgo de crédito considerando tanto la <span>sensibilidad</span> (duration) como el <span>nivel actual de spread</span>.<br>
+            Útil para comparar bonos de distintas calidades crediticias.
+          </div>
+        </div>
+
+        <div class="rule-callout gold" >
+ <strong>Intuición:</strong> Los spreads tienden a moverse en términos <em>relativos</em> (proporcionales). Un bono HY a 300bp que se amplía 10% (30bp) tiene un impacto 3× mayor en precio que un bono IG a 100bp que también se amplía 10% (10bp), aunque tengan la misma SDur.
+        </div>
+      </div>
+
+      <div>
+ <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Ejercicio, Dos bonos con SDur = 5 pero spreads distintos</div>
+        <div class="grid-2" style="gap:10px">
+          <div class="dts-card">
+ <div class="dts-label">Bond A · Spread 100bp</div>
+            <div class="dts-val">5%</div>
+            <div class="dts-sub">DTS = 5 × 0.01 = 0.05</div>
+          </div>
+          <div class="dts-card" >
+ <div class="dts-label">Bond B · Spread 300bp</div>
+            <div class="dts-val" style="color:var(--corp)">15%</div>
+            <div class="dts-sub">DTS = 5 × 0.03 = 0.15 (3× más riesgo)</div>
+          </div>
+        </div>
+        <div class="ex-box">
+          <div class="ex-title">Movimiento de 10% en spreads (relativos)</div>
+          <div class="ex-body">
+            Bond A: SDur=5, Δspread=+10bp → %ΔP = −5 × 0.001 = <strong style="color:var(--mid)">−0.5%</strong><br>
+            Bond B: SDur=5, Δspread=+30bp → %ΔP = −5 × 0.003 = <strong style="color:var(--mid)">−1.5%</strong>
+          </div>
+          <div class="ex-result">Bond B tiene 3× más impacto a pesar de tener la misma SDur → DTS es la métrica correcta para comparar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TABLA RESUMEN COMPARATIVA
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-05">
+  <div class="module-num">05</div>
+  <div class="module-title-block">
+    <h2>Síntesis: Cuadro Comparativo y Errores de Examen</h2>
+    <p>Criterios de elección · Errores frecuentes · Bibliografía por tema</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">R</span>
+    <span class="section-title">Comparativo de Todas las Medidas de Riesgo de Tasa de Interés</span>
+  </div>
+  <div class="section-body">
+    <table class="ref-table">
+      <thead>
+        <tr>
+          <th>Medida</th>
+          <th>Factor de Riesgo</th>
+          <th>Flujos Variables</th>
+          <th>Cuándo Usar</th>
+          <th>Limitación Clave</th>
+          <th>Fuente</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Modified Duration</strong></td>
+          <td>YTM del bono</td>
+          <td>❌ No</td>
+          <td>Bonos soberanos, IG sin opciones</td>
+          <td>No aplica a bonos con opciones; mezcla tasa y spread</td>
+          <td class="mono">Schweser R.60 · Fabozzi Ch.4</td>
+        </tr>
+        <tr>
+          <td><strong>Effective Duration</strong></td>
+          <td>Curva benchmark (ΔCurve)</td>
+          <td>✅ Sí</td>
+          <td>Callable, putable, MBS, floaters</td>
+          <td>Solo desplazamientos paralelos; requiere modelo de tasas</td>
+          <td class="mono">Schweser R.61 · Fabozzi Hb. Ch.5</td>
+        </tr>
+        <tr>
+          <td><strong>Key Rate Duration</strong></td>
+          <td>Puntos específicos de curva</td>
+          <td>✅ Sí</td>
+          <td>Gestión de shaping risk; hedge no-paralelo</td>
+          <td>Requiere modelo de curva completo; más complejo</td>
+          <td class="mono">Tuckman Ch.5 · Fabozzi Ch.4</td>
+        </tr>
+        <tr>
+          <td><strong>Empirical Duration</strong></td>
+          <td>Regresión histórica Δy</td>
+          <td>✅ Implícito</td>
+          <td>High-yield, crisis, spreads co-movientes</td>
+          <td>Depende de historia; inestable en regímenes distintos</td>
+          <td class="mono">Schweser R.61 · Fabozzi Ch.4</td>
+        </tr>
+        <tr>
+          <td><strong>Spread Duration</strong></td>
+          <td>Spread sobre benchmark (Δs)</td>
+          <td>Variable</td>
+          <td>Corporativos, floaters, MBS; gestión de crédito</td>
+          <td>No captura movimiento de la curva base</td>
+          <td class="mono">Fabozzi Ch.4 · Schweser R.61</td>
+        </tr>
+        <tr>
+          <td><strong>DTS</strong></td>
+          <td>SDur × Current Spread</td>
+ <td></td>
+          <td>Comparar riesgo de crédito relativo entre bonos de distinta calidad</td>
+          <td>No considera cambios en SDur con el tiempo</td>
+          <td class="mono">Fabozzi Ch.4 · Schweser R.61</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="inner-divider"></div>
+
+    <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">⚠ Errores Frecuentes en Examen</div>
+    <div class="grid-2">
+      <div class="rule-callout red">
+        <strong>Error 1:</strong> Usar modified duration para un callable bond. La EffDur será <em>menor</em> (shorter effective maturity cuando el call está cercano al dinero). La modified duration <strong>sobrestimará</strong> el riesgo de tasa en rallies.
+      </div>
+      <div class="rule-callout red">
+        <strong>Error 2:</strong> Asumir que portfolios con equal duration = igual exposición al riesgo. Un barbell y un bullet con duration 6.0 son <strong>muy distintos</strong> ante steepening (−0.75% vs 0%) → usar KRDs.
+      </div>
+      <div class="rule-callout gold">
+        <strong>Error 3:</strong> Confundir EffDur (sensibilidad a la curva benchmark) con SDur (sensibilidad al spread). Un hedge con Treasuries elimina EffDur pero <strong>no elimina SDur</strong>. Para corporativos, ambos son necesarios.
+      </div>
+      <div class="rule-callout gold">
+        <strong>Error 4:</strong> Convexidad negativa significa pérdida ante ↑ tasas &gt; ganancia ante ↓ tasas: ejemplo callable (EffDur=4, EffCon=−30): pérdida +200bp = −8.6% vs ganancia −200bp = +7.4%. El call price es el "techo".
+      </div>
+      <div class="rule-callout">
+        <strong>Error 5:</strong> Usar analytical duration para high-yield en crisis de crédito. Si Treasury cae 100bp pero el spread se amplía 150bp, el yield neto del HY sube 50bp → pérdida real. La <strong>empirical duration</strong> captura esta correlación negativa.
+      </div>
+      <div class="rule-callout">
+        <strong>Error 6:</strong> Comparar SDur entre bonos IG y HY sin ajustar por nivel de spread. Un bono HY (SDur=5, spread=300bp) tiene DTS=15% vs IG (SDur=5, spread=100bp) con DTS=5% → el HY tiene <strong>3× más riesgo de crédito</strong>.
+      </div>
+    </div>
+
+    <div class="inner-divider"></div>
+    <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Lecturas Recomendadas por Tema</div>
+    <div class="badge-row">
+      <span class="badge badge-blue">EffDur/EffCon: Schweser R.61 · Fabozzi Handbook Ch.5</span>
+      <span class="badge badge-outline">KRD: Tuckman &amp; Serrat Ch.5 · Fabozzi Bond Markets Ch.4</span>
+      <span class="badge badge-pale">Curva Level/Slope/Curvature: Veronesi Ch.4</span>
+      <span class="badge badge-gray">Empírica / Spread Dur / DTS: Fabozzi Bond Markets Ch.4 · Schweser R.61</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrapper -->
+
+<button class="print-btn no-print" id="printBtn" aria-label="Imprimir"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.75 6.25V2.25h6.5v4M4.75 12.5h6.5v2.25h-6.5z"/><path d="M4.75 6.25h-1.5a1.5 1.5 0 0 0-1.5 1.5v3.25a1.5 1.5 0 0 0 1.5 1.5h1.5m6.5 0h1.5a1.5 1.5 0 0 0 1.5-1.5V7.75a1.5 1.5 0 0 0-1.5-1.5h-1.5"/></svg></button>
+<button class="scroll-top-btn no-print" id="scrollTopBtn" aria-label="Volver al inicio"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13.25V3.5M3.75 7.75L8 3.5l4.25 4.25"/></svg></button>
+<script>
+(function(){
+  var top = document.getElementById('scrollTopBtn');
+  var prt = document.getElementById('printBtn');
+  top.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  prt.addEventListener('click', function(){ window.print(); });
+  function marca(){
+    var v = window.scrollY > 320;
+    top.classList.toggle('visible', v);
+    prt.classList.toggle('visible', v);
+  }
+  window.addEventListener('scroll', marca, {passive:true});
+  marca();
+})();
+</script>
+</body>
+</html>

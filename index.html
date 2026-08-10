@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Renta Fija 2026-II · Universidad del Pacífico</title>
+<meta name="description" content="Mapa del curso Renta Fija (1F0115), Universidad del Pacífico, semestre 2026-II. Cronograma, unidades, evaluación y one-pagers por semana."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   TOKENS
+   Paleta institucional. No se admiten colores fuera de esta lista.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --ink:#000000;
+  --navy:#061942;
+  --corp:#1E3771;
+  --mid:#0054B0;
+  --vivid:#0000FF;
+  --steel:#CED5DD;
+  --gray:#D1D1D1;
+  --off:#F2F2F2;
+  --white:#FFFFFF;
+
+  /* voces tipográficas */
+  --display:'Montserrat','Tahoma',sans-serif;   /* títulos */
+  --ui:'Tahoma','Open Sans',sans-serif;         /* etiquetas, datos, navegación */
+  --body:'Open Sans','Tahoma',sans-serif;       /* lectura */
+
+  /* texto sobre superficie clara */
+  --t-strong:var(--navy);
+  --t-body:rgba(6,25,66,.82);
+  --t-mute:rgba(6,25,66,.66);
+  /* texto sobre superficie oscura */
+  --d-strong:var(--white);
+  --d-body:rgba(255,255,255,.78);
+  --d-mute:rgba(255,255,255,.52);
+  --d-faint:rgba(255,255,255,.34);
+  --d-line:rgba(255,255,255,.12);
+
+  --r-lg:16px; --r-md:12px; --r-sm:8px;
+  --lift:0 1px 2px rgba(0,0,0,.16), 0 14px 34px rgba(0,0,0,.26);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+html,body{height:100%}
+body{
+  overflow:hidden;
+  font-family:var(--body);
+  font-size:14px;line-height:1.6;
+  color:var(--t-body);
+  background:var(--navy);
+  -webkit-font-smoothing:antialiased;
+  caret-color:var(--vivid);
+}
+::selection{background:var(--vivid);color:var(--white)}
+:focus-visible{outline:2px solid var(--vivid);outline-offset:2px;border-radius:4px}
+a{color:inherit}
+svg.ic{width:16px;height:16px;flex:none;display:block}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+/* ── scrollbars ── */
+*{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.22);border-radius:8px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.34)}
+
+/* ═══════════ SHELL ═══════════ */
+#shell{
+  display:flex;flex-direction:column;height:100dvh;
+  background:
+    radial-gradient(120% 80% at 82% -10%, rgba(0,84,176,.34) 0%, transparent 62%),
+    linear-gradient(168deg, var(--navy) 0%, #08205A 58%, var(--corp) 100%);
+}
+
+/* ═══════════ BARRA SUPERIOR ═══════════ */
+#topbar{
+  flex:none;height:56px;display:flex;align-items:stretch;
+  background:rgba(6,25,66,.72);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--d-line);
+  position:relative;z-index:20;
+}
+.brand{
+  flex:none;display:flex;align-items:center;gap:10px;
+  padding:0 18px 0 22px;border-right:1px solid var(--d-line);
+}
+.brand-mark{
+  width:26px;height:26px;border-radius:6px;background:var(--white);
+  display:grid;place-items:center;flex:none;
+}
+.brand-mark img{width:20px;height:auto;display:block}
+.brand-txt{font-family:var(--display);font-size:12px;font-weight:800;color:var(--white);letter-spacing:.02em;white-space:nowrap}
+.brand-sub{font-family:var(--ui);font-size:10px;color:var(--d-mute);letter-spacing:.08em;white-space:nowrap}
+
+#tabs{
+  flex:1 1 0;min-width:0;display:flex;align-items:stretch;gap:0;
+  overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+}
+#tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:none;position:relative;display:flex;align-items:center;
+  padding:0 14px;border:0;background:transparent;cursor:pointer;
+  font-family:var(--ui);font-size:11px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;
+  color:var(--d-faint);white-space:nowrap;
+  transition:color .22s var(--ease);
+}
+.tab:hover{color:var(--d-body)}
+.tab::after{
+  content:'';position:absolute;left:10px;right:10px;bottom:0;height:2px;
+  background:var(--white);border-radius:2px 2px 0 0;
+  transform:scaleX(0);transform-origin:50% 100%;
+  transition:transform .34s var(--ease);
+}
+.tab[aria-selected="true"]{color:var(--white)}
+.tab[aria-selected="true"]::after{transform:scaleX(1)}
+.tab.is-exam{color:rgba(206,213,221,.4)}
+.tab.is-exam[aria-selected="true"]{color:var(--steel)}
+.tab.is-done .tab-dot{
+  width:4px;height:4px;border-radius:50%;background:var(--mid);
+  margin-left:6px;flex:none;
+}
+
+/* ═══════════ ESCENARIO ═══════════ */
+#stage{flex:1;position:relative;overflow:hidden}
+.slide{
+  position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;
+  padding:36px 40px 48px;
+  opacity:0;visibility:hidden;transform:translate3d(28px,0,0);
+  transition:opacity .42s var(--ease), transform .42s var(--ease), visibility 0s .42s;
+}
+.slide.is-active{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.inner{max-width:1120px;margin:0 auto}
+/* las fichas semanales son cortas: se centran en la altura disponible */
+.slide--week{display:flex}
+.slide--week > .inner{margin:auto;width:100%}
+
+/* ═══════════ BARRA INFERIOR ═══════════ */
+#botbar{
+  flex:none;height:60px;display:flex;align-items:center;justify-content:space-between;
+  gap:16px;padding:0 24px;position:relative;
+  background:rgba(6,25,66,.72);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-top:1px solid var(--d-line);z-index:20;
+}
+.step{
+  display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 18px;
+  border:0;border-radius:999px;cursor:pointer;
+  font-family:var(--ui);font-size:11px;font-weight:700;
+  letter-spacing:.09em;text-transform:uppercase;
+  transition:background .22s var(--ease), color .22s var(--ease);
+}
+.step-prev{background:rgba(255,255,255,.08);color:var(--d-body)}
+.step-prev:hover{background:rgba(255,255,255,.16);color:var(--white)}
+.step-next{background:var(--mid);color:var(--white)}
+.step-next:hover{background:#0064CE}
+.step:disabled{opacity:.28;cursor:not-allowed}
+#position{
+  flex:1 1 0;min-width:0;
+  font-family:var(--ui);font-size:11px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--d-mute);text-align:center;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+#rail{
+  position:absolute;left:0;bottom:0;height:2px;width:100%;
+  background:var(--white);opacity:.5;
+  transform:scaleX(0);transform-origin:0 50%;
+  transition:transform .42s var(--ease);
+}
+
+/* ═══════════ PORTADA ═══════════ */
+.cover{
+  position:relative;overflow:hidden;
+  border:1px solid var(--d-line);border-radius:var(--r-lg);
+  background:linear-gradient(150deg, rgba(255,255,255,.09), rgba(255,255,255,.02));
+  padding:44px 44px 40px;margin-bottom:26px;
+}
+.cover::after{
+  content:'';position:absolute;right:-140px;top:-190px;
+  width:520px;height:520px;border-radius:50%;
+  background:radial-gradient(circle, rgba(0,84,176,.42) 0%, transparent 68%);
+  pointer-events:none;
+}
+.cover-in{position:relative;z-index:1}
+.crest{
+  display:inline-flex;align-items:center;gap:12px;
+  background:var(--white);border-radius:10px;padding:8px 14px;margin-bottom:26px;
+}
+.crest img{height:22px;width:auto;display:block}
+.cover h1{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(40px,6.4vw,78px);line-height:.94;letter-spacing:-.03em;
+  color:var(--white);text-wrap:balance;
+}
+.cover h1 em{font-style:normal;color:var(--steel);display:block}
+.cover-line{
+  display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin-top:18px;
+  font-family:var(--ui);font-size:12px;letter-spacing:.04em;color:var(--d-mute);
+}
+.cover-line b{color:var(--steel);font-weight:700}
+/* el separador viaja con el elemento siguiente, nunca queda colgando al final */
+.cover-line b + b::before{content:'·';color:var(--d-faint);margin-right:12px}
+.cover-lead{
+  font-size:15px;line-height:1.72;color:var(--d-body);
+  max-width:62ch;margin-top:20px;
+}
+
+.facts{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;margin-top:30px;
+  background:var(--d-line);border:1px solid var(--d-line);border-radius:var(--r-md);
+  overflow:hidden;
+}
+.fact{background:rgba(6,25,66,.42);padding:14px 16px}
+.fact dt{
+  font-family:var(--ui);font-size:10px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--d-faint);margin-bottom:5px;
+}
+.fact dd{font-family:var(--ui);font-size:13px;font-weight:700;color:var(--white)}
+.fact dd small{display:block;font-weight:400;font-size:11px;color:var(--d-mute);margin-top:2px}
+
+/* ═══════════ BLOQUES DE SECCIÓN (superficie clara) ═══════════ */
+.panel{
+  background:var(--white);border-radius:var(--r-lg);
+  overflow:hidden;margin-bottom:22px;
+}
+.panel-head{padding:24px 28px 16px}
+.panel-head h2{
+  font-family:var(--display);font-size:19px;font-weight:700;
+  letter-spacing:-.01em;color:var(--t-strong);
+}
+.panel-head p{font-size:13px;color:var(--t-mute);max-width:62ch;margin-top:5px}
+.panel-body{padding:0 28px 26px}
+
+/* rótulo de sección sobre fondo oscuro */
+.dark-label{
+  font-family:var(--ui);font-size:11px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--d-mute);
+  display:flex;align-items:center;gap:12px;margin-bottom:14px;
+}
+.dark-label::after{content:'';flex:1;height:1px;background:var(--d-line)}
+
+/* ═══════════ UNIDADES ═══════════ */
+.units{border-top:1px solid var(--steel)}
+.unit{
+  display:grid;grid-template-columns:64px 1fr 232px;gap:22px;
+  padding:20px 0;border-bottom:1px solid var(--steel);align-items:start;
+}
+.unit:last-child{border-bottom:0}
+.unit-n{
+  font-family:var(--display);font-size:40px;font-weight:800;line-height:.85;
+  color:var(--steel);letter-spacing:-.04em;
+}
+.unit h3{
+  font-family:var(--display);font-size:15.5px;font-weight:700;
+  color:var(--t-strong);margin-bottom:4px;
+}
+.unit p{font-size:13px;color:var(--t-mute);line-height:1.65;max-width:64ch}
+.unit-weeks{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.wchip{
+  font-family:var(--ui);font-size:11px;font-weight:700;letter-spacing:.03em;
+  padding:4px 10px;border-radius:999px;cursor:pointer;
+  background:var(--off);color:var(--corp);border:0;
+  transition:background .2s var(--ease), color .2s var(--ease);
+}
+.wchip:hover{background:var(--mid);color:var(--white)}
+.unit-topics{list-style:none;font-size:12.5px;color:var(--t-mute);line-height:1.75}
+.unit-topics li{padding-left:14px;position:relative}
+.unit-topics li::before{
+  content:'';position:absolute;left:0;top:.62em;
+  width:5px;height:5px;border-radius:50%;background:var(--steel);
+}
+
+/* ═══════════ PROGRESIÓN ═══════════ */
+.progress-wrap{
+  border:1px solid var(--d-line);border-radius:var(--r-lg);
+  background:rgba(6,25,66,.34);padding:26px 28px;margin-bottom:22px;
+}
+.progress-top{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:20px;flex-wrap:wrap;margin-bottom:18px;
+}
+.progress-top h2{
+  font-family:var(--display);font-size:19px;font-weight:700;color:var(--white);
+}
+.progress-top p{font-size:13px;color:var(--d-mute);margin-top:3px}
+.pct{text-align:right;line-height:1}
+.pct b{
+  font-family:var(--display);font-size:42px;font-weight:800;
+  color:var(--white);letter-spacing:-.03em;
+}
+.pct span{font-family:var(--display);font-size:20px;font-weight:700;color:var(--d-mute)}
+.pct small{
+  display:block;font-family:var(--ui);font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--d-faint);margin-top:7px;
+}
+.track{
+  height:6px;border-radius:999px;background:rgba(255,255,255,.1);
+  overflow:hidden;margin-bottom:20px;
+}
+.track i{
+  display:block;height:100%;width:100%;border-radius:999px;
+  background:linear-gradient(90deg,var(--mid),var(--vivid));
+  transform:scaleX(0);transform-origin:0 50%;
+  transition:transform .8s var(--ease);
+}
+.weeks-grid{
+  display:grid;grid-template-columns:repeat(16,1fr);gap:6px;
+}
+.wcell{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:11px 4px 10px;border:0;border-radius:var(--r-sm);cursor:pointer;
+  background:rgba(255,255,255,.05);
+  transition:background .22s var(--ease), transform .22s var(--ease);
+}
+.wcell:hover{background:rgba(255,255,255,.13);transform:translateY(-2px)}
+.wcell b{
+  font-family:var(--ui);font-size:12px;font-weight:700;letter-spacing:.02em;
+  color:var(--d-faint);transition:color .22s var(--ease);
+}
+.wcell span{
+  font-size:8.5px;line-height:1.25;text-align:center;color:var(--d-faint);
+  opacity:.7;letter-spacing:.02em;
+}
+/* semana ya dictada */
+.wcell.is-done{background:var(--mid)}
+.wcell.is-done:hover{background:#0064CE}
+.wcell.is-done b{color:var(--white)}
+.wcell.is-done span{color:rgba(255,255,255,.8);opacity:1}
+/* semana de exámenes */
+.wcell.is-exam{background:rgba(255,255,255,.02);box-shadow:inset 0 0 0 1px var(--d-line)}
+.wcell.is-exam b{color:var(--steel);opacity:.6}
+.wcell.is-done.is-exam{background:var(--corp);box-shadow:none}
+.wcell.is-done.is-exam b{color:var(--white);opacity:1}
+
+/* ═══════════ TABLA DE EVALUACIÓN ═══════════ */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{
+  font-family:var(--ui);font-size:10.5px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--t-mute);text-align:left;
+  padding:0 14px 9px;border-bottom:1px solid var(--steel);
+}
+.tbl th.r,.tbl td.r{text-align:right}
+.tbl td{padding:11px 14px;border-bottom:1px solid var(--off);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .grp td{background:var(--off)}
+.tbl .grp td:first-child{font-weight:700;color:var(--t-strong)}
+.tbl .sub td:first-child{padding-left:32px}
+.tbl b{font-family:var(--ui);font-weight:700;color:var(--t-strong)}
+.tbl .w{font-family:var(--ui);font-weight:700;color:var(--mid);white-space:nowrap}
+.tbl .d{font-family:var(--ui);font-size:12px;color:var(--t-mute);white-space:nowrap}
+.note{
+  margin-top:16px;padding:14px 16px;border-radius:var(--r-md);
+  background:var(--off);font-size:12.5px;line-height:1.65;color:var(--t-mute);
+}
+.note b{color:var(--t-strong)}
+
+/* ═══════════ BIBLIOGRAFÍA ═══════════ */
+.bib-cols{display:grid;grid-template-columns:1fr 1fr;gap:34px}
+.bib-h{
+  font-family:var(--ui);font-size:10.5px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--t-mute);
+  padding-bottom:9px;border-bottom:1px solid var(--steel);margin-bottom:4px;
+}
+.bib-h b{color:var(--mid)}
+.ref{padding:12px 0;border-bottom:1px solid var(--off);font-size:13px;line-height:1.6}
+.ref:last-child{border-bottom:0}
+.ref b{font-family:var(--ui);font-weight:700;color:var(--t-strong);display:block}
+.ref i{font-style:italic;color:var(--t-body)}
+.ref small{display:block;font-size:11.5px;color:var(--t-mute);margin-top:3px}
+
+/* ═══════════ TARJETA DE SEMANA ═══════════ */
+.wk-top{
+  display:grid;grid-template-columns:auto 1fr;align-items:start;
+  gap:34px;margin-bottom:26px;
+}
+.wk-id{display:flex;align-items:baseline;gap:12px}
+.wk-id .n{
+  font-family:var(--display);font-size:clamp(56px,8vw,88px);font-weight:800;
+  line-height:.8;letter-spacing:-.05em;color:var(--white);
+}
+.wk-id .k{
+  font-family:var(--ui);font-size:11px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--d-faint);
+}
+.wk-head h2{
+  font-family:var(--display);font-size:clamp(24px,3.1vw,36px);font-weight:700;
+  line-height:1.14;letter-spacing:-.02em;color:var(--white);
+  text-wrap:balance;max-width:26ch;
+}
+.wk-unit{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--ui);font-size:11px;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--steel);
+  background:rgba(255,255,255,.07);border-radius:999px;padding:6px 14px;margin-bottom:14px;
+}
+.wk-unit i{width:5px;height:5px;border-radius:50%;background:var(--mid);flex:none}
+
+.sessions{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background:var(--d-line);border:1px solid var(--d-line);
+  border-radius:var(--r-md);overflow:hidden;margin-bottom:22px;
+}
+.ses{background:rgba(6,25,66,.42);padding:18px 20px}
+.ses-k{
+  display:flex;align-items:center;gap:9px;margin-bottom:12px;
+  font-family:var(--ui);font-size:11px;font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--steel);
+}
+.ses-k svg{color:var(--d-faint)}
+.ses-date{
+  font-family:var(--display);font-size:20px;font-weight:700;
+  color:var(--white);letter-spacing:-.01em;margin-bottom:3px;
+}
+.ses-meta{
+  display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:11px;
+  font-family:var(--ui);font-size:11.5px;color:var(--d-mute);
+}
+.ses-meta span{display:inline-flex;align-items:center;gap:6px}
+.ses.is-eval .ses-k{color:var(--white)}
+.ses.is-eval{background:rgba(0,84,176,.3)}
+
+.wk-note{
+  display:flex;gap:11px;align-items:flex-start;
+  border:1px solid var(--d-line);border-radius:var(--r-md);
+  padding:14px 18px;margin-bottom:22px;
+  font-size:13px;line-height:1.65;color:var(--d-body);
+}
+.wk-note svg{color:var(--d-faint);margin-top:2px}
+.wk-note b{color:var(--white);font-weight:600}
+
+.op-card{
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+  flex-wrap:wrap;background:var(--white);border-radius:var(--r-lg);padding:26px 28px;
+}
+.op-card h3{
+  font-family:var(--display);font-size:17px;font-weight:700;color:var(--t-strong);
+  margin-bottom:5px;
+}
+.op-card p{font-size:13px;color:var(--t-mute);max-width:56ch}
+.op-btn{
+  display:inline-flex;align-items:center;gap:10px;flex:none;
+  height:46px;padding:0 24px;border:0;border-radius:999px;
+  background:var(--mid);color:var(--white);text-decoration:none;cursor:pointer;
+  font-family:var(--ui);font-size:12px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  transition:background .22s var(--ease), transform .22s var(--ease);
+}
+.op-btn:hover{background:var(--navy);transform:translateX(3px)}
+.op-btn.is-off{
+  background:var(--off);color:rgba(6,25,66,.42);cursor:not-allowed;
+}
+.op-btn.is-off:hover{background:var(--off);transform:none}
+
+/* ═══════════ SEMANA DE EXÁMENES ═══════════ */
+.exam{
+  border:1px solid var(--d-line);border-radius:var(--r-lg);
+  background:linear-gradient(150deg, rgba(255,255,255,.07), rgba(255,255,255,.015));
+  padding:52px 44px;text-align:center;
+}
+.exam .k{
+  font-family:var(--ui);font-size:11px;font-weight:700;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--d-faint);margin-bottom:16px;
+}
+.exam h2{
+  font-family:var(--display);font-size:clamp(30px,4.6vw,50px);font-weight:800;
+  letter-spacing:-.03em;color:var(--white);line-height:1.02;
+}
+.exam .range{
+  font-family:var(--display);font-size:19px;font-weight:700;
+  color:var(--steel);margin-top:12px;
+}
+.exam p{
+  font-size:14px;line-height:1.72;color:var(--d-body);
+  max-width:58ch;margin:22px auto 0;
+}
+.exam-scope{
+  display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+  margin-top:26px;padding-top:26px;border-top:1px solid var(--d-line);
+}
+.exam-scope button{
+  border:0;border-radius:999px;cursor:pointer;padding:7px 15px;
+  background:rgba(255,255,255,.07);color:var(--d-body);
+  font-family:var(--ui);font-size:11.5px;font-weight:600;
+  transition:background .2s var(--ease), color .2s var(--ease);
+}
+.exam-scope button:hover{background:var(--white);color:var(--navy)}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media(max-width:1080px){
+  .unit{grid-template-columns:52px 1fr;gap:18px}
+  .unit-topics{grid-column:2}
+  .weeks-grid{grid-template-columns:repeat(8,1fr)}
+}
+@media(max-width:860px){
+  .slide{padding:26px 20px 40px}
+  .wk-top{grid-template-columns:1fr;gap:16px}
+  .cover{padding:30px 24px 28px}
+  .facts{grid-template-columns:repeat(2,1fr)}
+  .sessions{grid-template-columns:1fr}
+  .bib-cols{grid-template-columns:1fr;gap:26px}
+  .panel-head,.panel-body{padding-left:20px;padding-right:20px}
+  .progress-wrap{padding:20px}
+  .op-card{padding:20px}
+}
+@media(max-width:560px){
+  .weeks-grid{grid-template-columns:repeat(4,1fr)}
+  .brand-txt,.brand-sub{display:none}
+  .brand{padding:0 12px}
+  #botbar{padding:0 12px;gap:8px}
+  .step{padding:0 14px}
+  #position{font-size:10px}
+  .exam{padding:34px 20px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+
+<!-- iconos -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <g id="i-cal" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2.25" y="3.25" width="11.5" height="10.5" rx="2"/><path d="M5.25 1.75v3M10.75 1.75v3M2.25 6.75h11.5"/>
+    </g>
+    <g id="i-clip" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5.75 2.75h-1.5a1.5 1.5 0 0 0-1.5 1.5v8.5a1.5 1.5 0 0 0 1.5 1.5h7.5a1.5 1.5 0 0 0 1.5-1.5v-8.5a1.5 1.5 0 0 0-1.5-1.5h-1.5"/>
+      <rect x="5.75" y="1.25" width="4.5" height="2.75" rx=".9"/><path d="M5.75 8.5h4.5M5.75 11h3"/>
+    </g>
+    <g id="i-doc" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 1.75H4.75a1.5 1.5 0 0 0-1.5 1.5v9.5a1.5 1.5 0 0 0 1.5 1.5h6.5a1.5 1.5 0 0 0 1.5-1.5V5.5z"/>
+      <path d="M9 1.75V5.5h3.75M5.75 9h4.5M5.75 11.5h3"/>
+    </g>
+    <g id="i-arrow" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M2.75 8h10.5M9.25 4l4 4-4 4"/>
+    </g>
+    <g id="i-back" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13.25 8H2.75M6.75 4l-4 4 4 4"/>
+    </g>
+    <g id="i-pin" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 6.75c0 3.6-5 7.5-5 7.5s-5-3.9-5-7.5a5 5 0 0 1 10 0Z"/><circle cx="8" cy="6.75" r="1.85"/>
+    </g>
+    <g id="i-clock" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="8" r="6.25"/><path d="M8 4.5V8l2.5 1.5"/>
+    </g>
+    <g id="i-info" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="8" r="6.25"/><path d="M8 7.25v4M8 4.9h.01"/>
+    </g>
+  </defs>
+</svg>
+
+<div id="shell">
+
+  <header id="topbar">
+    <div class="brand">
+      <span class="brand-mark"><img src="assets/Logo UP.jpg" alt="Universidad del Pacífico"/></span>
+      <span>
+        <span class="brand-txt">Renta Fija</span>
+        <span class="brand-sub">1F0115 · 2026-II</span>
+      </span>
+    </div>
+    <div id="tabs" role="tablist" aria-label="Secciones del curso"></div>
+  </header>
+
+  <main id="stage">
+
+    <!-- ══════════════════ MAIN ══════════════════ -->
+    <section class="slide is-active" id="slide-0" role="tabpanel" aria-label="Main">
+    <div class="inner">
+
+      <div class="cover">
+        <div class="cover-in">
+          <span class="crest"><img src="assets/Logo UP.jpg" alt="Universidad del Pacífico"/></span>
+          <h1>Renta Fija<em>2026-II</em></h1>
+          <div class="cover-line">
+            <b>1F0115</b><b>Sección A</b><b>Departamento de Finanzas</b><b>Prof. Serhat Yaman</b>
+          </div>
+          <p class="cover-lead">
+            Del principio de no arbitraje a la gestión de portafolios institucionales. Este mapa reúne
+            el cronograma de las 16 semanas, las cuatro unidades del sílabo, el sistema de evaluación
+            y el one-pager de referencia de cada sesión.
+          </p>
+          <dl class="facts">
+            <div class="fact"><dt>Inicio de clases</dt><dd>10 ago 2026<small>Cierre: 29 nov 2026</small></dd></div>
+            <div class="fact"><dt>Horario</dt><dd>Lun 10:30 a 13:20<small>Jue 20:30 a 22:20</small></dd></div>
+            <div class="fact"><dt>Aulas</dt><dd>E-303 teoría<small>A-106 práctica</small></dd></div>
+            <div class="fact"><dt>Créditos</dt><dd>4 créditos<small>3 h teoría, 2 h práctica</small></dd></div>
+          </dl>
+        </div>
+      </div>
+
+      <!-- Progresión -->
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <div>
+            <h2>Progresión del curso</h2>
+            <p id="progress-caption">Selecciona una semana para abrir su ficha.</p>
+          </div>
+          <div class="pct"><b id="pct-num">0</b><span>%</span><small id="pct-sub">0 de 16 semanas</small></div>
+        </div>
+        <div class="track"><i id="track-fill"></i></div>
+        <div class="weeks-grid" id="weeks-grid"></div>
+      </div>
+
+      <!-- Unidades -->
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Unidades de aprendizaje</h2>
+          <p>Las cuatro unidades del sílabo y las semanas en las que se desarrolla cada una.</p>
+        </div>
+        <div class="panel-body">
+          <div class="units">
+
+            <div class="unit">
+              <div class="unit-n">01</div>
+              <div>
+                <h3>Fundamentos de Valorización y Estructura Temporal de Tasas de Interés</h3>
+                <p>Valorar instrumentos de renta fija y analizar la estructura temporal aplicando el
+                   principio de no arbitraje, con tasas spot y forward técnicamente consistentes.</p>
+                <div class="unit-weeks" data-weeks="1,2,5"></div>
+              </div>
+              <ul class="unit-topics">
+                <li>Principio de no arbitraje</li>
+                <li>Precio y rendimiento del bono</li>
+                <li>Tasas spot y forward</li>
+                <li>Construcción de la curva</li>
+                <li>Teorías de la estructura temporal</li>
+                <li>Determinantes macro financieros</li>
+              </ul>
+            </div>
+
+            <div class="unit">
+              <div class="unit-n">02</div>
+              <div>
+                <h3>Medición y Gestión del Riesgo de Tasa de Interés</h3>
+                <p>Cuantificar y gestionar el riesgo de tasa de instrumentos y portafolios con duración,
+                   convexidad y key rate durations, bajo un enfoque libre de arbitraje.</p>
+                <div class="unit-weeks" data-weeks="3,4,6"></div>
+              </div>
+              <ul class="unit-topics">
+                <li>Riesgo de tasa de interés</li>
+                <li>Duración de Macaulay y modificada</li>
+                <li>Convexidad</li>
+                <li>Key Rate Durations</li>
+                <li>Medidas empíricas de sensibilidad</li>
+                <li>Modelos arbitrage free</li>
+              </ul>
+            </div>
+
+            <div class="unit">
+              <div class="unit-n">03</div>
+              <div>
+                <h3>Riesgo de Crédito y Estructuras Complejas en Renta Fija</h3>
+                <p>Evaluar el riesgo de crédito y analizar instrumentos estructurados, estimando spreads
+                   y probabilidades de incumplimiento e interpretando prepago y opcionalidad implícita.</p>
+                <div class="unit-weeks" data-weeks="7,9,10,11,12,13"></div>
+              </div>
+              <ul class="unit-topics">
+                <li>Fundamentos del análisis crediticio</li>
+                <li>Spreads de crédito e incumplimiento</li>
+                <li>Modelos básicos de default</li>
+                <li>Bonos con opcionalidad implícita</li>
+                <li>Introducción a ABS y MBS</li>
+                <li>Riesgo de prepago</li>
+              </ul>
+            </div>
+
+            <div class="unit">
+              <div class="unit-n">04</div>
+              <div>
+                <h3>Gestión de Portafolios de Renta Fija y Aplicaciones de Mercado</h3>
+                <p>Diseñar y justificar estrategias de portafolio integrando riesgo de tasa, riesgo de
+                   crédito y condiciones de mercado, coherentes con un objetivo de riesgo y retorno.</p>
+                <div class="unit-weeks" data-weeks="14,15"></div>
+              </div>
+              <ul class="unit-topics">
+                <li>Estrategias activas y pasivas</li>
+                <li>Inmunización y gestión por duración</li>
+                <li>Derivados para cobertura</li>
+                <li>Construcción y evaluación de portafolios</li>
+                <li>Mercado peruano de renta fija</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Sistema de evaluación -->
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Sistema de evaluación</h2>
+          <p>Pesos según el sílabo 1F0115 y fechas tomadas del cronograma del semestre.</p>
+        </div>
+        <div class="panel-body">
+          <table class="tbl">
+            <thead>
+              <tr><th>Evaluación</th><th class="r">Peso</th><th class="r">Fecha</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><b>1. Examen Parcial</b></td><td class="r w num">25 %</td><td class="r d num">28 sep al 3 oct 2026</td></tr>
+              <tr><td><b>2. Examen Final</b></td><td class="r w num">25 %</td><td class="r d num">23 al 29 nov 2026</td></tr>
+              <tr class="grp"><td>3. Prácticas calificadas, controles de lectura y tareas de investigación</td><td class="r w num">50 %</td><td class="r d"></td></tr>
+              <tr class="sub"><td>3.1 Práctica Calificada 1, contenido de las semanas 1 a 6</td><td class="r w num">15 %</td><td class="r d num">17 sep 2026</td></tr>
+              <tr class="sub"><td>3.2 Práctica Calificada 2, contenido de las semanas 7 a 13</td><td class="r w num">15 %</td><td class="r d num">5 nov 2026</td></tr>
+              <tr class="sub"><td>3.3 Trabajo grupal, presentación en clase</td><td class="r w num">10 %</td><td class="r d num">19 nov 2026</td></tr>
+              <tr class="sub"><td>3.4 Participación en clase</td><td class="r w num">10 %</td><td class="r d">Permanente</td></tr>
+            </tbody>
+          </table>
+          <div class="note">
+            <b>Evaluación sustitutoria.</b> Al final del semestre se rinde una evaluación que sustituye
+            hasta una nota de práctica o de examen no rendida. En el caso de un examen se requiere
+            autorización previa de Servicios Académicos. Fecha, hora y aula se comunican por Blackboard
+            y el temario abarca todo el curso.
+          </div>
+          <div class="note">
+            <b>Participación.</b> Se califica la intervención espontánea en los tópicos tratados, donde
+            se evalúa intuición y lógica en la argumentación antes que precisión, y la presentación breve
+            de una noticia vinculada a un tópico ya visto. El incumplimiento de las reglas de clase
+            descuenta puntos de esta nota.
+          </div>
+        </div>
+      </div>
+
+      <!-- Bibliografía -->
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Bibliografía del curso</h2>
+          <p>Cuatro textos obligatorios y seis recomendados según el sílabo.</p>
+        </div>
+        <div class="panel-body">
+          <div class="bib-cols">
+            <div>
+              <div class="bib-h">Obligatoria <b>4 textos</b></div>
+              <div class="ref"><b>Kaplan Schweser, nivel I</b><i>SchweserNotes CFA Level I, Book 4: Fixed Income and Derivatives</i><small>Kaplan Schweser, 2024</small></div>
+              <div class="ref"><b>Kaplan Schweser, nivel II</b><i>SchweserNotes CFA Level II, Book 4: Fixed Income and Derivatives</i><small>Kaplan Schweser, 2024</small></div>
+              <div class="ref"><b>Fabozzi, F. J. y Fabozzi, F. A.</b><i>Bond Markets, Analysis, and Strategies</i><small>10.ª edición, Pearson, 2021</small></div>
+              <div class="ref"><b>Tuckman, B. y Serrat, A.</b><i>Fixed Income Securities: Tools for Today's Markets</i><small>4.ª edición, Wiley, 2022</small></div>
+            </div>
+            <div>
+              <div class="bib-h">Recomendada <b>6 textos</b></div>
+              <div class="ref"><b>Brigo, D. y Mercurio, F.</b><i>Interest Rate Models: Theory and Practice. With Smile, Inflation and Credit</i><small>Springer, 2006</small></div>
+              <div class="ref"><b>De Servigny, A. y Renault, O.</b><i>Measuring and Managing Credit Risk</i><small>McGraw Hill, 2004</small></div>
+              <div class="ref"><b>Martellini, L., Priaulet, P. y Priaulet, S.</b><i>Fixed-Income Securities: Valuation, Risk Management and Portfolio Strategies</i><small>Wiley, 2003</small></div>
+              <div class="ref"><b>Petitt, B. S., Pinto, J. E. y Pirie, W. L.</b><i>Fixed Income Analysis</i><small>Wiley, 2015</small></div>
+              <div class="ref"><b>Veronesi, P.</b><i>Fixed Income Securities: Valuation, Risk, and Risk Management</i><small>Wiley, 2010</small></div>
+              <div class="ref"><b>Veronesi, P. (ed.)</b><i>Handbook of Fixed-Income Securities</i><small>Wiley, 2016</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    </section>
+
+    <!-- Las 16 fichas semanales se construyen desde CRONOGRAMA -->
+
+  </main>
+
+  <nav id="botbar" aria-label="Navegación entre secciones">
+    <button class="step step-prev" id="btn-prev" disabled>
+      <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-back"/></svg> Anterior
+    </button>
+    <span id="position" class="num">Main</span>
+    <button class="step step-next" id="btn-next">
+      Siguiente <svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><use href="#i-arrow"/></svg>
+    </button>
+    <i id="rail"></i>
+  </nav>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   1. AVANCE DEL CURSO
+   Escribe aquí los números de las semanas ya dictadas. Al agregarlas
+   se pintan en fuerte dentro de la progresión y sube el porcentaje.
+   Ejemplo: const SEMANAS_AVANZADAS = [1, 2, 3];
+   ═══════════════════════════════════════════════════════════════════ */
+const SEMANAS_AVANZADAS = [];
+
+/* One-pagers publicados. Agrega el número al crear el archivo w#_onepager.html */
+const ONEPAGERS_PUBLICADOS = [1,2,3,4,5,6,7,9,10,11,12,13];
+
+/* ═══════════════════════════════════════════════════════════════════
+   2. CRONOGRAMA 2026-II
+   Fuente: Cronograma Renta Fija 2026-II. Lunes teoría en E-303,
+   jueves práctica en A-106.
+   ═══════════════════════════════════════════════════════════════════ */
+const CRONOGRAMA = [
+  { n:1, unidad:1, corto:'Introducción',
+    tema:'Introducción a la Renta Fija',
+    bajada:'Instrumentos, mercados y estructuras fundamentales',
+    teoria:{fecha:'10 ago 2026', dia:'Lunes', sesion:'Clase Teórica 1'},
+    practica:{fecha:'13 ago 2026', dia:'Jueves', sesion:'PD1'} },
+
+  { n:2, unidad:1, corto:'Valorización',
+    tema:'Fundamentos de Valorización y Medidas de Rendimiento',
+    bajada:'Precio, yields, spreads, tasa flotante y mercado de dinero',
+    teoria:{fecha:'17 ago 2026', dia:'Lunes', sesion:'Clase Teórica 2'},
+    practica:{fecha:'20 ago 2026', dia:'Jueves', sesion:'PD2'} },
+
+  { n:3, unidad:2, corto:'Duración',
+    tema:'Riesgo de Tasa de Interés I: Duración y Convexidad',
+    bajada:'Macaulay, duración modificada, convexidad y DV01',
+    teoria:{fecha:'24 ago 2026', dia:'Lunes', sesion:'Clase Teórica 3'},
+    practica:{fecha:'27 ago 2026', dia:'Jueves', sesion:'PD3'} },
+
+  { n:4, unidad:2, corto:'KRD',
+    tema:'Riesgo de Tasa de Interés II: Medidas de Riesgo Basadas en la Curva y Empíricas',
+    bajada:'Duración efectiva, key rate durations y análisis de componentes principales',
+    teoria:{fecha:'31 ago 2026', dia:'Lunes', sesion:'Clase Teórica 4'},
+    practica:{fecha:'3 set 2026', dia:'Jueves', sesion:'PD4'} },
+
+  { n:5, unidad:1, corto:'Curva',
+    tema:'Estructura Temporal de las Tasas de Interés',
+    bajada:'Tasas spot y forward, teorías de la curva y roll down',
+    teoria:{fecha:'7 set 2026', dia:'Lunes', sesion:'Clase Teórica 5'},
+    practica:{fecha:'10 set 2026', dia:'Jueves', sesion:'PD5'} },
+
+  { n:6, unidad:2, corto:'No arbitraje',
+    tema:'Valorización Libre de Arbitraje',
+    bajada:'Ley de un solo precio, árboles binomiales y modelos de estructura temporal',
+    teoria:{fecha:'14 set 2026', dia:'Lunes', sesion:'Clase Teórica 6'},
+    practica:{fecha:'17 set 2026', dia:'Jueves', sesion:'PC1', eval:true,
+              detalle:'Práctica Calificada 1, contenido de las semanas 1 a 6'} },
+
+  { n:7, unidad:3, corto:'Opciones',
+    tema:'Valoración y Análisis de Bonos con Opciones',
+    bajada:'Callable, putable, OAS, duración efectiva y convertibles',
+    teoria:{fecha:'21 set 2026', dia:'Lunes', sesion:'Clase Teórica 7'},
+    practica:{fecha:'24 set 2026', dia:'Jueves', sesion:'PD6'},
+    nota:'La PD6 incluye ejercicios basados en el contenido de las semanas 6 y 7.' },
+
+  { n:8, tipo:'examen', corto:'Parciales',
+    tema:'Exámenes Parciales',
+    rango:'28 set al 3 oct 2026',
+    texto:'Semana de evaluación parcial, sin clases regulares. El examen parcial pesa 25 % de la nota final y se rinde en la fecha, hora y aula que comunique Servicios Académicos.',
+    cubre:[1,2,3,4,5,6,7] },
+
+  { n:9, unidad:3, corto:'Crédito I',
+    tema:'Riesgo de Crédito I: Fundamentos',
+    bajada:'PD, LGD, pérdida esperada, spreads, calificaciones y notching',
+    teoria:{fecha:'5 oct 2026', dia:'Lunes', sesion:'Clase Teórica 8'},
+    practica:{fecha:'8 oct 2026', dia:'Jueves', sesion:'PD7'},
+    nota:'El 8 de octubre es feriado nacional, por lo que la PD7 será reprogramada.' },
+
+  { n:10, unidad:3, corto:'Crédito II',
+    tema:'Riesgo de Crédito II: Modelos de Análisis Crediticio',
+    bajada:'CVA, modelos estructurales, forma reducida y curva de spread',
+    teoria:{fecha:'12 oct 2026', dia:'Lunes', sesion:'Clase Teórica 9'},
+    practica:{fecha:'15 oct 2026', dia:'Jueves', sesion:'PD8'} },
+
+  { n:11, unidad:3, corto:'Der. crédito',
+    tema:'Derivados de Renta Fija I: Derivados de Crédito',
+    bajada:'Credit default swaps single name e índices, pricing y usos',
+    teoria:{fecha:'19 oct 2026', dia:'Lunes', sesion:'Clase Teórica 10'},
+    practica:{fecha:'22 oct 2026', dia:'Jueves', sesion:'PD9'} },
+
+  { n:12, unidad:3, corto:'Der. tasa',
+    tema:'Derivados de Renta Fija II: Derivados de Tasa de Interés',
+    bajada:'Forwards sobre bonos, FRA, swaps de tasa y de moneda, futuros',
+    teoria:{fecha:'26 oct 2026', dia:'Lunes', sesion:'Clase Teórica 11'},
+    practica:{fecha:'29 oct 2026', dia:'Jueves', sesion:'PD10'} },
+
+  { n:13, unidad:3, corto:'Titulización',
+    tema:'Titulización de Renta Fija',
+    bajada:'MBS, ABS, CDO, vehículos de propósito especial y riesgo de prepago',
+    teoria:{fecha:'2 nov 2026', dia:'Lunes', sesion:'Clase Teórica 12'},
+    practica:{fecha:'5 nov 2026', dia:'Jueves', sesion:'PC2', eval:true,
+              detalle:'Práctica Calificada 2, contenido de las semanas 7 a 13'} },
+
+  { n:14, unidad:4, corto:'Portafolios',
+    tema:'Introducción a la Gestión de Portafolios de Renta Fija',
+    bajada:'Estrategias activas y pasivas, inmunización, atribución y VaR',
+    teoria:{fecha:'9 nov 2026', dia:'Lunes', sesion:'Clase Teórica 13'},
+    practica:{fecha:'12 nov 2026', dia:'Jueves', sesion:'PD11'},
+    nota:'La PD11 incluye ejercicios basados en el contenido de las semanas 12 y 13.' },
+
+  { n:15, unidad:4, corto:'Perú',
+    tema:'Mercado Peruano de Renta Fija',
+    bajada:'Curva soberana en soles y dólares, instrumentos locales y regulación',
+    teoria:{fecha:'16 nov 2026', dia:'Lunes', sesion:'Clase Teórica 14'},
+    practica:{fecha:'19 nov 2026', dia:'Jueves', sesion:'PD12', eval:true,
+              detalle:'Presentación del trabajo grupal, 10 % de la nota final'} },
+
+  { n:16, tipo:'examen', corto:'Finales',
+    tema:'Exámenes Finales',
+    rango:'23 al 29 nov 2026',
+    texto:'El examen final pesa 25 % de la nota final y cubre todo el curso. En esta semana también se rinde la evaluación sustitutoria para quienes tengan una práctica o examen pendiente.',
+    cubre:[1,2,3,4,5,6,7,9,10,11,12,13,14,15] }
+];
+
+const UNIDADES = {
+  1:'Unidad 1 · Fundamentos y estructura temporal',
+  2:'Unidad 2 · Riesgo de tasa de interés',
+  3:'Unidad 3 · Crédito y estructuras complejas',
+  4:'Unidad 4 · Gestión de portafolios'
+};
+
+/* ═══════════════════════════════════════════════════════════════════
+   3. CONSTRUCCIÓN DE LA INTERFAZ
+   ═══════════════════════════════════════════════════════════════════ */
+const stage = document.getElementById('stage');
+const tabsEl = document.getElementById('tabs');
+const grid  = document.getElementById('weeks-grid');
+const hecho = new Set(SEMANAS_AVANZADAS);
+const total = CRONOGRAMA.length;
+
+const icon = id => '<svg class="ic" viewBox="0 0 16 16" aria-hidden="true"><use href="#' + id + '"/></svg>';
+
+function sesionHTML(s, tipoIcono, rol){
+  const cls = 'ses' + (s.eval ? ' is-eval' : '');
+  return '<div class="' + cls + '">' +
+    '<div class="ses-k">' + icon(tipoIcono) + s.sesion + '</div>' +
+    '<div class="ses-date">' + s.fecha + '</div>' +
+    (s.detalle ? '<div style="font-size:12.5px;color:var(--d-body)">' + s.detalle + '</div>' : '') +
+    '<div class="ses-meta">' +
+      '<span>' + icon('i-cal') + s.dia + '</span>' +
+      '<span>' + icon('i-pin') + (rol === 'teoria' ? 'E-303' : 'A-106') + '</span>' +
+      '<span>' + icon('i-clock') + (rol === 'teoria' ? '10:30 a 13:20' : '20:30 a 22:20') + '</span>' +
+    '</div>' +
+  '</div>';
+}
+
+function semanaHTML(w){
+  if (w.tipo === 'examen'){
+    const chips = w.cubre.map(k => '<button type="button" data-goto="' + k + '">S' + k + '</button>').join('');
+    return '<div class="inner"><div class="exam">' +
+      '<div class="k">Semana ' + w.n + '</div>' +
+      '<h2>' + w.tema + '</h2>' +
+      '<div class="range num">' + w.rango + '</div>' +
+      '<p>' + w.texto + '</p>' +
+      '<div class="exam-scope">' + chips + '</div>' +
+    '</div></div>';
+  }
+
+  const publicado = ONEPAGERS_PUBLICADOS.includes(w.n);
+  const href = 'w' + w.n + '_onepager.html';
+  const boton = publicado
+    ? '<a class="op-btn" href="' + href + '">Abrir one-pager ' + icon('i-arrow') + '</a>'
+    : '<span class="op-btn is-off" aria-disabled="true">Próximamente</span>';
+  const copy = publicado
+    ? 'Resumen, keywords, conceptos clave y el desarrollo completo del tema en un documento aparte.'
+    : 'El one-pager de esta semana todavía no está publicado. Se habilitará en este mismo lugar.';
+
+  return '<div class="inner">' +
+    '<div class="wk-top">' +
+      '<div class="wk-id"><span class="n num">' + String(w.n).padStart(2,'0') + '</span>' +
+        '<span class="k">Semana</span></div>' +
+      '<div class="wk-head">' +
+        '<span class="wk-unit"><i></i>' + UNIDADES[w.unidad] + '</span>' +
+        '<h2>' + w.tema + '</h2>' +
+        '<p style="font-size:14px;color:var(--d-mute);margin-top:8px;max-width:56ch">' + w.bajada + '</p>' +
+      '</div>' +
+    '</div>' +
+    '<div class="sessions">' +
+      sesionHTML(w.teoria, 'i-doc', 'teoria') +
+      sesionHTML(w.practica, 'i-clip', 'practica') +
+    '</div>' +
+    (w.nota ? '<div class="wk-note">' + icon('i-info') + '<span>' + w.nota + '</span></div>' : '') +
+    '<div class="op-card">' +
+      '<div><h3>One-pager de la semana ' + w.n + '</h3><p>' + copy + '</p></div>' +
+      boton +
+    '</div>' +
+  '</div>';
+}
+
+/* pestañas */
+let tabsHTML = '<button class="tab" role="tab" aria-selected="true" data-slide="0">Main</button>';
+CRONOGRAMA.forEach(w => {
+  const cls = 'tab' + (w.tipo === 'examen' ? ' is-exam' : '') + (hecho.has(w.n) ? ' is-done' : '');
+  tabsHTML += '<button class="' + cls + '" role="tab" aria-selected="false" data-slide="' + w.n + '">S' +
+    w.n + (hecho.has(w.n) ? '<i class="tab-dot"></i>' : '') + '</button>';
+});
+tabsEl.innerHTML = tabsHTML;
+
+/* fichas semanales */
+CRONOGRAMA.forEach(w => {
+  const sec = document.createElement('section');
+  sec.className = 'slide slide--week';
+  sec.id = 'slide-' + w.n;
+  sec.setAttribute('role','tabpanel');
+  sec.setAttribute('aria-label','Semana ' + w.n);
+  sec.innerHTML = semanaHTML(w);
+  stage.appendChild(sec);
+});
+
+/* rejilla de progresión */
+grid.innerHTML = CRONOGRAMA.map(w => {
+  const cls = 'wcell' + (w.tipo === 'examen' ? ' is-exam' : '') + (hecho.has(w.n) ? ' is-done' : '');
+  return '<button type="button" class="' + cls + '" data-goto="' + w.n + '">' +
+    '<b class="num">S' + w.n + '</b><span>' + w.corto + '</span></button>';
+}).join('');
+
+/* contador */
+(function avance(){
+  const n = CRONOGRAMA.filter(w => hecho.has(w.n)).length;
+  const pct = Math.round(n / total * 100);
+  document.getElementById('pct-num').textContent = pct;
+  document.getElementById('pct-sub').textContent = n + ' de ' + total + ' semanas';
+  document.getElementById('progress-caption').textContent = n === 0
+    ? 'Aún no se registran semanas dictadas. Selecciona una semana para abrir su ficha.'
+    : 'Última semana registrada: S' + Math.max.apply(null, [...hecho]) + '. Selecciona una semana para abrir su ficha.';
+  requestAnimationFrame(() => {
+    document.getElementById('track-fill').style.transform = 'scaleX(' + (pct / 100) + ')';
+  });
+})();
+
+/* chips de semana dentro de las unidades */
+document.querySelectorAll('.unit-weeks').forEach(box => {
+  box.innerHTML = box.dataset.weeks.split(',').map(k =>
+    '<button type="button" class="wchip" data-goto="' + k + '">S' + k + '</button>').join('');
+});
+
+/* ═══════════════════════════════════════════════════════════════════
+   4. NAVEGACIÓN
+   ═══════════════════════════════════════════════════════════════════ */
+const tabs = [...tabsEl.querySelectorAll('.tab')];
+const prev = document.getElementById('btn-prev');
+const next = document.getElementById('btn-next');
+const pos  = document.getElementById('position');
+const rail = document.getElementById('rail');
+let actual = 0;
+
+const ETIQUETAS = ['Main'].concat(CRONOGRAMA.map(w =>
+  'S' + w.n + ' · ' + (w.tipo === 'examen' ? w.tema : w.corto)));
+
+function ir(n, silencioso){
+  if (n < 0 || n > total || n === actual) return;
+  document.getElementById('slide-' + actual).classList.remove('is-active');
+  const nuevo = document.getElementById('slide-' + n);
+  nuevo.classList.add('is-active');
+  nuevo.scrollTop = 0;
+  actual = n;
+
+  tabs.forEach((t,i) => t.setAttribute('aria-selected', i === n ? 'true' : 'false'));
+  prev.disabled = n === 0;
+  next.disabled = n === total;
+  pos.textContent = ETIQUETAS[n];
+  rail.style.transform = 'scaleX(' + (n / total) + ')';
+  const t = tabs[n];
+  if (t) t.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  if (!silencioso){
+    const h = n === 0 ? '#main' : '#s' + n;
+    if (location.hash !== h) history.replaceState(null, '', h);
+  }
+}
+
+function desdeHash(silencioso){
+  const m = /^#s(\d+)$/.exec(location.hash);
+  if (m) ir(Math.min(Math.max(+m[1], 1), total), silencioso);
+  else if (location.hash === '#main') ir(0, silencioso);
+}
+
+tabsEl.addEventListener('click', e => {
+  const t = e.target.closest('.tab');
+  if (t) ir(+t.dataset.slide);
+});
+document.addEventListener('click', e => {
+  const g = e.target.closest('[data-goto]');
+  if (g) ir(+g.dataset.goto);
+});
+prev.addEventListener('click', () => ir(actual - 1));
+next.addEventListener('click', () => ir(actual + 1));
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input,textarea')) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown'){ e.preventDefault(); ir(actual + 1); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp'){   e.preventDefault(); ir(actual - 1); }
+  if (e.key === 'Home'){ e.preventDefault(); ir(0); }
+  if (e.key === 'End'){  e.preventDefault(); ir(total); }
+});
+
+window.addEventListener('hashchange', () => desdeHash(true));
+
+pos.textContent = ETIQUETAS[0];
+desdeHash(true);
+</script>
+</body>
+</html>

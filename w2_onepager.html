@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Semana 2 · Fundamentos de Valorización y Medidas de Rendimiento · Renta Fija 2026-II</title>
+<meta name="description" content="One-pager de la semana 2 del curso Renta Fija 1F0115, Universidad del Pacífico, semestre 2026-II."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/onepager.css"/>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<header class="doc-header">
+  <div class="header-inner">
+    <a class="back-btn no-print" href="index.html#s2"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.25 8H2.75M6.75 4l-4 4 4 4"/></svg> Mapa del curso</a>
+    <h1 class="header-title">Fundamentos de Valorización y Medidas de Rendimiento</h1>
+    <p class="header-sub"><b>Semana 2</b><b>Precio, yields, spreads, tasa flotante y mercado de dinero</b></p>
+    <nav class="header-pills" aria-label="Secciones del documento"><a href="#resumen" class="pill accent">Resumen</a><a href="#keywords" class="pill accent">Keywords</a><a href="#conceptos" class="pill accent">Conceptos clave</a><a href="#onepager" class="pill accent">One-pager</a><span class="pills-rule" aria-hidden="true"></span><a href="#module-01" class="pill quiet">01 Valoración</a><a href="#module-02" class="pill quiet">02 Yields & Spreads</a><a href="#module-03" class="pill quiet">03 Tasa Flotante & Money Market</a><a href="#module-04" class="pill quiet">04 Curvas Spot · Par · Forward</a></nav>
+  </div>
+</header>
+
+<div class="wrapper">
+
+<!-- ═══════════ RESUMEN ═══════════ -->
+<section class="section-block" id="resumen">
+  <div class="section-header"><span class="section-title">Resumen</span></div>
+  <div class="section-body">
+    <p class="lead">Esta semana cubre cuatro grandes bloques que constituyen el framework cuantitativo central del curso. <strong>(1) Valoración de bonos:</strong> se formaliza el precio como VP de flujos descontados al YTM, el ajuste por días transcurridos (full price vs. flat price), las convenciones de interés devengado 30/360 y Actual/Actual, y el matrix pricing por interpolación lineal para bonos ilíquidos o nuevas emisiones. <strong>(2) Medidas de rendimiento en bonos de tasa fija:</strong> periodicidad y conversión YTM nominal ↔ EAY, Street Convention vs. True Yield, current yield y simple yield, medidas para bonos con opciones embebidas (YTC, YTW, OAY) y los cuatro spreads de referencia (G-spread, I-spread, Z-spread, OAS). <strong>(3) Instrumentos de tasa flotante:</strong> FRNs (Quoted Margin vs. Discount Margin) y mercado monetario (Discount Yield, Add-On Yield, BEY, HPY, EAY). <strong>(4) Estructura temporal:</strong> construcción de la curva spot por bootstrapping, par yields, tasas forward implícitas y la relación Forward > Spot > Par en curvas ascendentes.</p>
+  </div>
+</section>
+
+<!-- ═══════════ KEYWORDS ═══════════ -->
+<section class="section-block" id="keywords">
+  <div class="section-header"><span class="section-title">Keywords</span></div>
+  <div class="section-body">
+    <div class="kw-list"><span class="badge badge-blue">YTM (Yield to Maturity)</span><span class="badge badge-blue">Full Price / Dirty Price</span><span class="badge badge-blue">Spot Rate · Bootstrapping</span><span class="badge badge-blue">Z-Spread</span><span class="badge badge-outline">Flat Price (Clean)</span><span class="badge badge-outline">Accrued Interest 30/360 &amp; Actual/Actual</span><span class="badge badge-outline">Matrix Pricing</span><span class="badge badge-outline">EAY (Effective Annual Yield)</span><span class="badge badge-outline">Yield to Call (YTC)</span><span class="badge badge-outline">Yield to Worst (YTW)</span><span class="badge badge-outline">OAS (Option-Adjusted Spread)</span><span class="badge badge-outline">G-Spread</span><span class="badge badge-outline">I-Spread</span><span class="badge badge-outline">Quoted Margin vs. Discount Margin</span><span class="badge badge-outline">Forward Rate · Par Rate</span><span class="badge badge-gray">Street Convention</span><span class="badge badge-gray">Current Yield · Simple Yield</span><span class="badge badge-gray">Discount Yield (T-Bills)</span><span class="badge badge-gray">Bond Equivalent Yield (BEY)</span><span class="badge badge-gray">Add-On Yield · HPY</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ CONCEPTOS CLAVE ═══════════ -->
+<section class="section-block" id="conceptos">
+  <div class="section-header"><span class="section-title">Conceptos clave</span></div>
+  <div class="section-body">
+    <ul class="concepts"><li><strong>Full Price &amp; Accrued Interest:</strong> <span class="math-block">\[\text{Full Price} = PV_{\text{último cupón}} \times (1+y)^{t/T}\]</span><span class="math-block">\[\text{AI} = C \times \dfrac{d_{\text{transcurridos}}}{d_{\text{período}}}\]</span><span class="math-block">\[\text{Flat Price} = \text{Full Price} - \text{AI}\]</span> Convenciones: 30/360 (bonos corporativos EEUU), Actual/Actual (Treasuries). El mercado cotiza flat price para evitar el &ldquo;diente de sierra&rdquo; visual del devengado.</li><li><strong>Relaciones precio-características:</strong> relación inversa precio-yield. Efecto cupón: menor cupón → mayor sensibilidad. Efecto plazo: mayor vencimiento → mayor sensibilidad. Convexidad positiva: ganancia por caída de yield &gt; pérdida por subida equivalente. Bono a descuento si \(C < \text{YTM}\); a prima si \(C > \text{YTM}\); pull-to-par conforme vence.</li><li><strong>Matrix Pricing:</strong> estima el YTM de bonos ilíquidos o nuevas emisiones por interpolación lineal entre comparables activos.<span class="math-block">\[\text{YTM}_{\text{obj}} = \text{YTM}_{\text{menor}} + (\text{YTM}_{\text{mayor}} - \text{YTM}_{\text{menor}}) \times \dfrac{P_{\text{obj}} - P_{\text{menor}}}{P_{\text{mayor}} - P_{\text{menor}}}\]</span> También se usa para estimar el spread sobre Treasuries para nuevas emisiones corporativas.</li><li><strong>Medidas de rendimiento y spreads:</strong> \(\text{EAY} = \left(1 + \frac{\text{YTM}}{m}\right)^{\!m} - 1\) convierte periodicidades. \(\text{YTW} = \min(\text{YTM},\,\text{YTC}_1,\,\text{YTC}_2,\ldots)\). \(\text{OAS} = Z\text{-spread} - \text{costo opción}\): permite comparar callable vs. straight en igualdad de condiciones. G-spread sobre curva gubernamental; I-spread sobre tasas swap (MRR: SOFR, €STR); Z-spread constante sobre curva spot.</li><li><strong>FRNs y Mercado Monetario:</strong> FRN: \(\text{cupón} = \text{MRR} + QM;\;\text{descuento} = \text{MRR} + DM\). Si \(QM > DM \Rightarrow P > \text{Par}\); si \(QM = DM \Rightarrow P = \text{Par}\). Instrumentos a descuento: <span class="math-block">\[\text{DY} = \frac{FV-P}{FV}\times\frac{360}{d} \qquad \text{AOY} = \frac{FV-P}{P}\times\frac{360}{d} \qquad \text{BEY} = \text{HPY}\times\frac{365}{d}\]</span>\(\text{EAY} = (1+\text{HPY})^{365/d}-1\). Jerarquía: \(\text{DY} < \text{HPY} < \text{BEY} < \text{EAY}\).</li><li><strong>Curvas Spot, Par y Forward:</strong> Bootstrapping extrae tasas spot iterativamente. Forward implícita:<span class="math-block">\[f_{m,n} = \left[\frac{(1+S_{m+n})^{m+n}}{(1+S_m)^m}\right]^{1/n} - 1\]</span> Par yield: cupón que hace \(P = 100\) (promedio ponderado de spots). Curva ascendente: \(\text{Forward} > \text{Spot} > \text{Par}\). Valoración con spots y forwards produce precios idénticos por no-arbitraje.</li></ul>
+    <div class="applies"><div class="apply"><h4>Aplicación práctica</h4><ul><li>Calcular full price y flat price de un bono con settlement T+2</li><li>Matrix pricing: estimar YTM de un bono A+ a 3 años interpolando entre 2y y 5y</li><li>Bootstrapping de curva spot a 3 plazos y derivar tasas forward 1y1y y 2y1y</li><li>Calcular discount yield, BEY y EAY de un T-Bill a 90 días</li></ul></div><div class="apply"><h4>Conexiones del curso</h4><ul><li>S1: Estructura de flujos y relación precio-tasa</li><li>S3: YTM y DV01 como input de Duration y Convexity</li><li>S5: Curva spot y forwards desarrollados en profundidad</li><li>S6: Z-spread y bootstrapping son el input del árbol binomial</li><li>S7: OAS reemplaza al Z-spread para bonos con opciones</li></ul></div></div>
+  </div>
+</section>
+
+<!-- ═══════════ ONE-PAGER ═══════════ -->
+<div class="module-divider" id="onepager">
+  <div class="module-num"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div>
+  <div class="module-title-block">
+    <h2>One-pager</h2>
+    <p>Desarrollo completo del tema, módulo por módulo</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 01 · VALORACIÓN DE BONOS
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-01">
+  <div class="module-num">01</div>
+  <div class="module-title-block">
+    <h2>Valoración de Bonos: Precios y Rendimientos</h2>
+    <p>Fórmula fundamental · Full & Flat price · Accrued interest · Relaciones precio-características · Matrix pricing</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 1.1 PRECIO COMO VP DE FLUJOS -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">1.1</span>
+    <span class="section-title">Precio como Valor Presente de Flujos · Full Price · Accrued Interest</span>
+  </div>
+  <div class="section-body">
+
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Fórmula fundamental de pricing</div>
+          <div class="f-eq">$$P = \sum_{t=1}^{N}\frac{C}{(1+y)^{t}} + \frac{FV}{(1+y)^{N}}$$</div>
+          <div class="f-vars">
+            <span>P</span> = precio &nbsp;|&nbsp; <span>C</span> = cupón por período &nbsp;|&nbsp; <span>y</span> = YTM por período &nbsp;|&nbsp; <span>N</span> = número de períodos &nbsp;|&nbsp; <span>FV</span> = valor nominal
+          </div>
+        </div>
+
+        <div class="formula-box" >
+          <div class="f-label">Pricing semestral (periodicidad m = 2)</div>
+          <div class="f-eq">$$P = \sum_{t=1}^{2N}\frac{C/2}{(1+y/2)^{t}} + \frac{FV}{(1+y/2)^{2N}}$$</div>
+          <div class="f-vars">YTM nominal anual = <span>y</span> &nbsp;→&nbsp; tasa periódica = <span>y/2</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Full Price (Dirty / Invoice Price)</div>
+          <div class="f-eq">$$P^{\text{full}} = PV_{\text{últ. cupón}} \times (1+y)^{\,t/T}$$</div>
+          <div class="f-vars">
+            <span>t</span> = días transcurridos desde último cupón &nbsp;|&nbsp; <span>T</span> = días en el período de cupón &nbsp;|&nbsp; <span>y</span> = YTM semestral
+          </div>
+        </div>
+
+        <div class="formula-box" >
+          <div class="f-label">Accrued Interest</div>
+          <div class="f-eq">$$AI = C \times \frac{t}{T}$$</div>
+          <div class="f-vars">
+            <span>30/360</span>: meses de 30 días, año de 360 → corporativos USA<br>
+            <span>Act/Act</span>: días reales → Treasuries USA
+          </div>
+        </div>
+
+        <div class="formula-box" >
+          <div class="f-label">Flat Price (Clean / Quoted)</div>
+          <div class="f-eq">$$P^{\text{flat}} = P^{\text{full}} - AI$$</div>
+          <div class="f-vars">El precio de mercado cotizado excluye el interés devengado</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-callout gold" >
+      <strong>Leyes del precio:</strong> &nbsp;Cupón = YTM → precio = par (100). &nbsp;Cupón &lt; YTM → descuento. &nbsp;Cupón &gt; YTM → prima. &nbsp;Al vencimiento el precio converge a 100 (<em>pull-to-par</em>).
+    </div>
+
+  </div>
+</div>
+
+<!-- 1.2 RELACIONES PRECIO -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">1.2</span>
+    <span class="section-title">Relaciones Precio · Cupón · Plazo · Yield</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-3">
+      <div class="concept-card">
+        <div class="cc-label">Relación inversa precio-yield</div>
+        <div class="cc-def">Cuando el YTM ↑, el precio ↓ (y viceversa). La relación es <strong>convexa</strong>: las ganancias por caída de yield superan las pérdidas por subida equivalente.</div>
+      </div>
+      <div class="concept-card accent-mid">
+        <div class="cc-label mid">Efecto del cupón</div>
+        <div class="cc-def">A igual plazo y yield: <strong>menor cupón → mayor sensibilidad</strong> al cambio de yield (más peso en el principal lejano).</div>
+      </div>
+      <div class="concept-card accent-gold">
+        <div class="cc-label gold">Efecto del plazo</div>
+        <div class="cc-def">A igual cupón: <strong>mayor vencimiento → mayor sensibilidad</strong> al cambio de yield (flujos más lejanos en el tiempo).</div>
+      </div>
+    </div>
+
+    <table class="ref-table" >
+      <thead>
+        <tr><th>Variable ↑</th><th>Efecto en sensibilidad del precio</th><th>Intuición</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Cupón ↑</strong></td><td>Sensibilidad ↓</td><td>Más flujos anticipados → menor peso del principal lejano</td></tr>
+        <tr><td><strong>Plazo ↑</strong></td><td>Sensibilidad ↑</td><td>Flujos más lejanos → mayor exposición a tasa de descuento</td></tr>
+        <tr><td><strong>Yield ↑</strong></td><td>Sensibilidad ↓</td><td>Descuento mayor → flujos lejanos tienen menos peso relativo</td></tr>
+      </tbody>
+    </table>
+
+    <div class="rule-callout" >
+      <strong>Convexidad:</strong> Para un Δy simétrico, la <em>ganancia</em> cuando el yield cae es mayor que la <em>pérdida</em> cuando el yield sube. Siempre positiva para bonos plain-vanilla.
+    </div>
+  </div>
+</div>
+
+<!-- 1.3 MATRIX PRICING -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">1.3</span>
+    <span class="section-title">Matrix Pricing · Interpolación Lineal</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="concept-card accent-navy">
+          <div class="cc-label">¿Para qué sirve?</div>
+          <div class="cc-def">Estima el YTM de bonos <strong>ilíquidos o nuevas emisiones</strong> usando bonos comparables con calificación y vencimiento similares.</div>
+        </div>
+
+        <div class="formula-box" >
+          <div class="f-label">Interpolación lineal de YTM</div>
+          <div class="f-eq">$$YTM_{\text{obj}} = YTM_{\text{menor}} + (YTM_{\text{mayor}} - YTM_{\text{menor}}) \times \frac{T_{\text{obj}} - T_{\text{menor}}}{T_{\text{mayor}} - T_{\text{menor}}}$$</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="step-flow" style="flex-direction:column;gap:6px">
+          <div class="note-inline">
+            <strong style="color:var(--corp)">① Identificar</strong> bonos comparables (misma calidad, vencimiento cercano)
+          </div>
+          <div class="note-inline">
+            <strong style="color:var(--corp)">② Promediar</strong> YTMs si hay varios comparables al mismo plazo
+          </div>
+          <div class="note-inline">
+            <strong style="color:var(--corp)">③ Interpolar</strong> linealmente al vencimiento objetivo
+          </div>
+          <div class="note-inline">
+            <strong style="color:var(--corp)">④ Calcular precio</strong> con YTM estimado y flujos del bono
+          </div>
+        </div>
+        <div class="footnote" style="border-radius:6px">Para <strong>nuevas emisiones</strong>: calcular spread sobre el Treasury interpolado al mismo vencimiento → <em>YTM<sub>nueva</sub> = YTM<sub>Treasury</sub> + Spread<sub>promedio</sub></em></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 02 · YIELDS & SPREADS TASA FIJA
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-02">
+  <div class="module-num">02</div>
+  <div class="module-title-block">
+    <h2>Rendimientos y Spreads en Bonos de Tasa Fija</h2>
+    <p>Periodicidad · EAY · Street/True yield · Current/Simple yield · YTC · YTW · OAS · G/I/Z-Spread</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 2.1 PERIODICIDAD -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.1</span>
+    <span class="section-title">Medidas de Rendimiento según Periodicidad</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Effective Annual Yield (EAY)</div>
+          <div class="f-eq">$$EAY = \left(1 + \frac{YTM_{\text{nom}}}{m}\right)^{m} - 1$$</div>
+          <div class="f-vars"><span>m</span> = periodicidad (1 anual, 2 semestral, 4 trimestral, 12 mensual)</div>
+        </div>
+        <div class="formula-box" >
+          <div class="f-label">Convertir EAY a YTM nominal con periodicidad m</div>
+          <div class="f-eq">$$YTM_{\text{nom}} = m \times \left[(1+EAY)^{1/m} - 1\right]$$</div>
+        </div>
+      </div>
+
+      <div>
+        <table class="ref-table">
+          <thead><tr><th>Medida</th><th>Fórmula</th><th>Nota</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><strong>Current Yield</strong></td>
+              <td class="mono">Cupón anual / Precio</td>
+              <td>Ignora capital y reinversión</td>
+            </tr>
+            <tr>
+              <td><strong>Simple Yield</strong></td>
+              <td class="mono">(C ± Amort.) / P</td>
+              <td>Amort. = (100−P)/N</td>
+            </tr>
+            <tr>
+              <td><strong>Street Convention</strong></td>
+              <td>Fechas teóricas de pago</td>
+              <td>Cotización estándar</td>
+            </tr>
+            <tr>
+              <td><strong>True Yield</strong></td>
+              <td>Fechas reales (adj. feriados)</td>
+              <td>Ligeramente &lt; street conv.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="rule-callout" >
+          Para igual EAY: mayor periodicidad → menor YTM nominal. Para igual YTM nominal: mayor periodicidad → mayor EAY.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2.2 OPCIONES EMBEBIDAS -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.2</span>
+    <span class="section-title">Rendimientos Ajustados por Opciones Embebidas</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-3">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Yield to Call (YTC)</div>
+          <div class="f-eq">$$P = \sum_{t=1}^{n}\frac{C}{(1+YTC)^{t}} + \frac{CP}{(1+YTC)^{n}}$$</div>
+          <div class="f-vars"><span>CP</span> = call price &nbsp;|&nbsp; <span>n</span> = períodos hasta la call date</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="concept-card">
+          <div class="cc-label">Yield to Worst (YTW)</div>
+          <div class="cc-def">
+            $$YTW = \min(YTM,\; YTC_1,\; YTC_2,\;\ldots)$$
+            Representa el <strong>rendimiento mínimo garantizado</strong>. El emisor ejerce la call si es óptimo para él.
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="concept-card accent-gold">
+          <div class="cc-label gold">Option-Adjusted (OAP / OAY)</div>
+          <div class="cc-def">
+            Callable: \(\;P_{\text{straight}} = P_{\text{callable}} + V_{\text{call}}\)<br>
+            <br>\(OAY = \text{Yield callable} - \text{Costo opción}\)<br>
+            <br>El OAY es la medida <strong>pura de crédito</strong>, sin riesgo de opción.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2.3 SPREADS -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.3</span>
+    <span class="section-title">Medidas de Spread</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">G-Spread (Government Spread)</div>
+          <div class="f-eq">$$G\text{-}Spread = Yield_{\text{bono}} - Yield_{\text{Treasury}}$$</div>
+          <div class="f-vars">Se interpola el Treasury al vencimiento exacto del bono. Base: curva soberana.</div>
+        </div>
+        <div class="formula-box" >
+          <div class="f-label">I-Spread (Interpolated Spread)</div>
+          <div class="f-eq">$$I\text{-}Spread = Yield_{\text{bono}} - Swap\,Rate_{\text{mismo plazo}}$$</div>
+          <div class="f-vars">Benchmark: curva swap (SOFR, €STR, SONIA…). Más representativo que G-spread en mercados europeos.</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Z-Spread (Zero-Volatility Spread)</div>
+          <div class="f-eq">$$P = \sum_{t=1}^{n}\frac{C_t}{(1 + S_t + Z)^{t}}$$</div>
+          <div class="f-vars"><span>S_t</span> = tasa spot para período t &nbsp;|&nbsp; <span>Z</span> = Z-spread constante. Calculado por iteración.</div>
+        </div>
+        <div class="formula-box" >
+          <div class="f-label">OAS (Option-Adjusted Spread)</div>
+          <div class="f-eq">$$OAS = Z\text{-}Spread - \text{Costo de la Opción}$$</div>
+          <div class="f-vars">
+            Bono straight: OAS = Z-Spread<br>
+            Bono callable: OAS &lt; Z-Spread<br>
+            Bono putable:  OAS &gt; Z-Spread
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table class="ref-table" >
+      <thead><tr><th>Spread</th><th>Benchmark</th><th>Ventaja</th><th>Limitación</th></tr></thead>
+      <tbody>
+        <tr><td><strong>G-Spread</strong></td><td>Curva soberana (un punto)</td><td>Simple, directo</td><td>Ignora forma de la curva</td></tr>
+        <tr><td><strong>I-Spread</strong></td><td>Tasa swap (un punto)</td><td>Disponible en más monedas</td><td>Ignora forma de la curva</td></tr>
+        <tr><td><strong>Z-Spread</strong></td><td>Curva spot completa</td><td>Usa toda la estructura temporal</td><td>Ignora opcionalidad</td></tr>
+        <tr><td><strong>OAS</strong></td><td>Curva spot + modelo</td><td>Elimina efecto de la opción</td><td>Sensible al modelo de tasas</td></tr>
+      </tbody>
+    </table>
+    <div class="rule-callout gold" >
+      El spread compensa por: riesgo crediticio + riesgo de liquidez + riesgo de opción (si aplica) + diferencias fiscales.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 03 · TASA FLOTANTE & MONEY MARKET
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-03">
+  <div class="module-num">03</div>
+  <div class="module-title-block">
+    <h2>Rendimientos en Instrumentos de Tasa Flotante y Mercado de Dinero</h2>
+    <p>FRN · Quoted Margin · Discount Margin · Discount Yield · Add-On · BEY · HPY · EAY</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 3.1 FRN -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">3.1</span>
+    <span class="section-title">Floating-Rate Notes (FRN) · Quoted Margin vs Discount Margin</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Cupón del FRN</div>
+          <div class="f-eq">$$C_t = (MRR_{t-1} + QM) \times FV$$</div>
+          <div class="f-vars"><span>MRR</span> = Market Reference Rate (SOFR, €STR…) &nbsp;|&nbsp; <span>QM</span> = Quoted Margin (fijo por contrato)</div>
+        </div>
+        <div class="formula-box" >
+          <div class="f-label">Valoración del FRN con Discount Margin</div>
+          <div class="f-eq">$$P = \sum_{t=1}^{n}\frac{(MRR + QM)\times FV}{(1+MRR+DM)^{t}} + \frac{FV}{(1+MRR+DM)^{n}}$$</div>
+          <div class="f-vars"><span>DM</span> = Discount Margin (margen de mercado requerido)</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="cmp-strip">
+          <div class="cmp-cell up">
+            <div class="cmp-head">QM &gt; DM</div>
+            <div class="cmp-rule">Precio &gt; 100</div>
+            <p>Cupón pagado &gt; tasa de descuento del mercado</p>
+          </div>
+          <div class="cmp-cell flat">
+            <div class="cmp-head">QM = DM</div>
+            <div class="cmp-rule">Precio = 100</div>
+            <p>Cupón = tasa descuento; no hay ganancia/pérdida de capital</p>
+          </div>
+          <div class="cmp-cell down">
+            <div class="cmp-head">QM &lt; DM</div>
+            <div class="cmp-rule">Precio &lt; 100</div>
+            <p>Cupón pagado &lt; lo que exige el mercado</p>
+          </div>
+        </div>
+
+        <table class="ref-table" >
+          <thead><tr><th>Característica</th><th>QM</th><th>DM</th></tr></thead>
+          <tbody>
+            <tr><td>Definición</td><td>Margen contractual</td><td>Margen de mercado</td></tr>
+            <tr><td>Determina</td><td>Cupón pagado</td><td>Tasa de descuento</td></tr>
+            <tr><td>Variabilidad</td><td>Fijo (vida del bono)</td><td>Variable (condiciones)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3.2 MONEY MARKET -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">3.2</span>
+    <span class="section-title">Rendimientos en el Mercado de Dinero</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Discount Yield (base 360 · sobre valor nominal)</div>
+          <div class="f-eq">$$DY = \frac{FV - P}{FV} \times \frac{360}{d}$$</div>
+          <div class="f-vars">
+            Precio desde DY: \(\;P = FV \times \left[1 - DY \times \dfrac{d}{360}\right]\)<br>
+            Instrumentos: T-Bills, Commercial Paper
+          </div>
+        </div>
+        <div class="formula-box" >
+          <div class="f-label">Add-On Yield (base 360 · sobre precio)</div>
+          <div class="f-eq">$$FV = P \times \left[1 + AOY \times \frac{d}{360}\right]$$</div>
+          <div class="f-vars">Instrumentos: CDs, Repos (algunos base 365)</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Holding Period Yield (HPY)</div>
+          <div class="f-eq">$$HPY = \frac{FV - P}{P}$$</div>
+          <div class="f-vars">Retorno total del período, sin anualizar.</div>
+        </div>
+        <div class="formula-box" >
+          <div class="f-label">Bond Equivalent Yield (BEY) · base 365 · simple</div>
+          <div class="f-eq">$$BEY = HPY \times \frac{365}{d}$$</div>
+        </div>
+        <div class="formula-box" >
+          <div class="f-label">Effective Annual Yield (EAY) · base 365 · compuesto</div>
+          <div class="f-eq">$$EAY = (1+HPY)^{365/d} - 1$$</div>
+        </div>
+        <div class="formula-box" >
+          <div class="f-label">Conversión directa DY → BEY</div>
+          <div class="f-eq">$$BEY = \frac{365 \times DY}{360 - DY \times d}$$</div>
+        </div>
+      </div>
+    </div>
+
+    <table class="ref-table" >
+      <thead><tr><th>Medida</th><th>Base</th><th>Denominador del interés</th><th>Instrumento típico</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Discount Yield</strong></td><td>360</td><td>Valor nominal (FV)</td><td>T-Bills, Commercial Paper</td></tr>
+        <tr><td><strong>Add-On Yield</strong></td><td>360</td><td>Precio (P)</td><td>CDs, Repos</td></tr>
+ <tr><td><strong>HPY</strong></td><td></td><td>Precio (sin anualizar)</td><td>Cualquier instrumento</td></tr>
+        <tr><td><strong>BEY</strong></td><td>365</td><td>Precio (anualiz. simple)</td><td>Comparación con bonos</td></tr>
+        <tr><td><strong>EAY</strong></td><td>365</td><td>Precio (anualiz. compuesto)</td><td>Comparación precisa</td></tr>
+      </tbody>
+    </table>
+
+    <div class="rule-callout gold" >
+      <strong>Jerarquía para un mismo instrumento:</strong> &nbsp;Discount Yield &lt; HPY &lt; BEY &lt; EAY. Para comparaciones precisas entre instrumentos de distinta convención, convertir siempre a EAY.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 04 · ESTRUCTURA TEMPORAL
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-04">
+  <div class="module-num">04</div>
+  <div class="module-title-block">
+    <h2>Estructura Temporal de Tasas: Curvas Spot, Par y Forward</h2>
+    <p>Spot rates · Bootstrapping · Par yields · Notación forward · Relaciones e implicaciones de inversión</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 4.1 SPOT -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">4.1</span>
+    <span class="section-title">Tasas Spot y Curva Spot · Bootstrapping · Valoración sin Arbitraje</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Precio del bono cupón cero (definición de tasa spot)</div>
+          <div class="f-eq">$$P_{\text{zero}} = \frac{FV}{(1 + S_n)^{n}}$$</div>
+          <div class="f-vars"><span>S_n</span> = tasa spot para el vencimiento n</div>
+        </div>
+        <div class="formula-box" >
+          <div class="f-label">Valoración de no-arbitraje con tasas spot</div>
+          <div class="f-eq">$$P = \sum_{t=1}^{n}\frac{C_t}{(1+S_t)^{t}} + \frac{FV}{(1+S_n)^{n}}$$</div>
+          <div class="f-vars">Cada flujo descontado a su propia tasa spot. Precio consistente con la curva.</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="concept-card accent-navy">
+          <div class="cc-label">Bootstrapping (extracción iterativa de spot rates)</div>
+          <div class="cc-def">
+            <strong>Paso 1:</strong> \(S_1 = YTM_{\text{bono 1 año}}\)<br><br>
+            <strong>Paso 2:</strong> Del bono de 2 años con cupón:<br>
+            \(\;P = \dfrac{C}{1+S_1} + \dfrac{C+FV}{(1+S_2)^2}\) → despejar \(S_2\)<br><br>
+            <strong>Paso n:</strong> Usar \(S_1, \ldots, S_{n-1}\) para calcular \(S_n\) del bono de n años.
+          </div>
+        </div>
+        <div class="rule-callout" >
+          <strong>YTM vs. Tasas Spot:</strong> El YTM es una tasa única promedio (depende del cupón). Las tasas spot son independientes del cupón y permiten valoración sin arbitraje para cualquier bono.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4.2 PAR Y FORWARD -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">4.2</span>
+    <span class="section-title">Par Yields · Tasas Forward · Notación mTnY · Relaciones</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Par Yield a n años (cupón que da precio = 100)</div>
+          <div class="f-eq">$$PY_n = \frac{1 - (1+S_n)^{-n}}{\displaystyle\sum_{t=1}^{n}(1+S_t)^{-t}}$$</div>
+          <div class="f-vars">La par yield es un promedio ponderado de tasas spot. En curva ascendente: \(PY_n < S_n\)</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Tasa forward implícita: notación mTnY</div>
+          <div class="f-eq">$$(1 + f_{m,n})^{n} = \frac{(1+S_{m+n})^{m+n}}{(1+S_m)^{m}}$$</div>
+          <div class="f-vars">
+            Despejando: \(\;f_{m,n} = \left[\dfrac{(1+S_{m+n})^{m+n}}{(1+S_m)^m}\right]^{1/n} - 1\)<br><br>
+            <span>m</span> = inicio (años desde hoy) &nbsp;|&nbsp; <span>n</span> = duración del período forward
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="formula-box" >
+      <div class="f-label">Relación fundamental spot ↔ forward (producto de tasas forward)</div>
+      <div class="f-eq">$$(1+S_n)^n = (1+f_{0,1})(1+f_{1,1})(1+f_{2,1})\cdots(1+f_{n-1,1})$$</div>
+      <div class="f-vars">La tasa spot es la <strong>media geométrica</strong> de las tasas forward consecutivas de 1 período.</div>
+    </div>
+
+    <div class="formula-box" >
+      <div class="f-label">Valoración equivalente con tasas forward</div>
+      <div class="f-eq">$$P = \frac{C_1}{1+f_1} + \frac{C_2}{(1+f_1)(1+f_2)} + \cdots + \frac{C_n+FV}{(1+f_1)(1+f_2)\cdots(1+f_n)}$$</div>
+      <div class="f-vars">Donde \(f_1 = S_1\), \(f_2 = 1y1y\), \(f_3 = 2y1y\), etc. → <strong>el precio obtenido es idéntico al método spot.</strong></div>
+    </div>
+
+    <div class="grid-4" >
+      <div class="concept-card">
+        <div class="cc-label">0y1y</div>
+        <div class="cc-def">= \(S_1\). Tasa spot de 1 año. Es la primera forward.</div>
+      </div>
+      <div class="concept-card accent-mid">
+        <div class="cc-label mid">1y1y</div>
+        <div class="cc-def">Forward de 1 año comenzando en 1 año.<br>\((1+S_2)^2=(1+S_1)(1+1y1y)\)</div>
+      </div>
+      <div class="concept-card accent-navy">
+        <div class="cc-label">2y1y</div>
+        <div class="cc-def">Forward de 1 año comenzando en 2 años.<br>\((1+S_3)^3=(1+S_2)^2(1+2y1y)\)</div>
+      </div>
+      <div class="concept-card accent-gold">
+        <div class="cc-label gold">2y2y</div>
+        <div class="cc-def">Forward de 2 años comenzando en 2 años.<br>\((1+2y2y)^2=\dfrac{(1+S_4)^4}{(1+S_2)^2}\)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4.3 COMPARACIÓN DE CURVAS -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">4.3</span>
+    <span class="section-title">Comparación de las Tres Curvas · Implicaciones de Inversión</span>
+  </div>
+  <div class="section-body">
+
+    <div class="cmp-strip">
+      <div class="cmp-cell up">
+        <div class="cmp-head">Curva Normal (Ascendente)</div>
+        <div class="cmp-rule">Forward &gt; Spot &gt; Par</div>
+        <p>Expectativa de tasas crecientes. Prima de liquidez positiva.</p>
+      </div>
+      <div class="cmp-cell flat">
+        <div class="cmp-head">Curva Plana</div>
+        <div class="cmp-rule">Forward = Spot = Par</div>
+        <p>Incertidumbre o cambio de ciclo. Las tres curvas coinciden.</p>
+      </div>
+      <div class="cmp-cell down">
+        <div class="cmp-head">Curva Invertida</div>
+        <div class="cmp-rule">Forward &lt; Spot &lt; Par</div>
+        <p>Expectativa de recesión. Indicador histórico de desaceleración.</p>
+      </div>
+    </div>
+
+    <div class="grid-3" >
+      <div class="concept-card">
+        <div class="cc-label">Curva Spot</div>
+        <div class="cc-def">Tasas \(S_1, S_2,\ldots, S_n\) para bonos cupón cero. <strong>Base para valoración sin arbitraje</strong>. Construida por bootstrapping.</div>
+      </div>
+      <div class="concept-card accent-mid">
+        <div class="cc-label mid">Curva Par</div>
+        <div class="cc-def">Cupones que hacen precio = 100. Base para swaps y nuevas emisiones. <strong>Derivada desde la curva spot.</strong></div>
+      </div>
+      <div class="concept-card accent-gold">
+        <div class="cc-label gold">Curva Forward</div>
+        <div class="cc-def">Tasas forward implícitas para períodos futuros. <strong>Refleja expectativas</strong> del mercado (+ prima de riesgo).</div>
+      </div>
+    </div>
+
+    <table class="ref-table" >
+      <thead><tr><th>Señal</th><th>Interpretación</th><th>Estrategia</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Forward &gt; Spot</strong></td><td>Mercado espera tasas ↑</td><td>Corto plazo, rollover strategy</td></tr>
+        <tr><td><strong>Forward &lt; Spot</strong></td><td>Mercado espera tasas ↓</td><td>Largo plazo, lock-in rates</td></tr>
+        <tr><td><strong>Curva muy plana</strong></td><td>Incertidumbre / transición</td><td>Diversificación de plazos</td></tr>
+        <tr><td><strong>Curva invertida</strong></td><td>Posible recesión próxima</td><td>Calidad crediticia alta, duración corta</td></tr>
+      </tbody>
+    </table>
+
+    <div class="rule-callout gold" >
+      <strong>Riding the yield curve:</strong> en curva normal, comprar bonos con plazo &gt; horizonte de inversión y vender antes del vencimiento captura el <em>roll-down</em> (caída del yield por envejecimiento del bono a lo largo de la curva).
+    </div>
+    <div class="footnote" style="border-radius:6px">
+      Las tasas forward incluyen <strong>primas de riesgo</strong> además de las expectativas puras. Bajo la hipótesis de expectativas puras no hay prima → forward = predicción insesgada de spot futura. La teoría de preferencia de liquidez y preferred habitat añaden primas positivas para plazos largos.
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ RESUMEN FINAL ══ -->
+<div class="section-block" >
+  <div class="section-header" style="background:var(--navy)">
+    <span class="section-num" style="background:var(--navy);color:var(--corp)">REF</span>
+    <span class="section-title" style="color:white">Índice rápido de fórmulas clave</span>
+  </div>
+  <div class="section-body" style="padding:14px 20px">
+    <div class="grid-3">
+      <div>
+        <div class="badge-row" style="flex-direction:column;gap:5px">
+          <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Módulo 01 · Pricing</div>
+          <code class="chip">P = Σ C/(1+y)ᵗ + FV/(1+y)ᴺ</code>
+          <code class="chip">AI = C × (t/T)</code>
+          <code class="chip">Full Price = PV × (1+y)^(t/T)</code>
+          <code class="chip">Flat = Full − AI</code>
+          <code class="chip">YTM_obj = interp. lineal</code>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Módulos 02-03 · Yields</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <code class="chip">EAY = (1+y/m)ᵐ − 1</code>
+          <code class="chip">YTW = min(YTM, YTC₁…)</code>
+          <code class="chip">OAS = Z-Spread − V(opción)</code>
+          <code class="chip">DY = [(FV−P)/FV]×(360/d)</code>
+          <code class="chip">BEY = HPY×(365/d)</code>
+          <code class="chip">EAY = (1+HPY)^(365/d) − 1</code>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Módulo 04 · Curvas</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <code class="chip">P(spot) = Σ Ct/(1+St)ᵗ + FV/(1+Sn)ⁿ</code>
+          <code class="chip">PYn = [1−(1+Sn)⁻ⁿ] / Σ(1+St)⁻ᵗ</code>
+          <code class="chip">f(m,n) = [(1+S_{m+n})^{m+n}/(1+Sm)^m]^{1/n}−1</code>
+          <code class="chip">(1+Sn)ⁿ = Π(1+f_i)</code>
+          <code class="chip">Ascendente: Forward &gt; Spot &gt; Par</code>
+          <code class="chip">Invertida: Forward &lt; Spot &lt; Par</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrapper -->
+
+<button class="print-btn no-print" id="printBtn" aria-label="Imprimir"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.75 6.25V2.25h6.5v4M4.75 12.5h6.5v2.25h-6.5z"/><path d="M4.75 6.25h-1.5a1.5 1.5 0 0 0-1.5 1.5v3.25a1.5 1.5 0 0 0 1.5 1.5h1.5m6.5 0h1.5a1.5 1.5 0 0 0 1.5-1.5V7.75a1.5 1.5 0 0 0-1.5-1.5h-1.5"/></svg></button>
+<button class="scroll-top-btn no-print" id="scrollTopBtn" aria-label="Volver al inicio"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13.25V3.5M3.75 7.75L8 3.5l4.25 4.25"/></svg></button>
+<script>
+(function(){
+  var top = document.getElementById('scrollTopBtn');
+  var prt = document.getElementById('printBtn');
+  top.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  prt.addEventListener('click', function(){ window.print(); });
+  function marca(){
+    var v = window.scrollY > 320;
+    top.classList.toggle('visible', v);
+    prt.classList.toggle('visible', v);
+  }
+  window.addEventListener('scroll', marca, {passive:true});
+  marca();
+})();
+</script>
+</body>
+</html>

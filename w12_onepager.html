@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Semana 12 · Derivados de Renta Fija II: Derivados de Tasa de Interés · Renta Fija 2026-II</title>
+<meta name="description" content="One-pager de la semana 12 del curso Renta Fija 1F0115, Universidad del Pacífico, semestre 2026-II."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/onepager.css"/>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<header class="doc-header">
+  <div class="header-inner">
+    <a class="back-btn no-print" href="index.html#s12"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.25 8H2.75M6.75 4l-4 4 4 4"/></svg> Mapa del curso</a>
+    <h1 class="header-title">Derivados de Renta Fija II: Derivados de Tasa de Interés</h1>
+    <p class="header-sub"><b>Semana 12</b><b>Forwards sobre bonos, FRA, swaps de tasa y de moneda, futuros</b></p>
+    <nav class="header-pills" aria-label="Secciones del documento"><a href="#resumen" class="pill accent">Resumen</a><a href="#keywords" class="pill accent">Keywords</a><a href="#conceptos" class="pill accent">Conceptos clave</a><a href="#onepager" class="pill accent">One-pager</a><span class="pills-rule" aria-hidden="true"></span><a href="#module-01" class="pill quiet">01 Forwards sobre Bonos</a><a href="#module-02" class="pill quiet">02 FRA</a><a href="#module-03" class="pill quiet">03 Swaps de Tasa de Interés</a><a href="#module-04" class="pill quiet">04 Swaps de Moneda</a></nav>
+  </div>
+</header>
+
+<div class="wrapper">
+
+<!-- ═══════════ RESUMEN ═══════════ -->
+<section class="section-block" id="resumen">
+  <div class="section-header"><span class="section-title">Resumen</span></div>
+  <div class="section-body">
+    <p class="lead">La semana desarrolla los derivados lineales sobre tasas de interés bajo el principio de no-arbitraje (cost-of-carry). Se inicia con los forwards sobre bonos con cupones: el precio forward se obtiene ajustando el precio spot completo por el valor presente (PVC) o futuro (FVC) de los cupones intermedios. Los T-Bond Futures introducen la opción de entrega (CTD) y el factor de conversión (CF) que determinan el Quoted Futures Price (QFP). Los FRAs fijan hoy la tasa de un préstamo futuro con tasas MRR add-on en base 360 y se valoran descontando el ahorro de interés. Los Interest Rate Swaps son portafolios de FRAs: la Swap Fixed Rate (SFR) se deriva de los factores de descuento Z de la curva MRR para que el valor inicial sea cero. Finalmente, los Currency Swaps extienden la mecánica al intercambio de dos divisas con nocionales explícitos y valoración como portafolio de bonos en cada moneda convertido al tipo de cambio actual.</p>
+  </div>
+</section>
+
+<!-- ═══════════ KEYWORDS ═══════════ -->
+<section class="section-block" id="keywords">
+  <div class="section-header"><span class="section-title">Keywords</span></div>
+  <div class="section-body">
+    <div class="kw-list"><span class="badge badge-blue">Forward sobre Bono (Cost-of-Carry)</span><span class="badge badge-blue">FRA (Forward Rate Agreement)</span><span class="badge badge-blue">Interest Rate Swap (IRS)</span><span class="badge badge-blue">Currency Swap</span><span class="badge badge-outline">Swap Fixed Rate (SFR)</span><span class="badge badge-outline">Factor de Descuento (Z)</span><span class="badge badge-outline">PVC / FVC</span><span class="badge badge-outline">Tasa MRR (add-on, base 360)</span><span class="badge badge-outline">Precio limpio vs. sucio</span><span class="badge badge-gray">CTD (Cheapest to Deliver)</span><span class="badge badge-gray">Factor de Conversión (CF)</span><span class="badge badge-gray">QFP (Quoted Futures Price)</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ CONCEPTOS CLAVE ═══════════ -->
+<section class="section-block" id="conceptos">
+  <div class="section-header"><span class="section-title">Conceptos clave</span></div>
+  <div class="section-body">
+ <ul class="concepts"><li><strong>Precio Forward (Cost-of-Carry):</strong> <span class="math-block">\[\text{FP} = (S_0 - \text{PVC}) \times (1+R_f)^T = S_0 \times (1+R_f)^T - \text{FVC}\]</span> El comprador de la larga no recibe los cupones intermedios; el spot se ajusta por su valor presente. Alternativamente se restan en valor futuro al capitalizar \(S_0\).</li><li><strong>Valoración del forward:</strong> <span class="math-block">\[V_t(\text{largo}) = S_t - \text{PVC}_t - \frac{\text{FP}}{(1+R_f)^{T-t}} = \frac{\text{FP}_t - \text{FP}}{(1+R_f)^{T-t}}\]</span> Ambas formas son equivalentes: la segunda usa directamente el nuevo precio forward de mercado en <em>t</em>.</li><li><strong>FRA, Precio y valoración:</strong> el precio es la tasa forward MRR implícita. Al vencimiento, el pago es el ahorro de interés descontado al inicio del préstamo: \(\frac{(\text{MRR}-\text{FRA})\times\frac{d}{360}\times N}{1+\text{MRR}\times\frac{d}{360}}\). Antes del vencimiento, se recalcula una nueva tasa forward y se descuenta al plazo total restante.</li><li><strong>IRS, Swap Fixed Rate:</strong> <span class="math-block">\[Z_i = \frac{1}{1+\text{MRR}_i\times\frac{d_i}{360}}, \quad \text{SFR}_{\text{per}} = \frac{1-Z_{\text{final}}}{\sum Z_i}\]</span> La SFR iguala el VP de los pagos fijos con el VP de los pagos flotantes. El swap tiene valor cero al inicio.</li><li><strong>Currency Swap, Valoración:</strong> cada lado se valora como un bono (flujos + principal) con la curva MRR de su divisa. El lado extranjero se convierte al tipo de cambio <em>actual</em>. Valor neto = VP(lado recibido) − VP(lado pagado).</li></ul>
+    <div class="applies"><div class="apply"><h4>Aplicación práctica</h4><ul><li>Calcular FP de un T-Bond con cupones intermedios y verificar con FVC</li><li>Valorar un FRA 1×4 diez días después de su inicio con nueva curva MRR</li><li>Determinar SFR trimestral de un IRS a 1 año con curva spot dada</li></ul></div><div class="apply"><h4>Conexiones del curso</h4><ul><li>S5: Forward rates como base de FRAs y swap rate</li><li>S3: DV01 y duration conectan con el hedge ratio de futuros</li><li>S11: CTD y factor de conversión ya aparecen en forwards sobre bonos</li><li>S14: IRS y currency swaps como overlay en gestión de portafolios</li></ul></div></div>
+  </div>
+</section>
+
+<!-- ═══════════ ONE-PAGER ═══════════ -->
+<div class="module-divider" id="onepager">
+  <div class="module-num"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div>
+  <div class="module-title-block">
+    <h2>One-pager</h2>
+    <p>Desarrollo completo del tema, módulo por módulo</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 01 · FORWARDS SOBRE BONOS
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-01">
+  <div class="module-num">01</div>
+  <div class="module-title-block">
+    <h2>Forwards sobre Bonos</h2>
+    <p>Cost-of-Carry · Precio forward con cupones · PVC y FVC · Precio limpio vs. sucio · Valoración · T-Bond Futures · CTD · QFP</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 1.1 Precio forward -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">1.1</span>
+    <span class="section-title">Precio de un Forward sobre Bono con Cupones</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="concept-card accent-mid" >
+          <div class="cc-label mid">Modelo Cost-of-Carry</div>
+          <div class="cc-def">
+            El precio forward sin arbitraje equivale al precio spot más el costo neto de mantener el activo. El comprador de la posición <strong>larga no recibe los cupones</strong> que ocurren antes del vencimiento del contrato, por lo que el precio spot se ajusta restando el <strong>Valor Presente de los Cupones (PVC)</strong>.
+          </div>
+        </div>
+        <div class="formula-box">
+          <div class="f-label">Dos formas equivalentes</div>
+          <div class="f-eq">
+            $$\text{FP} = (S_0 - \text{PVC}) \times (1+R_f)^T$$
+            $$\text{FP} = S_0 \times (1+R_f)^T - \text{FVC}$$
+          </div>
+          <div class="f-vars">
+            <span>S₀</span> = precio spot al inicio (precio completo / full price)<br>
+            <span>R_f</span> = tasa libre de riesgo anual<br>
+            <span>T</span> = plazo del contrato en años (días/365 para renta fija)<br>
+            <span>PVC</span> = VP de cupones pagados antes de expiración<br>
+            <span>FVC</span> = VF de cupones pagados antes de expiración
+          </div>
+        </div>
+        <div class="concept-card" >
+          <div class="cc-label">Precio Limpio, Sucio e Interés Acumulado</div>
+          <div class="cc-def">
+            Los bonos se cotizan como <strong>precio limpio</strong> (clean price), sin incluir el interés acumulado. Al liquidar, el comprador paga el <strong>precio completo o sucio</strong> (full price):<br><br>
+            $$\text{Full Price} = \text{Clean Price} + \text{AI}$$
+            $$\text{AI} = \frac{\text{Días desde el último pago}}{\text{Días entre pagos}} \times \text{Cupón}$$
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="ex-box">
+ <div class="ex-title">Ejemplo · Forward a 250 días sobre T-Bond al 7%</div>
+          <div class="ex-body">
+            Valor nominal: $1,000 · Spot S₀: $1,050 (full price, acaba de pagar cupón)<br>
+            Cupón semestral siguiente: en 182 días · \(R_f = 6\%\)<br><br>
+            <strong>① Cupón semestral:</strong><br>
+            $$C = \frac{\$1{,}000 \times 0.07}{2} = \$35.00$$
+            <strong>② PVC del cupón en 182 días:</strong><br>
+            $$\text{PVC} = \frac{\$35.00}{1.06^{182/365}} = \$34.00$$
+            <strong>③ Precio forward:</strong><br>
+            $$\text{FP} = (\$1{,}050 - \$34.00) \times 1.06^{250/365}$$
+          </div>
+          <div class="ex-result">FP = $1,057.37</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teach">
+      <div class="t-tag">🟣 Desde cero · Cost-of-carry: dos caminos al mismo destino deben costar lo mismo</div>
+      Quieres <b>tener el bono dentro de T días</b>. Hay dos caminos:
+      <div class="mini-ej">
+ <b>Camino A, "cómpralo hoy con plata prestada":</b> pides prestado S₀, compras el bono ya. En T devuelves S₀×(1+R_f)^T… pero en el camino cobraste los cupones (que reinvertidos valen FVC). Costo neto = S₀(1+R_f)^T − FVC.<br><br>
+ <b>Camino B, "resérvalo a precio fijo":</b> firmas hoy el forward y pagas FP en T. Costo = FP.
+      </div>
+ Ambos caminos terminan igual (tú con el bono en T), así que si costaran distinto, alguien compraría por el camino barato y vendería por el caro ganando sin riesgo. El <b>no-arbitraje</b> obliga: FP = S₀(1+R_f)^T − FVC, y agrupando, (S₀ − PVC)(1+R_f)^T. <b>De ahí que se resten los cupones:</b> el comprador forward no los recibe, así que no los paga.
+    </div>
+
+    <div class="widget">
+      <span class="widget-tag">🧮 Calculadora · Precio forward sobre bono con cupones</span>
+      <h4>Reproduce el ejemplo del T-Bond (S₀ = 1,050 · cupón 35 en 182 días · R_f 6% · plazo 250 días)</h4>
+      <div class="w-controls">
+ <div class="w-field"><label>Spot S₀, full price ($)</label><input type="number" id="fwS0" value="1050" step="5" min="0" oninput="calcFwd12()"></div>
+        <div class="w-field"><label>Cupón intermedio ($)</label><input type="number" id="fwC" value="35" step="5" min="0" oninput="calcFwd12()"></div>
+        <div class="w-field"><label>Días hasta el cupón</label><input type="number" id="fwDC" value="182" step="1" min="0" oninput="calcFwd12()"></div>
+        <div class="w-field"><label>R_f anual (%)</label><input type="number" id="fwRf" value="6" step="0.25" min="0" oninput="calcFwd12()"></div>
+        <div class="w-field"><label>Plazo del forward (días)</label><input type="number" id="fwT" value="250" step="1" min="1" oninput="calcFwd12()"></div>
+      </div>
+      <div class="w-results">
+        <div class="w-res"><div class="r-label">PVC del cupón</div><div class="r-val" id="fwPVC">$34.00</div></div>
+        <div class="w-res gold"><div class="r-label">Precio forward FP</div><div class="r-val" id="fwFP">$1,057.37</div></div>
+      </div>
+ <p class="w-note"><strong>Pruebas:</strong> ① pon el cupón en 0 (verás el caso simple FP = S₀(1+R_f)^T; ② mueve los días del cupón a 260 (después del vencimiento del forward, T = 250)) el cupón <strong>deja de restarse</strong>: caerá cuando el bono ya esté en manos del comprador forward, así que él sí lo cobra. Solo se ajustan los cupones que ocurren <strong>durante la vida del contrato</strong> (los que el comprador forward se pierde).</p>
+    </div>
+  </div>
+</div>
+
+<!-- 1.2 Valoración de forwards -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">1.2</span>
+    <span class="section-title">Valoración de un Forward sobre Bono (antes del vencimiento)</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Valor de la posición larga en el tiempo t</div>
+          <div class="f-eq">
+            $$V_t\,(\text{largo}) = S_t - \text{PVC}_t - \frac{\text{FP}}{(1+R_f)^{(T-t)}}$$
+          </div>
+          <div class="f-vars">
+            <span>S_t</span> = precio spot del bono en la fecha de valoración t<br>
+            <span>PVC_t</span> = VP de cupones que quedan antes de la expiración, descontados desde t<br>
+            <span>FP</span> = precio forward fijado al inicio del contrato
+          </div>
+        </div>
+        <div class="formula-box" >
+          <div class="f-label">Método alternativo: usando el FP actualizado (FP_t)</div>
+          <div class="f-eq">
+            $$V_t\,(\text{largo}) = \frac{\text{FP}_t - \text{FP}}{(1+R_f)^{(T-t)}}$$
+          </div>
+          <div class="f-vars">
+            <span>FP_t</span> = precio forward de mercado en t (nuevo contrato, mismo vencimiento)<br>
+            Ambos métodos producen el mismo resultado.
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="ex-box">
+ <div class="ex-title">Ejemplo · Valoración 100 días después (FP original = $1,057.37)</div>
+          <div class="ex-body">
+            Spot S₁₀₀ = $1,090 · Queda 1 cupón en 82 días antes del vencimiento (150 días)<br>
+            \(R_f = 6\%\)<br><br>
+            <strong>① PVC del cupón restante:</strong><br>
+            $$\text{PVC} = \frac{\$35.00}{1.06^{82/365}} = \$34.54$$
+            <strong>② Valor posición larga:</strong><br>
+            $$V_{100} = \$1{,}090 - \$34.54 - \frac{\$1{,}057.37}{1.06^{150/365}}$$
+          </div>
+          <div class="ex-result">V₁₀₀ = $23.11</div>
+        </div>
+        <div class="ex-box" >
+          <div class="ex-title">Verificación: método FP actualizado (FP₁₀₀ = $1,081.04)</div>
+          <div class="ex-body">
+            $$V_{100} = \frac{\$1{,}081.04 - \$1{,}057.37}{1.06^{150/365}}$$
+          </div>
+ <div class="ex-result">V₁₀₀ = $23.11, mismo resultado, confirma consistencia</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 1.3 T-Bond Futures -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">1.3</span>
+    <span class="section-title">Futuros sobre Bonos del Tesoro (T-Bond Futures): CTD y QFP</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="cmp-strip" >
+          <div class="cmp-cell down">
+            <div class="cmp-head">Opción de Entrega (CTD)</div>
+            <div class="cmp-rule">Posición corta elige el bono</div>
+            <p>La posición corta puede entregar cualquier bono elegible. Selecciona el <strong>Cheapest-to-Deliver (CTD)</strong> para maximizar su beneficio. Cada bono tiene un <strong>Factor de Conversión (CF)</strong> que ajusta el pago recibido.</p>
+          </div>
+          <div class="cmp-cell neutral">
+            <div class="cmp-head">Factor de Conversión (CF)</div>
+            <div class="cmp-rule">Ajusta el pago de la posición larga</div>
+            <p>El comprador paga: FP × CF al vencimiento. Los bonos más valiosos (mayor cupón, mayor plazo) tienen CF &gt; 1. Estandariza la entrega entre bonos con distintas características.</p>
+          </div>
+        </div>
+        <div class="formula-box">
+          <div class="f-label">Precio Futuro Cotizado (QFP)</div>
+          <div class="f-eq">
+            $$\text{FP} = \text{Full Price} \times (1+R_f)^T - \text{FVC} - \text{AI}_T$$
+            $$\text{QFP} = \frac{\text{FP}}{\text{CF}} = \left[\text{Full Price} \times (1+R_f)^T - \text{FVC} - \text{AI}_T\right] \times \frac{1}{\text{CF}}$$
+          </div>
+          <div class="f-vars">
+            <span>AI_T</span> = interés acumulado al vencimiento del contrato futuro<br>
+            <span>FVC</span> = valor futuro de los cupones pagados antes de expiración<br>
+            <span>CF</span> = factor de conversión del bono CTD
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="ex-box">
+ <div class="ex-title">Ejemplo · QFP a 1.2 años sobre T-Bond CTD al 7%</div>
+          <div class="ex-body">
+            Full price (=limpio, recién pagó cupón): $1,040<br>
+            Cupones: $35 en 0.5 y 1.0 años · CF = 1.13 · AI al vencimiento = $14 · \(R_f = 5\%\)<br><br>
+            <strong>① FVC de cupones:</strong><br>
+            $$\text{FVC} = \$35 \times 1.05^{0.7} + \$35 \times 1.05^{0.2} = \$71.56$$
+            <strong>② QFP:</strong><br>
+            $$\text{QFP} = \left[\$1{,}040 \times 1.05^{1.2} - \$71.56 - \$14\right] \times \frac{1}{1.13}$$
+          </div>
+          <div class="ex-result">QFP = $900.13</div>
+        </div>
+        <div class="rule-callout gold" >
+          <strong>CTD en la práctica:</strong> el vendedor del futuro busca el bono con el menor costo de entrega (precio spot − FP × CF). El mercado compensa al vendedor con la QFP, que incluye implícitamente el valor de la opción de entrega.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 02 · FORWARD RATE AGREEMENTS (FRA)
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-02">
+  <div class="module-num">02</div>
+  <div class="module-title-block">
+    <h2>Forward Rate Agreements (FRA)</h2>
+    <p>Depósitos Eurodólar · Tasa MRR (add-on, base 360) · Notación m×n · Precio FRA · Valoración al vencimiento · Valoración antes del vencimiento</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 2.1 Estructura y notación -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.1</span>
+    <span class="section-title">Definición, Estructura y Tasa MRR</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="concept-card accent-mid" >
+          <div class="cc-label mid">¿Qué es un FRA?</div>
+          <div class="cc-def">
+            Acuerdo para fijar hoy la tasa de un préstamo o depósito futuro. La <strong>posición larga</strong> es el tomador de préstamo (se beneficia si la tasa sube). Si la tasa flotante al vencimiento supera la tasa pactada, la posición larga <em>recibe</em> el diferencial.<br><br>
+            <strong>Notación m × n:</strong> el FRA vence en <em>m</em> meses; el préstamo subyacente finaliza en <em>n</em> meses. El plazo del préstamo es <em>(n − m)</em> meses.
+          </div>
+        </div>
+        <div class="ex-box">
+          <div class="ex-title">Ejemplo de notación</div>
+          <div class="ex-body">
+            <strong>FRA 2 × 3:</strong> vence en 2 meses (60 días); el préstamo subyacente de 1 mes (30 días) finaliza en 3 meses (90 días).<br><br>
+            <strong>FRA 1 × 4:</strong> vence en 1 mes (30 días); el préstamo subyacente de 3 meses (90 días) finaliza en 4 meses (120 días).
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="concept-card accent-navy">
+          <div class="cc-label">Tasa MRR (Market Reference Rate): 3 Reglas Clave</div>
+          <div class="cc-def">
+            <strong>1. Add-on rate:</strong> el interés se suma al principal al vencimiento (no descuento).<br>
+            &nbsp;&nbsp;&nbsp;Interés = Principal × Tasa_anual × (días / 360)<br><br>
+            <strong>2. Base 360:</strong> el año convencional tiene 360 días.<br><br>
+            <strong>3. Larga en la tasa:</strong> la posición larga del FRA se beneficia cuando la tasa sube. El pago se hace al <em>inicio del préstamo</em> (descuento del interés que ocurre al final).<br><br>
+            Ejemplo: $1M a 30 días, MRR 6%:<br>
+            Interés = $1,000,000 × 0.06 × (30/360) = <strong>$5,000</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teach">
+      <div class="t-tag">🟣 Desde cero · El FRA es "reservar hoy el precio del dinero futuro"</div>
+      Igual que reservas hoy la tarifa de un pasaje que volarás en 3 meses, el FRA fija <b>hoy</b> la tasa de un préstamo que recién <b>empezará en el futuro</b>. La notación se lee directo: <b>1×4 = el préstamo empieza en el mes 1 y termina en el mes 4</b> (dura n−m = 3 meses).
+      <div class="mini-ej">
+ <b>¿Por qué la posición larga gana si la tasa sube?</b> La larga "compró" el derecho a endeudarse a la tasa pactada (5.32%). Si al vencimiento el mercado cobra 6%, su contrato vale el <b>ahorro de intereses</b>, igual que tu reserva de pasaje vale más si la tarifa subió.<br><br>
+ <b>¿Y por qué el pago se descuenta?</b> El ahorro de intereses se materializaría al <b>final</b> del préstamo (mes 4), pero el FRA se liquida al <b>inicio</b> (mes 1). Te pagan hoy el valor presente de un ahorro futuro, por eso se divide entre [1 + tasa × d/360].
+      </div>
+ Detalle de examen: el FRA se liquida en efectivo, <b>nadie está obligado a prestar ni a pedir prestado de verdad</b>; el préstamo es "virtual" y solo sirve para calcular el diferencial.
+    </div>
+  </div>
+</div>
+
+<!-- 2.2 Precio del FRA -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.2</span>
+    <span class="section-title">Determinación del Precio (Tasa Forward) de un FRA</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Tasas periódicas y tasa forward</div>
+          <div class="f-eq">
+            $$R_{\text{período}} = \text{Tasa Anual} \times \frac{\text{días}}{360}$$
+            $$\text{Precio FRA} = \left(\frac{1 + R_{\text{largo}}}{1 + R_{\text{corto}}} - 1\right) \times \frac{360}{\text{días préstamo}}$$
+          </div>
+          <div class="f-vars">
+            <span>R_largo</span> = tasa MRR no anualizada hasta el fin del préstamo (período n)<br>
+            <span>R_corto</span> = tasa MRR no anualizada hasta el vencimiento del FRA (período m)<br>
+            El resultado se anualiza multiplicando por 360 / días del préstamo
+          </div>
+        </div>
+        <div class="rule-callout gold" >
+          <strong>Intuición:</strong> invertir por n días debe equivaler a invertir por m días y reinvertir por (n−m) días a la tasa forward. Este es el argumento de no-arbitraje que fija el precio del FRA.
+        </div>
+      </div>
+      <div>
+        <div class="ex-box">
+ <div class="ex-title">Ejemplo · Precio FRA 1×4 (préstamo de 90 días en 30 días)</div>
+          <div class="ex-body">
+            MRR a 30 días = 4% · MRR a 120 días = 5%<br><br>
+            <strong>① Tasas no anualizadas:</strong><br>
+            $$R_{30} = 4\% \times \frac{30}{360} = 0.333\%$$
+            $$R_{120} = 5\% \times \frac{120}{360} = 1.667\%$$
+            <strong>② Tasa forward del período (90 días):</strong><br>
+            $$\text{Precio} = \frac{1.01667}{1.00333} - 1 = 1.33\%$$
+            <strong>③ Anualizado:</strong><br>
+            $$1.33\% \times \frac{360}{90} = \mathbf{5.32\%}$$
+          </div>
+          <div class="ex-result">Precio FRA 1×4 = 5.32%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="widget">
+      <span class="widget-tag">🧮 Calculadora · Precio del FRA desde la curva MRR</span>
+      <h4>Reproduce el FRA 1×4 (MRR 30d = 4%, MRR 120d = 5%) o arma el 3×5 del quiz (90d = 5%, 150d = 6%)</h4>
+      <div class="w-controls">
+        <div class="w-field"><label>MRR corto (%)</label><input type="number" id="fraRc" value="4" step="0.25" min="0" oninput="calcFRA12()"></div>
+        <div class="w-field"><label>Días período corto (m)</label><input type="number" id="fraDc" value="30" step="30" min="0" oninput="calcFRA12()"></div>
+        <div class="w-field"><label>MRR largo (%)</label><input type="number" id="fraRl" value="5" step="0.25" min="0" oninput="calcFRA12()"></div>
+        <div class="w-field"><label>Días período largo (n)</label><input type="number" id="fraDl" value="120" step="30" min="1" oninput="calcFRA12()"></div>
+      </div>
+      <div class="w-results">
+        <div class="w-res"><div class="r-label">Notación del contrato</div><div class="r-val" id="fraNot">FRA 1×4</div></div>
+        <div class="w-res"><div class="r-label">Tasa forward del período</div><div class="r-val" id="fraPer">1.33%</div></div>
+        <div class="w-res gold"><div class="r-label">Precio FRA (anualizado)</div><div class="r-val" id="fraAnn">5.32%</div></div>
+      </div>
+ <p class="w-note"><strong>La lógica:</strong> invertir n días directo debe rendir igual que invertir m días y reinvertir a la tasa forward. Si el largo paga más por día que el corto, el forward tiene que estar <strong>por encima de ambas tasas spot</strong> para compensar, verifícalo: con 4% y 5%, el FRA sale 5.32%.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 2.3 Valoración al vencimiento -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.3</span>
+    <span class="section-title">Valoración de un FRA al Vencimiento y Antes del Vencimiento</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Pago al vencimiento del FRA (larga)</div>
+          <div class="f-eq">
+            $$\text{Valor} = \frac{\left(\text{Tasa}_{\text{mcdo}} \times \tfrac{d}{360} - \text{Tasa}_{\text{FRA}} \times \tfrac{d}{360}\right) \times \text{Nocional}}{1 + \left(\text{Tasa}_{\text{mcdo}} \times \tfrac{d}{360}\right)}$$
+          </div>
+          <div class="f-vars">
+            El numerador = ahorro de interés al final del préstamo<br>
+            El denominador = descuento del ahorro al inicio del préstamo (fecha de liquidación del FRA)<br>
+            <span>d</span> = días del préstamo subyacente
+          </div>
+        </div>
+        <div class="ex-box" >
+ <div class="ex-title">Ejemplo · FRA 1×4 al 5.32%, nocional $1M: tasa sube a 6%</div>
+          <div class="ex-body">
+            Ahorro al final del préstamo (90 días después):<br>
+            $$\text{Ahorro} = \left(0.06 \times \frac{90}{360} - 0.0532 \times \frac{90}{360}\right) \times \$1\text{M} = \$1{,}700$$
+            Descontado al 6%:<br>
+            $$\text{VP} = \frac{\$1{,}700}{1 + (0.06 \times 90/360)}$$
+          </div>
+          <div class="ex-result">Pago (larga) = $1,674.88</div>
+        </div>
+      </div>
+      <div>
+        <div class="concept-card accent-navy" >
+ <div class="cc-label">Valoración antes del vencimiento · 3 pasos</div>
+          <div class="cc-def">
+            <strong>1.</strong> Calcular la nueva tasa FRA para el período del préstamo con las tasas MRR actualizadas.<br><br>
+            <strong>2.</strong> Calcular la diferencia de intereses sobre el nocional entre la nueva tasa forward y la tasa FRA original.<br><br>
+            <strong>3.</strong> Descontar la diferencia al <em>plazo total restante</em> (hasta el final del préstamo) usando la tasa MRR para ese plazo completo.
+          </div>
+        </div>
+        <div class="ex-box">
+ <div class="ex-title">Ejemplo · FRA 1×4 al 5.32%, valorado 10 días después</div>
+          <div class="ex-body">
+            Nuevas tasas: MRR 110 días = 5.9% · MRR 20 días = 5.7%<br><br>
+            <strong>① Nueva tasa FRA a 90 días, dentro de 20 días:</strong><br>
+            $$R_{\text{new}} = \left[\frac{1+(0.059 \times 110/360)}{1+(0.057 \times 20/360)} - 1\right] \times \frac{360}{90} = 5.93\%$$
+            <strong>② Diferencia de intereses:</strong><br>
+            $$\text{Int} = (0.0593 - 0.0532) \times \frac{90}{360} \times \$1\text{M} = \$1{,}514.20$$
+            <strong>③ Descuento a la tasa de 110 días (5.9%):</strong><br>
+            $$\text{Valor} = \frac{\$1{,}514.20}{1 + (0.059 \times 110/360)}$$
+          </div>
+          <div class="ex-result">Valor = $1,487.39</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="widget">
+      <span class="widget-tag">🧮 Calculadora · Pago del FRA al vencimiento</span>
+      <h4>Reproduce el ejemplo (pactado 5.32%, mercado 6%, préstamo 90 días, $1M) y prueba qué pasa si la tasa BAJA</h4>
+      <div class="w-controls">
+        <div class="w-field"><label>Tasa FRA pactada (%)</label><input type="number" id="fsK" value="5.32" step="0.01" min="0" oninput="calcFSet12()"></div>
+        <div class="w-field"><label>Tasa de mercado al vencimiento (%)</label><input type="number" id="fsM" value="6" step="0.25" min="0" oninput="calcFSet12()"></div>
+        <div class="w-field"><label>Días del préstamo</label><input type="number" id="fsD" value="90" step="30" min="1" oninput="calcFSet12()"></div>
+        <div class="w-field"><label>Nocional ($ MM)</label><input type="number" id="fsN" value="1" step="1" min="0" oninput="calcFSet12()"></div>
+      </div>
+      <div class="w-results">
+        <div class="w-res"><div class="r-label">Ahorro de interés (al final del préstamo)</div><div class="r-val" id="fsAh">$1,700</div></div>
+        <div class="w-res gold"><div class="r-label">Pago al liquidar (valor presente)</div><div class="r-val" id="fsVP">$1,674.88</div></div>
+        <div class="w-res green"><div class="r-label">¿Quién cobra?</div><div class="r-val" id="fsWho" >LA LARGA</div></div>
+      </div>
+ <p class="w-note"><strong>Prueba:</strong> baja la tasa de mercado a 4.5%, el "ahorro" se vuelve negativo y ahora es <strong>la larga quien paga a la corta</strong>: fijaste 5.32% cuando el mercado terminó cobrando menos. El FRA protege en ambas direcciones: elimina la incertidumbre, no garantiza ganar.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 03 · SWAPS DE TASA DE INTERÉS
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-03">
+  <div class="module-num">03</div>
+  <div class="module-title-block">
+    <h2>Swaps de Tasa de Interés (IRS)</h2>
+    <p>Mecánica · Swap Rate (SFR) · Factores de descuento Z · Determinación de la SFR · Valoración en fechas de liquidación</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 3.1 Estructura y SFR -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">3.1</span>
+    <span class="section-title">Estructura, Mecánica y Swap Fixed Rate (SFR)</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="cmp-strip" >
+          <div class="cmp-cell up">
+            <div class="cmp-head">Pagador Fijo (Fixed Payer)</div>
+            <div class="cmp-rule">Paga fijo, recibe flotante</div>
+            <p>Se beneficia si las tasas <em>suben</em>: sigue pagando la tasa fija antigua más baja y recibe la tasa flotante mayor. Equivale a estar <em>long</em> en bonos flotantes y <em>short</em> en bonos fijos.</p>
+          </div>
+          <div class="cmp-cell down">
+            <div class="cmp-head">Receptor Fijo (Fixed Receiver)</div>
+            <div class="cmp-rule">Recibe fijo, paga flotante</div>
+            <p>Se beneficia si las tasas <em>bajan</em>: recibe la tasa fija mayor y paga la flotante más baja. Equivale a estar <em>long</em> en bonos fijos y <em>short</em> en bonos flotantes.</p>
+          </div>
+        </div>
+        <div class="concept-card accent-mid">
+ <div class="cc-label mid">Swap Rate (SFR) · Condición de No Arbitraje</div>
+          <div class="cc-def">
+            Al inicio del swap, la tasa fija se fija para que <strong>VP pagos fijos = VP pagos flotantes</strong>, haciendo que el valor inicial sea cero. Esta tasa es la <strong>Swap Fixed Rate (SFR)</strong> y equivale a la <em>par rate</em> de la curva MRR.<br><br>
+            Económicamente, el IRS = portafolio long bono fijo + short bono flotante (o viceversa).
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="formula-box">
+          <div class="f-label">Factores de descuento y SFR periódica</div>
+          <div class="f-eq">
+            $$Z_i = \frac{1}{1 + \left(\text{MRR}_i \times \dfrac{\text{días}_i}{360}\right)}$$
+            $$\text{SFR}_{\text{periódico}} = \frac{1 - Z_{\text{final}}}{\sum Z_i}$$
+            $$\text{SFR}_{\text{anual}} = \text{SFR}_{\text{periódico}} \times \frac{360}{\text{días por período}}$$
+          </div>
+          <div class="f-vars">
+            <span>Z_i</span> = factor de descuento para la fecha de pago i<br>
+            <span>Z_final</span> = factor de descuento del último período<br>
+            <span>ΣZ</span> = suma de todos los factores de descuento
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teach">
+ <div class="t-tag">🟣 Desde cero · El swap es un trueque de alquileres · y la SFR es el cupón que vale "par"</div>
+      Imagina dos inquilinos que intercambian contratos: <i>"yo te pago una renta <b>fija</b> todos los trimestres; tú me pagas una renta que <b>flota</b> con el mercado"</i>. Eso es un IRS. Nadie se presta el principal (es solo <b>nocional</b>, una base de cálculo); solo se intercambia la <b>diferencia</b> entre las dos rentas.<br><br>
+      <b>¿De dónde sale la fórmula de la SFR?</b> El swap equivale a tener un bono fijo y deber uno flotante. Un bono flotante vale par (100%) en cada reseteo. Para que el trueque sea justo el día uno, el bono fijo también debe valer par:
+      <div class="mini-ej" style="text-align:center">\( 1 = \text{SFR} \times \sum Z + Z_{\text{final}} \) &nbsp;→ despejando → &nbsp;\( \text{SFR} = \dfrac{1 - Z_{\text{final}}}{\sum Z} \)</div>
+      Es decir: la SFR es <b>el cupón que hace que un bono valga exactamente la par</b> con la curva MRR de hoy (la <i>par rate</i>). Por eso ninguna parte paga nada al inicio: ambas "rentas" tienen el mismo valor presente.
+    </div>
+  </div>
+</div>
+
+<!-- 3.2 Ejemplo SFR -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">3.2</span>
+ <span class="section-title">Determinación de la SFR · Ejemplo Completo</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div style="font-weight:700;color:var(--corp);text-transform:uppercase;letter-spacing:1px">Swap 1 año, pagos trimestrales, nocional $5M</div>
+        <div class="table-scroll-wrap">
+          <table class="ref-table">
+            <thead>
+              <tr><th>Plazo</th><th>MRR spot</th><th>Factor Z</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>90 días</strong></td><td>3.0%</td><td class="val-blue">0.99256</td></tr>
+              <tr><td><strong>180 días</strong></td><td>3.5%</td><td class="val-blue">0.98280</td></tr>
+              <tr><td><strong>270 días</strong></td><td>4.0%</td><td class="val-blue">0.97087</td></tr>
+              <tr><td><strong>360 días</strong></td><td>4.5%</td><td class="val-blue">0.95694</td></tr>
+              <tr><td><strong>ΣZ</strong></td><td></td><td class="val-blue">3.90317</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ex-box" >
+          <div class="ex-title">Cálculo SFR y pagos</div>
+          <div class="ex-body">
+            $$\text{SFR}_{(Q)} = \frac{1 - 0.95694}{3.90317} = 0.011 = 1.1\%$$
+            $$\text{SFR}_{\text{anual}} = 1.1\% \times \frac{360}{90} = \mathbf{4.4\%}$$
+            Pago fijo trimestral = $5,000,000 × 1.1% = <strong>$55,000</strong><br>
+            Flotante (90d, MRR 3%) = 0.03 × (90/360) × $5M = <strong>$37,500</strong><br>
+            Pago neto (pagador fijo) = $55,000 − $37,500 = <strong>$37,500</strong>
+          </div>
+          <div class="ex-result">SFR = 4.4% anual · Primer pago neto del pagador fijo = $37,500</div>
+        </div>
+      </div>
+      <div>
+        <div class="formula-box" >
+          <div class="f-label">Valoración en fechas de liquidación</div>
+          <div class="f-eq">
+            $$V_{\text{pagador fijo}} = \sum Z_i \times (\text{SFR}_{\text{nueva}} - \text{SFR}_{\text{antigua}}) \times \frac{d}{360} \times N$$
+          </div>
+          <div class="f-vars">
+            <span>ΣZ</span> = suma de factores de descuento de períodos restantes<br>
+            Después del intercambio en t, la SFR nueva vs. antigua determina ganancia o pérdida<br>
+            Receptor fijo = −V del pagador fijo
+          </div>
+        </div>
+        <div class="ex-box">
+          <div class="ex-title">Valoración tras 180 días: nueva curva plana al 3.5%</div>
+          <div class="ex-body">
+            SFR original = 4.4% · Quedan pagos en 90 y 180 días<br>
+            $$Z_{90} = \frac{1}{1+0.035 \times 90/360} = 0.9913$$
+            $$Z_{180} = \frac{1}{1+0.035 \times 180/360} = 0.9828$$
+            $$\sum Z = 1.9741$$
+            $$V_{\text{pagador fijo}} = 1.9741 \times (0.035-0.044) \times \frac{90}{360} \times \$5\text{M}$$
+          </div>
+          <div class="ex-result red">V pagador fijo = −$22,209 · V receptor fijo = +$22,209</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="widget">
+      <span class="widget-tag">🧮 Calculadora · SFR de un swap a 1 año con pagos trimestrales</span>
+      <h4>Reproduce el ejemplo (curva 3 / 3.5 / 4 / 4.5%) o aplana/empina la curva y observa la SFR</h4>
+      <div class="w-controls">
+        <div class="w-field"><label>MRR 90 días (%)</label><input type="number" id="sfR1" value="3" step="0.25" min="0" oninput="calcSFR12()"></div>
+        <div class="w-field"><label>MRR 180 días (%)</label><input type="number" id="sfR2" value="3.5" step="0.25" min="0" oninput="calcSFR12()"></div>
+        <div class="w-field"><label>MRR 270 días (%)</label><input type="number" id="sfR3" value="4" step="0.25" min="0" oninput="calcSFR12()"></div>
+        <div class="w-field"><label>MRR 360 días (%)</label><input type="number" id="sfR4" value="4.5" step="0.25" min="0" oninput="calcSFR12()"></div>
+        <div class="w-field"><label>Nocional ($ MM)</label><input type="number" id="sfN" value="5" step="1" min="0" oninput="calcSFR12()"></div>
+      </div>
+      <div class="w-results">
+        <div class="w-res"><div class="r-label">ΣZ</div><div class="r-val" id="sfSZ">3.90317</div></div>
+        <div class="w-res"><div class="r-label">SFR trimestral</div><div class="r-val" id="sfQ">1.10%</div></div>
+        <div class="w-res gold"><div class="r-label">SFR anual</div><div class="r-val" id="sfA">4.41%</div></div>
+        <div class="w-res green"><div class="r-label">Pago fijo trimestral</div><div class="r-val" id="sfPay">$55,163</div></div>
+      </div>
+ <p class="w-note"><strong>Pruebas:</strong> ① pon la curva plana al 3.5% (la SFR converge a ≈3.5%: con curva plana, la par rate ES la tasa de la curva; ② empina la curva (3 / 4 / 5 / 6)) la SFR sube hacia un promedio ponderado de las tasas, cargado hacia los plazos largos. <em>(El ejemplo del libro redondea la SFR a 1.1% trimestral / 4.4% anual.)</em></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 04 · SWAPS DE MONEDA
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-04">
+  <div class="module-num">04</div>
+  <div class="module-title-block">
+    <h2>Swaps de Moneda (Currency Swaps)</h2>
+    <p>Intercambio de principales · Dos curvas independientes · SFR por divisa · Valoración como portafolio de bonos · Tipo de cambio actual</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 4.1 Estructura -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">4.1</span>
+    <span class="section-title">Estructura y Determinación de la Tasa Fija</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="concept-card accent-mid" >
+          <div class="cc-label mid">Características del Swap de Moneda</div>
+          <div class="cc-def">
+            • Se <strong>intercambia el principal nocional</strong> al inicio y se retorna al vencimiento.<br>
+            • Involucra <strong>dos monedas</strong>, dos curvas MRR distintas y, por tanto, <strong>dos SFR diferentes</strong>.<br>
+            • El nocional de la contraparte extranjera se determina con el tipo de cambio al inicio:<br><br>
+            Si TC = $2 / £1 y nocional USD = $25M → nocional GBP = <strong>£12.5M</strong>
+          </div>
+        </div>
+        <div class="step-flow">
+          <div class="step-item">
+            <div class="step-n">INICIO</div>
+            <div class="step-txt">Intercambio de nocionales al tipo de cambio spot actual</div>
+          </div>
+          <div class="step-item">
+            <div class="step-n">PERIÓDICO</div>
+            <div class="step-txt">Pagos de interés en cada divisa sobre sus respectivos nocionales</div>
+          </div>
+          <div class="step-item">
+            <div class="step-n">FINAL</div>
+            <div class="step-txt">Devolución de los nocionales originales (mismo monto inicial)</div>
+          </div>
+        </div>
+        <div class="rule-callout" >
+          Las SFR se calculan de forma <strong>completamente independiente</strong> para cada moneda usando su propia curva MRR. Luego se aplican a los nocionales correspondientes en cada divisa.
+        </div>
+      </div>
+      <div>
+        <div class="ex-box">
+ <div class="ex-title">Ejemplo · Swap USD/GBP a 1 año, trimestrales, $5M nocional USD</div>
+          <div class="ex-body">
+            SFR$ = 4.4% (1.1% trim.) ya calculada. TC = £0.50/$<br><br>
+            <strong>Curva MRR en libras:</strong><br>
+            <table class="ref-table" >
+              <thead><tr><th>Plazo</th><th>MRR (£)</th><th>Z (£)</th></tr></thead>
+              <tbody>
+                <tr><td>90 días</td><td>4%</td><td class="val-blue">0.99010</td></tr>
+                <tr><td>180 días</td><td>5%</td><td class="val-blue">0.97561</td></tr>
+                <tr><td>270 días</td><td>6%</td><td class="val-blue">0.95694</td></tr>
+                <tr><td>360 días</td><td>7%</td><td class="val-blue">0.93458</td></tr>
+                <tr><td><strong>ΣZ£</strong></td><td></td><td class="val-blue">3.85723</td></tr>
+              </tbody>
+            </table>
+            $$\text{SFR}_{(£)} = \frac{1-0.93458}{3.85723} = 1.7\% \quad \Rightarrow \quad 6.8\%\text{ anual}$$
+            Nocional £ = $5,000,000 × £0.50/$ = <strong>£2,500,000</strong><br>
+            Paga $ fijo: 1.1% × $5M = <strong>$55,000</strong> trim.<br>
+            Recibe £ fijo: 1.7% × £2.5M = <strong>£42,500</strong> trim.
+          </div>
+          <div class="ex-result">SFR£ = 6.8% anual · Nocional £2.5M</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="teach">
+      <div class="t-tag">🟣 Desde cero · ¿Por qué aquí SÍ se intercambian los principales?</div>
+ En el IRS el nocional nunca se mueve: ambas patas están en la <b>misma moneda</b>, así que intercambiar $5M por $5M sería absurdo. En el swap de moneda, en cambio, cada parte <b>necesita el efectivo en la otra divisa</b>, esa es justamente la razón del contrato: una empresa americana que necesita libras y una británica que necesita dólares se "prestan" mutuamente, cada una en su moneda fuerte.
+      <div class="mini-ej">
+        Piensa en el swap de moneda como <b>dos bonos espejo</b>: tú "compraste" un bono en libras (recibes sus cupones al 1.7% y su principal de £2.5M al final) y "emitiste" uno en dólares (pagas sus cupones al 1.1% y devuelves $5M). Valorar el swap = valorar el bono que tienes − el bono que debes, <b>convertidos al tipo de cambio de HOY</b>.<br><br>
+ ⚠️ Detalle de examen: cada SFR se calcula con <b>su propia curva</b>, de forma totalmente independiente, la SFR en £ (6.8%) no "sabe" nada de la curva en $. Y los principales se devuelven a los <b>montos originales</b>: el TC del vencimiento no importa, solo el TC actual para la valoración intermedia.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4.2 Valoración -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">4.2</span>
+    <span class="section-title">Valoración de un Swap de Moneda después del Inicio</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="concept-card accent-navy" >
+          <div class="cc-label">Metodología de Valoración (4 pasos)</div>
+          <div class="cc-def">
+            <strong>1.</strong> Valorar el lado de la moneda doméstica como un <strong>bono</strong>: VP de (flujos restantes + principal) descontado a las tasas spot actuales de esa divisa.<br><br>
+            <strong>2.</strong> Valorar el lado de la moneda extranjera como un <strong>bono</strong>: VP de (flujos restantes + principal) descontado a las tasas spot actuales de la divisa extranjera.<br><br>
+            <strong>3.</strong> Convertir el valor extranjero al <strong>tipo de cambio actual</strong>.<br><br>
+            <strong>4.</strong> Valor neto = Valor lado que se recibe − Valor lado que se paga (en moneda común).
+          </div>
+        </div>
+        <div class="rule-callout gold">
+          El tipo de cambio al vencimiento del swap <strong>no importa</strong>: los principales se devuelven a los montos originales fijados al inicio. Solo el TC actual afecta la valoración intermedia del contrato.
+        </div>
+      </div>
+      <div>
+        <div class="ex-box">
+ <div class="ex-title">Ejemplo · Tras 300 días: tasa $ 5.4%, tasa £ 6.6%, TC = £0.52/$</div>
+          <div class="ex-body">
+            Quedan en 60 días: último interés + principal de cada lado<br>
+            Flujos $: $5,000,000 + $55,000 · Flujos £: £2,500,000 + £42,500<br><br>
+            <strong>① Factores de descuento a 60 días:</strong><br>
+            $$Z_{60}^{\$} = \frac{1}{1+(0.054 \times 60/360)} = 0.99108$$
+            $$Z_{60}^{£} = \frac{1}{1+(0.066 \times 60/360)} = 0.98912$$
+            <strong>② Valor de cada lado (como bono):</strong><br>
+            $$V_{\$} = 0.99108 \times \$5{,}055{,}000 = \mathbf{\$5{,}009{,}909}$$
+            $$V_{£} = 0.98912 \times £2{,}542{,}500 = \mathbf{£2{,}514{,}838}$$
+            <strong>③ Convertir £ a $ al TC actual (£0.52/$):</strong><br>
+            $$V_{£\,\text{en}\,\$} = \frac{£2{,}514{,}838}{0.52} = \mathbf{\$4{,}836{,}227}$$
+            <strong>④ Valor neto (recibe $ fijo, paga £ fijo):</strong><br>
+            $$\text{Neto} = \$5{,}009{,}909 - \$4{,}836{,}227$$
+          </div>
+          <div class="ex-result green">Valor neto = $173,682</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabla resumen -->
+<div class="section-block" >
+  <div class="section-header">
+    <span class="section-num">REF</span>
+    <span class="section-title">Tabla Resumen: Fórmulas Clave de la Semana</span>
+  </div>
+  <div class="section-body">
+    <div class="table-scroll-wrap">
+      <table class="ref-table">
+        <thead>
+          <tr><th>Instrumento</th><th>Precio / Valor</th><th>Fórmula central</th><th>Ajustes clave</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Forward bono</strong><br>(inicio)</td>
+            <td>Precio Forward (FP)</td>
+            <td class="mono">FP = (S₀ − PVC) × (1+Rf)^T</td>
+            <td>PVC = VP cupones antes de T · Base 365</td>
+          </tr>
+          <tr>
+            <td><strong>Forward bono</strong><br>(valoración)</td>
+            <td>V_t (larga)</td>
+            <td class="mono">V_t = S_t − PVC_t − FP/(1+Rf)^(T−t)</td>
+            <td>Equivalente: (FP_t − FP) / (1+Rf)^(T−t)</td>
+          </tr>
+          <tr>
+            <td><strong>T-Bond Futures</strong></td>
+            <td>Precio Cotizado (QFP)</td>
+            <td class="mono">QFP = [Full Price×(1+Rf)^T − FVC − AI_T] × 1/CF</td>
+            <td>CF = factor de conversión del CTD · AI_T = interés acumulado al venc.</td>
+          </tr>
+          <tr>
+            <td><strong>FRA</strong><br>(precio)</td>
+            <td>Tasa Forward</td>
+            <td class="mono">Precio = [(1+R_largo)/(1+R_corto) − 1] × 360/d</td>
+            <td>R_período = Tasa_anual × d/360 · Base 360</td>
+          </tr>
+          <tr>
+            <td><strong>FRA</strong><br>(valoración al venc.)</td>
+            <td>Pago larga</td>
+            <td class="mono">Valor = [(MRR − SFR) × d/360 × N] / [1 + MRR × d/360]</td>
+            <td>El descuento es al inicio del préstamo (vencimiento del FRA)</td>
+          </tr>
+          <tr>
+            <td><strong>IRS</strong><br>(SFR)</td>
+            <td>Swap Fixed Rate</td>
+            <td class="mono">SFR_período = (1 − Z_final) / ΣZ</td>
+            <td>Z = 1/(1 + MRR × d/360) · SFR_anual = SFR_per × 360/d</td>
+          </tr>
+          <tr>
+            <td><strong>IRS</strong><br>(valoración)</td>
+            <td>V pagador fijo</td>
+            <td class="mono">V = ΣZ × (SFR_nueva − SFR_antigua) × d/360 × N</td>
+            <td>ΣZ = solo períodos restantes · Receptor fijo = −V pagador</td>
+          </tr>
+          <tr>
+            <td><strong>Currency Swap</strong><br>(valoración)</td>
+            <td>V neto</td>
+            <td class="mono">V = V_recibe − V_paga (en moneda común)</td>
+            <td>Cada lado valorado como bono · Convertir al TC actual</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     QUIZ DE AUTOEVALUACIÓN
+══════════════════════════════════════════════ -->
+<div class="quiz">
+  <div class="quiz-head">📝 Quiz de autoevaluación · Derivados de Renta Fija II</div>
+  <div class="quiz-body">
+    <div class="q-item" data-correct="B">
+      <div class="q-text">1. Un bono del Tesoro al 6% cotiza a $1,044 (full price) por cada $1,000 de nominal. Pagará cupón en 98 días y la curva es plana al 5%. El precio forward a 120 días es más cercano a:</div>
+      <div class="q-opts">
+        <button class="q-opt" data-opt="A">A. $1,014.52</button>
+        <button class="q-opt" data-opt="B">B. $1,030.79</button>
+        <button class="q-opt" data-opt="C">C. $1,037.13</button>
+      </div>
+      <div class="q-feedback" data-exp="Cupón semestral C = 1,000×6%/2 = $30. PVC = 30/1.05^(98/365) = $29.61. FP = (1,044 − 29.61) × 1.05^(120/365) = $1,030.79. Verifícalo en la calculadora de la sección 1.1 (1044, 30, 98, 5, 120)."></div>
+    </div>
+    <div class="q-item" data-correct="C">
+      <div class="q-text">2. La tasa de contrato (anualizada) de un FRA 3×5, si la tasa a 90 días es 5% y la tasa a 150 días es 6%, es más cercana a:</div>
+      <div class="q-opts">
+        <button class="q-opt" data-opt="A">A. 6.0%</button>
+        <button class="q-opt" data-opt="B">B. 6.9%</button>
+        <button class="q-opt" data-opt="C">C. 7.4%</button>
+      </div>
+ <div class="q-feedback" data-exp="R90 = 5%×90/360 = 1.25%; R150 = 6%×150/360 = 2.50%. Tasa del período de 60 días = 1.025/1.0125 − 1 = 1.235%. Anualizada: 1.235% × 360/60 = 7.4%. Nota cómo el forward (7.4%) queda por ENCIMA de ambas spot, la curva ascendente lo exige."></div>
+    </div>
+    <div class="q-item" data-correct="C">
+      <div class="q-text">3. El CFO de Yellow River quiere cubrir el costo de un préstamo de 90 días que inicia en 90 días. Con MRR 30d = 4.5%, 90d = 4.7% y 180d = 4.9%, la posición de cobertura apropiada y su tasa justa son:</div>
+      <div class="q-opts">
+        <button class="q-opt" data-opt="A">A. Largo en FRA 3×3 al 4.48%.</button>
+        <button class="q-opt" data-opt="B">B. Largo en FRA 3×6 al 4.48%.</button>
+        <button class="q-opt" data-opt="C">C. Largo en FRA 3×6 al 5.02%.</button>
+      </div>
+      <div class="q-feedback" data-exp="Un préstamo de 90 días que inicia en 90 días = FRA 3×6 (expira en el mes 3, el préstamo termina en el mes 6); quien va a PEDIR PRESTADO se cubre con la posición LARGA (gana si la tasa sube). Tasa: R90 = 4.7%×90/360 = 1.18%; R180 = 4.9%×180/360 = 2.45%; (1.0245/1.0118 − 1)×360/90 = 5.02%."></div>
+    </div>
+    <div class="q-item" data-correct="C">
+      <div class="q-text">4. Para un swap a 1 año con liquidación trimestral, los factores de descuento suman ΣZ = 3.88060 y el factor final es Z₃₆₀ = 0.95057. La swap rate anualizada es más cercana a:</div>
+      <div class="q-opts">
+        <button class="q-opt" data-opt="A">A. 1.27%</button>
+        <button class="q-opt" data-opt="B">B. 2.54%</button>
+        <button class="q-opt" data-opt="C">C. 5.08%</button>
+      </div>
+      <div class="q-feedback" data-exp="SFR trimestral = (1 − 0.95057)/3.88060 = 1.27%. ¡Pero piden la ANUAL!: 1.27% × 360/90 = 5.08%. La opción A es la trampa clásica: olvidar anualizar la tasa periódica."></div>
+    </div>
+    <div class="q-item" data-correct="C">
+      <div class="q-text">5. Una empresa entra a un currency swap fijo-por-flotante de US$1 millón para cubrir un pasivo a tasa fija denominado en C$. Esa parte:</div>
+      <div class="q-opts">
+        <button class="q-opt" data-opt="A">A. Recibirá $1 millón al término del swap.</button>
+        <button class="q-opt" data-opt="B">B. Pagará una tasa fija basada en la curva de EE.UU.</button>
+        <button class="q-opt" data-opt="C">C. Recibirá una tasa fija basada en la curva de Canadá.</button>
+      </div>
+ <div class="q-feedback" data-exp="Para cubrir un pasivo FIJO en C$ necesita RECIBIR fijo en C$, y esa tasa fija se calcula con la curva CANADIENSE (cada divisa usa su propia curva). Al inicio recibe los US$1M (entregando C$) y al término los DEVUELVE, por eso A es falsa. Como es fijo-por-flotante, paga flotante basado en la curva de EE.UU."></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end wrapper -->
+
+<script>
+/* ── Calculadora forward sobre bono ── */
+function calcFwd12() {
+  const s0 = +document.getElementById('fwS0').value || 0;
+  const c  = +document.getElementById('fwC').value  || 0;
+  const dc = +document.getElementById('fwDC').value || 0;
+  const rf = (+document.getElementById('fwRf').value || 0) / 100;
+  const T  = +document.getElementById('fwT').value  || 0;
+  const pvc = (c > 0 && dc <= T) ? c / Math.pow(1 + rf, dc / 365) : 0;
+  const fp  = (s0 - pvc) * Math.pow(1 + rf, T / 365);
+  document.getElementById('fwPVC').textContent = '$' + pvc.toFixed(2) + (pvc === 0 && c > 0 ? ' (fuera del plazo)' : '');
+  document.getElementById('fwFP').textContent  = '$' + fp.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+}
+
+/* ── Calculadora precio FRA ── */
+function calcFRA12() {
+  const rc = (+document.getElementById('fraRc').value || 0) / 100;
+  const dc = +document.getElementById('fraDc').value || 0;
+  const rl = (+document.getElementById('fraRl').value || 0) / 100;
+  const dl = +document.getElementById('fraDl').value || 0;
+  const dLoan = dl - dc;
+ if (dLoan <= 0) { document.getElementById('fraNot').textContent = ' (n debe ser > m) '; return; }
+  const Rc = rc * dc / 360, Rl = rl * dl / 360;
+  const per = (1 + Rl) / (1 + Rc) - 1;
+  const ann = per * 360 / dLoan;
+  document.getElementById('fraNot').textContent = 'FRA ' + Math.round(dc / 30) + '×' + Math.round(dl / 30);
+  document.getElementById('fraPer').textContent = (per * 100).toFixed(2) + '%';
+  document.getElementById('fraAnn').textContent = (ann * 100).toFixed(2) + '%';
+}
+
+/* ── Calculadora pago del FRA al vencimiento ── */
+function calcFSet12() {
+  const k = (+document.getElementById('fsK').value || 0) / 100;
+  const m = (+document.getElementById('fsM').value || 0) / 100;
+  const d = +document.getElementById('fsD').value || 0;
+  const n = (+document.getElementById('fsN').value || 0) * 1e6;
+  const ahorro = (m - k) * d / 360 * n;
+  const vp = ahorro / (1 + m * d / 360);
+  const f = x => (x < 0 ? '−$' : '$') + Math.abs(x).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  document.getElementById('fsAh').textContent = f(ahorro);
+  document.getElementById('fsVP').textContent = f(vp);
+  document.getElementById('fsWho').textContent = vp > 0 ? 'LA LARGA (cobra)' : (vp < 0 ? 'LA CORTA (cobra)' : 'Nadie');
+}
+
+/* ── Calculadora SFR del swap ── */
+function calcSFR12() {
+  const rs = [1, 2, 3, 4].map(i => (+document.getElementById('sfR' + i).value || 0) / 100);
+  const n  = (+document.getElementById('sfN').value || 0) * 1e6;
+  let sz = 0, zFin = 0;
+  rs.forEach((r, i) => {
+    const z = 1 / (1 + r * (90 * (i + 1)) / 360);
+    sz += z;
+    if (i === 3) zFin = z;
+  });
+  const sfrQ = sz > 0 ? (1 - zFin) / sz : 0;
+  document.getElementById('sfSZ').textContent  = sz.toFixed(5);
+  document.getElementById('sfQ').textContent   = (sfrQ * 100).toFixed(2) + '%';
+  document.getElementById('sfA').textContent   = (sfrQ * 4 * 100).toFixed(2) + '%';
+  document.getElementById('sfPay').textContent = '$' + (sfrQ * n).toLocaleString('en-US', {maximumFractionDigits: 0});
+}
+
+/* ── Quiz ── */
+document.querySelectorAll('.q-item').forEach(item => {
+  const correct = item.dataset.correct;
+  const fb = item.querySelector('.q-feedback');
+  item.querySelectorAll('.q-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      if (item.classList.contains('answered')) return;
+      item.classList.add('answered');
+      const chosen = opt.dataset.opt;
+      item.querySelectorAll('.q-opt').forEach(o => {
+        o.disabled = true;
+        if (o.dataset.opt === correct) o.classList.add('correct');
+        else if (o.dataset.opt === chosen) o.classList.add('wrong');
+      });
+      fb.classList.add('show', chosen === correct ? 'ok' : 'ko');
+      fb.innerHTML = (chosen === correct ? '✅ <b>¡Correcto!</b> ' : '❌ <b>Incorrecto.</b> La respuesta es <b>' + correct + '</b>. ') + fb.dataset.exp;
+    });
+  });
+});
+
+calcFwd12(); calcFRA12(); calcFSet12(); calcSFR12();
+</script>
+
+<button class="print-btn no-print" id="printBtn" aria-label="Imprimir"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.75 6.25V2.25h6.5v4M4.75 12.5h6.5v2.25h-6.5z"/><path d="M4.75 6.25h-1.5a1.5 1.5 0 0 0-1.5 1.5v3.25a1.5 1.5 0 0 0 1.5 1.5h1.5m6.5 0h1.5a1.5 1.5 0 0 0 1.5-1.5V7.75a1.5 1.5 0 0 0-1.5-1.5h-1.5"/></svg></button>
+<button class="scroll-top-btn no-print" id="scrollTopBtn" aria-label="Volver al inicio"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13.25V3.5M3.75 7.75L8 3.5l4.25 4.25"/></svg></button>
+<script>
+(function(){
+  var top = document.getElementById('scrollTopBtn');
+  var prt = document.getElementById('printBtn');
+  top.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  prt.addEventListener('click', function(){ window.print(); });
+  function marca(){
+    var v = window.scrollY > 320;
+    top.classList.toggle('visible', v);
+    prt.classList.toggle('visible', v);
+  }
+  window.addEventListener('scroll', marca, {passive:true});
+  marca();
+})();
+</script>
+</body>
+</html>

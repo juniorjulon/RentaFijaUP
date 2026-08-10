@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Semana 13 · Titulización de Renta Fija · Renta Fija 2026-II</title>
+<meta name="description" content="One-pager de la semana 13 del curso Renta Fija 1F0115, Universidad del Pacífico, semestre 2026-II."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/onepager.css"/>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<!-- ══════════════════ HEADER ══════════════════ -->
+<header class="doc-header">
+  <div class="header-inner">
+    <a class="back-btn no-print" href="index.html#s13"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.25 8H2.75M6.75 4l-4 4 4 4"/></svg> Mapa del curso</a>
+    <h1 class="header-title">Titulización de Renta Fija</h1>
+    <p class="header-sub"><b>Semana 13</b><b>MBS, ABS, CDO, vehículos de propósito especial y riesgo de prepago</b></p>
+    <nav class="header-pills" aria-label="Secciones del documento"><a href="#resumen" class="pill accent">Resumen</a><a href="#keywords" class="pill accent">Keywords</a><a href="#conceptos" class="pill accent">Conceptos clave</a><a href="#onepager" class="pill accent">One-pager</a><span class="pills-rule" aria-hidden="true"></span><a href="#module-01" class="pill quiet">01 Fundamentos de la Titulización</a><a href="#module-02" class="pill quiet">02 Instrumentos ABS</a><a href="#module-03" class="pill quiet">03 Instrumentos MBS</a></nav>
+  </div>
+</header>
+
+<div class="wrapper">
+
+<!-- ═══════════ RESUMEN ═══════════ -->
+<section class="section-block" id="resumen">
+  <div class="section-header"><span class="section-title">Resumen</span></div>
+  <div class="section-body">
+ <p class="lead">La titulización es el proceso por el cual activos ilíquidos (hipotecas, créditos de consumo, préstamos corporativos) se agrupan en un Special Purpose Vehicle (SPV) que emite títulos tranched con distintos perfiles de riesgo-retorno. La semana cubre las motivaciones del emisor (balance sheet management, funding diversification, regulatory capital relief) y la mecánica de los principales vehículos. Los MBS pass-through transfieren pro-rata los pagos del pool al inversor, incluyendo prepagos. Los CMOs estructuran tranches con distintas prioridades de repago. Los CDOs/CLOs reempaquetan crédito corporativo. El riesgo de prepago (PSA model) genera convexidad negativa análoga a los callable bonds (cuando las tasas bajan, los deudores refinancian y el inversor recupera capital a destiempo).</p>
+  </div>
+</section>
+
+<!-- ═══════════ KEYWORDS ═══════════ -->
+<section class="section-block" id="keywords">
+  <div class="section-header"><span class="section-title">Keywords</span></div>
+  <div class="section-body">
+    <div class="kw-list"><span class="badge badge-blue">MBS (Mortgage-Backed Security)</span><span class="badge badge-blue">ABS (Asset-Backed Security)</span><span class="badge badge-blue">CDO / CLO</span><span class="badge badge-blue">SPV / SPE</span><span class="badge badge-outline">Prepayment Risk</span><span class="badge badge-outline">PSA Model</span><span class="badge badge-outline">Tranching (Senior/Mezz/Equity)</span><span class="badge badge-outline">Negative Convexity</span><span class="badge badge-outline">WAL (Weighted Average Life)</span><span class="badge badge-gray">Pass-Through</span><span class="badge badge-gray">CMO</span><span class="badge badge-gray">Regulatory Capital Relief</span><span class="badge badge-gray">Waterfall</span></div>
+  </div>
+</section>
+
+<!-- ═══════════ CONCEPTOS CLAVE ═══════════ -->
+<section class="section-block" id="conceptos">
+  <div class="section-header"><span class="section-title">Conceptos clave</span></div>
+  <div class="section-body">
+    <ul class="concepts"><li><strong>Ventajas de la titulización:</strong> el originator mejora su balance (activos fuera de sheet), diversifica fuentes de funding, libera capital regulatorio (RWA reduction) y accede a inversores globales de largo plazo.</li><li><strong>MBS pass-through:</strong> los pagos del pool (principal + interés + prepagos) se "pasan" pro-rata a los inversores. La incertidumbre del timing de los prepagos es el riesgo central: si tasas bajan, se refinancian → el inversor recibe capital cuando menos quiere.</li><li><strong>PSA prepayment model:</strong> 100% PSA = rampa de prepagos del 0.2% CPR mensual, alcanzando 6% CPR al mes 30. 150% PSA = 9% CPR. Determina el WAL y la effective duration del MBS.</li><li><strong>Tranching (CDO):</strong> el equity tranche absorbe las primeras pérdidas (first loss); el mezzanine absorbe pérdidas intermedias; el senior (AAA) solo pierde si las pérdidas exceden el colchón inferior. Concentra y redistribuye riesgo.</li><li><strong>Convexidad negativa de MBS:</strong> análoga al callable bond. En tasas bajas, precio sube menos de lo esperado (el prepago limita el upside). En tasas altas, la extensión del plazo efectivo magnifica las pérdidas.</li></ul>
+    <div class="applies"><div class="apply"><h4>Aplicación práctica</h4><ul><li>Calcular flujos de un MBS con PSA 100% y 150%</li><li>Modelar estructura de tranches de un CLO simplificado</li><li>Comparar OAS de MBS agency vs. bono corporativo equivalente</li></ul></div><div class="apply"><h4>Conexiones del curso</h4><ul><li>S9-S11: PD y LGD son inputs del pricing de CDO tranches</li><li>S7: Convexidad negativa ya fue vista en callable bonds</li><li>S14: MBS/ABS son activos en portafolios institucionales diversificados</li></ul></div></div>
+  </div>
+</section>
+
+<!-- ═══════════ ONE-PAGER ═══════════ -->
+<div class="module-divider" id="onepager">
+  <div class="module-num"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg></div>
+  <div class="module-title-block">
+    <h2>One-pager</h2>
+    <p>Desarrollo completo del tema, módulo por módulo</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 01 · FUNDAMENTOS DE LA TITULIZACIÓN
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-01">
+  <div class="module-num">01</div>
+  <div class="module-title-block">
+    <h2>Fundamentos de la Titulización</h2>
+    <p>Proceso (3 pasos) · Beneficios para originadores, inversores y economía · Riesgos ABS · Partes: SPE, servicer, trustee · Etapas: cesión, estructuración, distribución</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 1.1 Proceso y beneficios originadores -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">1.1</span>
+    <span class="section-title">El Proceso de Titulización y Beneficios para el Originador</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="concept-card accent-mid" >
+          <div class="cc-label mid">Definición</div>
+          <div class="cc-def">
+            La <strong>titulización</strong> es el proceso por el cual activos de deuda (préstamos o cuentas por cobrar) se agrupan y se transforman en valores de renta fija negociables (ABS). Desintermedia al banco originador conectando directamente capital con prestatarios.
+          </div>
+        </div>
+        <div class="step-flow">
+          <div class="step-item">
+            <div class="step-n">PASO 1</div>
+            <div class="step-txt"><strong>Creación del pool.</strong> El <em>originador</em> (banco/empresa) agrupa activos de deuda.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-n">PASO 2</div>
+            <div class="step-txt"><strong>Venta a SPE.</strong> El pool (colateral) se vende a la <em>entidad de propósito especial</em>.</div>
+          </div>
+          <div class="step-item">
+            <div class="step-n">PASO 3</div>
+            <div class="step-txt"><strong>Emisión ABS.</strong> La SPE emite valores respaldados por los flujos del colateral.</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="concept-card accent-navy">
+          <div class="cc-label">Beneficios para el Originador</div>
+          <div class="cc-def">
+            <strong>Mayor actividad de negocio.</strong> Al titulizar la cartera, el banco recibe fondos y origina nuevos préstamos sin crecer el balance.<br><br>
+            <strong>Mejora de la rentabilidad.</strong> Cobra comisiones por originar la transacción y por vender el colateral a la SPE.<br><br>
+            <strong>Menores reservas de capital.</strong> Al retirar los préstamos del balance, se reduce el riesgo de crédito y las reservas regulatorias exigidas.<br><br>
+            <strong>Mejora de la liquidez.</strong> Permite vender carteras ilíquidas, operando más eficientemente desde la perspectiva riesgo/retorno.<br><br>
+            <em style="color:var(--muted)">Nota: el emisor real de los ABS es la SPE, no el banco originador (el vendedor).</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 1.2 Beneficios para inversores y riesgos -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">1.2</span>
+    <span class="section-title">Beneficios para Inversores y Economía · Riesgos para Inversores en ABS</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="cmp-strip" >
+          <div class="cmp-cell up">
+            <div class="cmp-head">Para Inversores</div>
+            <div class="cmp-rule">Acceso y diversificación</div>
+            <p><strong>Riesgo/retorno a medida:</strong> perfiles personalizados sin recursos especializados de originación.<br>
+            <strong>Acceso:</strong> inversión en pools de colateral sin administrar préstamos directamente.<br>
+            <strong>Liquidez:</strong> los ABS son más fáciles de vender que el colateral subyacente.</p>
+          </div>
+          <div class="cmp-cell flat">
+            <div class="cmp-head">Para la Economía</div>
+            <div class="cmp-rule">Eficiencia sistémica</div>
+            <p><strong>Menor riesgo de liquidez:</strong> ABS se negocian más fácilmente que el colateral.<br>
+            <strong>Mayor eficiencia:</strong> la liquidez ayuda a fijar precios de equilibrio.<br>
+            <strong>Menores costos de financiamiento</strong> y menor apalancamiento para los originadores.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="concept-card accent-red">
+          <div class="cc-label red">Riesgos para Inversores en ABS</div>
+          <div class="cc-def">
+            <strong>Incertidumbre de flujos de caja.</strong> Los flujos del colateral varían en tiempo y monto; por ejemplo, los prestatarios hipotecarios pueden prepagar a un ritmo distinto al esperado.<br><br>
+            <strong>Riesgo de crédito del colateral.</strong> El riesgo de crédito del colateral se traspasa directamente a los inversores del ABS.<br><br>
+            <strong>Riesgo sistémico.</strong> La acumulación de riesgo de crédito en los ABS puede afectar todo el sistema financiero, como evidenció la crisis de 2007-2009.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 1.3 Partes y etapas -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">1.3</span>
+    <span class="section-title">Partes, Roles y Etapas del Proceso</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="table-scroll-wrap">
+          <table class="ref-table">
+            <thead>
+              <tr><th>Parte</th><th>Rol</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Vendedor / Originador</strong><br><span class="mono">seller / depositor</span></td>
+                <td>Origina los préstamos y vende la cartera a la SPE. Capta fondos mediante la titulización.</td>
+              </tr>
+              <tr>
+                <td><strong>Emisor / Trust</strong><br><span class="mono">SPE o SPV</span></td>
+                <td>Entidad de propósito especial, independiente del vendedor. Compra activos y emite los ABS.</td>
+              </tr>
+              <tr>
+                <td><strong>Administrador</strong><br><span class="mono">servicer</span></td>
+                <td>Realiza cobranzas, envía avisos de morosidad y gestiona garantías. Puede ser el mismo vendedor.</td>
+              </tr>
+              <tr>
+                <td><strong>Fiduciario</strong><br><span class="mono">trustee</span></td>
+                <td>Supervisa custodia del colateral y flujos a inversores. Es desinteresado (sin interés en la estructura).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="concept-card accent-mid" >
+          <div class="cc-label mid">Etapas del Proceso</div>
+          <div class="cc-def">
+            <strong>Cesión del colateral.</strong> El vendedor cede la cartera a la SPE mediante un contrato de compra (<em>purchase agreement</em>).<br><br>
+            <strong>Estructuración y emisión.</strong> La SPE emite ABS respaldados por flujos del colateral. El <em>prospecto</em> describe comisiones y distribución de flujos.<br><br>
+            <strong>Distribución de flujos.</strong> Los pagos de principal e intereses se asignan a las comisiones del servicer y a los pagos de los tenedores de ABS.
+          </div>
+        </div>
+        <div class="rule-callout gold">
+          <strong>Bankruptcy remote.</strong> Como la SPE es una entidad legal separada, un deterioro financiero del originador no afecta los derechos de los inversores sobre los flujos del colateral. Los compradores del ABS solo tienen derecho sobre el colateral vendido a la SPE.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 02 · INSTRUMENTOS ABS
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-02">
+  <div class="module-num">02</div>
+  <div class="module-title-block">
+    <h2>Instrumentos ABS y Características del Mercado</h2>
+    <p>Covered bonds · Mejora crediticia interna (sobrecolateralización, excess spread, tranching) · ABS no hipotecarios (tarjetas, solar) · CDO / CLO / CBO</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 2.1 Covered bonds -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.1</span>
+    <span class="section-title">Bonos Cubiertos (Covered Bonds): Estructura y Doble Recurso</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="cmp-strip" >
+          <div class="cmp-cell down">
+            <div class="cmp-head">ABS (titulización clásica)</div>
+            <div class="cmp-rule">Pool fuera del balance</div>
+            <p>El colateral se vende a una <strong>SPE</strong>. El inversor solo tiene derecho sobre el colateral de la SPE. Pool <strong>fijo</strong> a la emisión. Reduce reservas de capital del emisor.</p>
+          </div>
+          <div class="cmp-cell up">
+            <div class="cmp-head">Covered Bond</div>
+            <div class="cmp-rule">Cover pool en balance + doble recurso</div>
+            <p>El cover pool <strong>permanece en el balance</strong>. No se crea SPE. Pool <strong>dinámico</strong> (el emisor repone activos morosos/prepagados). Sin alivio de capital. Sin tranching crediticio.</p>
+          </div>
+        </div>
+        <div class="concept-card accent-gold">
+          <div class="cc-label gold">Doble Recurso (Dual Recourse)</div>
+          <div class="cc-def">
+            Ante default del emisor, el inversor tiene derechos sobre <strong>(1) el cover pool</strong> y <strong>(2) otros activos no gravados</strong> del emisor (<em>unencumbered assets</em>). Esto no existe en ABS con SPE. Mejoras adicionales: límites de LTV sobre hipotecas del cover pool, <strong>sobrecolateralización</strong> y monitoreo independiente por un tercero. Resultado: rendimientos <strong>menores</strong> que ABS comparables.
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="concept-card accent-navy" >
+          <div class="cc-label">Tipos según Default del Emisor</div>
+          <div class="cc-def">
+            <strong>Hard-bullet.</strong> El bono entra en default si el emisor no realiza un pago programado, acelerando los pagos hacia los tenedores.<br><br>
+            <strong>Soft-bullet.</strong> Puede posponer la fecha de vencimiento original hasta por un año si se incumple un pago, aplazando el default y la aceleración asociada.<br><br>
+            <strong>Conditional pass-through.</strong> En la fecha de vencimiento se convierte en un bono pass-through si quedan pagos pendientes; cualquier pago recuperado del cover pool se traspasa a los inversores.
+          </div>
+        </div>
+        <div class="rule-callout">
+          Los covered bonds los emiten principalmente bancos europeos, asiáticos y australianos. El cover pool suele estar formado por préstamos hipotecarios.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2.2 Mejora crediticia interna -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.2</span>
+    <span class="section-title">Mejora Crediticia Interna: Sobrecolateralización, Excess Spread y Tranching</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="cmp-strip cmp-strip-3" >
+          <div class="cmp-cell neutral">
+            <div class="cmp-head">Sobrecolateralización</div>
+            <div class="cmp-rule">V<sub>colateral</sub> &gt; V<sub>ABS</sub></div>
+            <p>El colateral puede sufrir defaults de hasta el exceso antes de que los inversores pierdan.</p>
+          </div>
+          <div class="cmp-cell neutral">
+            <div class="cmp-head">Excess Spread</div>
+            <div class="cmp-rule">Rendimiento col. &gt; Cupón ABS</div>
+            <p>La diferencia acumulada sirve como reserva para absorber pérdidas crediticias del colateral.</p>
+          </div>
+          <div class="cmp-cell neutral">
+            <div class="cmp-head">Tranching (Waterfall)</div>
+            <div class="cmp-rule">Senior → Mezz → Equity</div>
+            <p>Las tranches subordinadas absorben primero las pérdidas, protegiendo a las senior.</p>
+          </div>
+        </div>
+        <div class="formula-box">
+          <div class="f-label">Sobrecolateralización</div>
+          <div class="f-eq">
+            $$\text{Sobrecol.} = V_{\text{colateral}} - V_{\text{nominal ABS}}$$
+            $$\text{Absorción máxima} = \frac{\text{Sobrecol.}}{V_{\text{colateral}}}$$
+          </div>
+          <div class="f-vars">
+            Ejemplo: colateral $600M, ABS $500M → exceso $100M<br>
+            Puede absorber hasta <span>$100/$600 = 16.7%</span> de defaults antes de pérdidas al inversor
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="ex-box" >
+ <div class="ex-title">Ejercicio · Estructura de Tranches y Orden de Pérdidas</div>
+          <div class="ex-body">
+            <table class="ref-table" >
+              <thead><tr><th>Tranche</th><th>Nominal</th><th>Tasa</th></tr></thead>
+              <tbody>
+ <tr><td><strong>A, Senior</strong></td><td>$300M</td><td class="val-blue">MRR + 0.5%</td></tr>
+ <tr><td><strong>B, Subordinada</strong></td><td>$80M</td><td class="val-blue">MRR + 1.5%</td></tr>
+ <tr><td><strong>C, Equity</strong></td><td>$30M</td><td class="val-blue">Variable</td></tr>
+              </tbody>
+            </table>
+            <strong>Tranche C (equity)</strong> absorbe los primeros $30M de pérdidas.<br>
+            <strong>Tranche B</strong> absorbe pérdidas entre $30M y $110M.<br>
+            <strong>Tranche A</strong> protegida ante pérdidas ≤ $110M (27% del pool).
+          </div>
+        </div>
+        <div class="ex-box">
+ <div class="ex-title">Ejercicio · Cupón Tranche B con Defaults de $50M · MRR = 4%</div>
+          <div class="ex-body">
+            Inversor con $10M nominales de Tranche B (MRR 4% + 1.5% spread):<br><br>
+            <strong>Sin defaults:</strong>
+            $$\$10M \times (0.04 + 0.015) = \$550{,}000 / \text{año}$$
+            <strong>Con $50M defaults:</strong> C absorbe $30M; B se reduce de $80M a $60M.
+            $$\$550{,}000 \times \frac{60}{80} = \$412{,}500 / \text{año}$$
+          </div>
+          <div class="ex-result">El cupón se reduce en proporción al nominal vigente de la tranche.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2.3 ABS no hipotecarios -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.3</span>
+    <span class="section-title">ABS No Hipotecarios: Tarjetas de Crédito y Solar</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="concept-card accent-mid" >
+          <div class="cc-label mid">ABS de Tarjetas de Crédito</div>
+          <div class="cc-def">
+            Respaldados por pools de deuda de tarjetas (<em>cuentas por cobrar nonamortizing</em>).<br><br>
+            <strong>Flujos del pool:</strong> cargos financieros (intereses), comisiones de membresía y mora, y repagos de principal. Tasas fijas o flotantes, usualmente con <em>cap</em>.<br><br>
+            <strong>Período de lockout (revolving):</strong> los inversores solo reciben interés y comisiones; los repagos de principal se usan para comprar nuevas cuentas por cobrar, manteniendo el pool constante. <em>Sin riesgo de prepago</em> durante este período.<br><br>
+            <strong>Período de amortización:</strong> al terminar el lockout, los pagos de principal del colateral se traspasan a los tenedores.<br><br>
+            <strong>Early (rapid) amortization:</strong> provisión que adelanta la amortización cuando se deteriora la calidad crediticia.
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="concept-card accent-green">
+          <div class="cc-label green">ABS Solar (Residential Solar ABS)</div>
+          <div class="cc-def">
+            Respaldados por préstamos a hogares para financiar sistemas de energía solar.<br><br>
+            <strong>Colateral.</strong> Préstamos de financieras especializadas o subsidiarias de empresas solares. Pueden garantizarse sobre el propio sistema solar o sobre la vivienda como <em>hipoteca junior</em>.<br><br>
+            <strong>Atractivo ESG.</strong> Financian el cambio a energía renovable; atractivos para inversores con mandatos ambientales, sociales y de gobernanza.<br><br>
+            <strong>Riesgo crediticio bajo pero clase nueva.</strong> Otorgados a hogares con buen score crediticio; aún no probados en un ciclo de crédito completo.<br><br>
+            <strong>Pre-funding period.</strong> Permite al trust invertir en préstamos solares durante un plazo fijo tras captar fondos, logrando un pool mayor y más diversificado.
+          </div>
+        </div>
+        <div class="rule-callout" >
+          En principio, <strong>cualquier activo que genere flujos futuros puede titulizarse</strong>: préstamos comerciales, cuentas por cobrar, préstamos de auto, regalías musicales, licencias de franquicia.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2.4 CDO -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">2.4</span>
+    <span class="section-title">Obligaciones de Deuda Colateralizada (CDO): CBO, CLO y Tipos</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="concept-card accent-mid" >
+          <div class="cc-label mid">Estructura General del CDO</div>
+          <div class="cc-def">
+            Un <strong>CDO</strong> es un valor estructurado emitido por una SPE cuyo colateral es un pool de obligaciones de deuda. Lo distingue de un ABS común su <strong>collateral manager activo</strong>, que compra y vende valores del pool dinámicamente para generar los pagos prometidos.<br><br>
+            Emite tranches subordinadas similar a un ABS. La estructura debe ofrecer retorno atractivo a la tranche equity tras cubrir los rendimientos de las tranches de deuda senior.<br><br>
+            Post-crisis 2007-2009: estructuras más simples, mayor calidad de colateral. Hoy el colateral es mayormente <em>leveraged loans</em>, por lo que el CDO más común es el <strong>CLO</strong>.
+          </div>
+        </div>
+        <div class="cmp-strip">
+          <div class="cmp-cell up">
+            <div class="cmp-head">CBO</div>
+            <div class="cmp-rule">Collateralized Bond Obligation</div>
+            <p>Colateral: <strong>deuda corporativa y de mercados emergentes</strong>. Pool formado por valores de renta fija (bonos). Puede incluir deuda soberana de países en desarrollo.</p>
+          </div>
+          <div class="cmp-cell neutral">
+            <div class="cmp-head">CLO</div>
+            <div class="cmp-rule">Collateralized Loan Obligation</div>
+            <p>Colateral: <strong>cartera de préstamos bancarios apalancados</strong> (leveraged loans). Pool formado por préstamos, no bonos. Es hoy la forma más común de CDO.</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="concept-card accent-navy" >
+          <div class="cc-label">Tipos de CLO</div>
+          <div class="cc-def">
+            <strong>Cash flow CLO.</strong> Los pagos a inversores se generan a través de los flujos de caja del colateral.<br><br>
+            <strong>Market value CLO.</strong> Los pagos se generan negociando el valor de mercado del colateral.<br><br>
+            <strong>Synthetic CLO.</strong> La exposición al pool se genera mediante contratos de <em>derivados de crédito</em>; el trust del CLO <strong>no toma propiedad</strong> del colateral.
+          </div>
+        </div>
+        <div class="concept-card">
+          <div class="cc-label">Tests de Cobertura y Calidad del Colateral</div>
+          <div class="cc-def">
+            El colateral de un CDO se somete a pruebas preestablecidas:<br>
+            • <strong>Cobertura de pagos:</strong> flujos del colateral cubren los pagos a inversores.<br>
+            • <strong>Niveles de sobrecolateralización por tranche:</strong> si se incumplen, los flujos se redirigen a comprar colateral adicional o pagar tranches senior.<br>
+            • <strong>Diversificación del pool</strong> de colateral.<br>
+            • <strong>Límite a deuda CCC</strong> dentro del pool.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MÓDULO 03 · INSTRUMENTOS MBS
+══════════════════════════════════════════════ -->
+<div class="module-divider" id="module-03">
+  <div class="module-num">03</div>
+  <div class="module-title-block">
+    <h2>Instrumentos MBS y Características del Mercado</h2>
+    <p>Riesgo de prepago · Time tranching · LTV · DTI · RMBS agency/non-agency · WAM · WAC · CMO (sequential pay, PAC) · CMBS (DSCR, call protection, balloon risk)</p>
+  </div>
+  <div class="module-rule"></div>
+</div>
+
+<!-- 3.1 Riesgo de prepago y time tranching -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">3.1</span>
+    <span class="section-title">Riesgo de Prepago: Extension Risk, Contraction Risk y Time Tranching</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="concept-card accent-mid" >
+          <div class="cc-label mid">Riesgo de Prepago (Prepayment Risk)</div>
+          <div class="cc-def">
+            Los <strong>prepagos</strong> son repagos de principal por encima del cronograma de un préstamo amortizing. En un pool hipotecario, los prestatarios prepagan al vender su vivienda o refinanciar.<br><br>
+            El <strong>riesgo de prepago</strong> es el riesgo de que las velocidades de prepago resulten distintas a las expectativas del inversor.<br><br>
+            <strong>Determinante clave:</strong> el nivel de las tasas de interés. Cuando bajan, los prestatarios refinancian a tasas menores, acelerando los prepagos.<br><br>
+            <strong>Analogía:</strong> los MBS se parecen a bonos rescatables (callable). El prestatario tiene el derecho de repagar anticipadamente → <em>convexidad negativa</em> a tasas bajas.
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="cmp-strip" >
+          <div class="cmp-cell down">
+            <div class="cmp-head">Contraction Risk</div>
+            <div class="cmp-rule">Prepagos más rápidos</div>
+            <p>Ocurre cuando las <strong>tasas bajan</strong> y aumentan las refinanciaciones. El inversor recibe capital antes de lo esperado y debe reinvertir a tasas menores. El precio sube menos que otros instrumentos.</p>
+          </div>
+          <div class="cmp-cell up">
+            <div class="cmp-head">Extension Risk</div>
+            <div class="cmp-rule">Prepagos más lentos</div>
+            <p>Ocurre cuando las <strong>tasas suben</strong> y se frena la refinanciación. El inversor espera más por sus flujos, que se descuentan por más períodos a una tasa de descuento mayor.</p>
+          </div>
+        </div>
+        <div class="concept-card">
+ <div class="cc-label">Time Tranching · Redistribución del Riesgo de Prepago</div>
+          <div class="cc-def">
+            Un MBS con <strong>time tranching</strong> tiene distintas clases de bonos con distintos vencimientos. Los riesgos no desaparecen pero se <strong>redistribuyen</strong> entre tranches:<br><br>
+            • Tranches de <strong>menor vencimiento</strong> → más protección contra <em>extension risk</em>.<br>
+            • Tranches de <strong>mayor vencimiento</strong> → más protección contra <em>contraction risk</em>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3.2 Préstamos hipotecarios residenciales -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">3.2</span>
+    <span class="section-title">Préstamos Hipotecarios Residenciales: LTV, DTI, Recurso y Clasificación</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="formula-box" >
+          <div class="f-label">Métricas de Riesgo de Originación</div>
+          <div class="f-eq">
+            $$\text{LTV} = \frac{\text{Monto del préstamo}}{\text{Valor del inmueble}}$$
+            $$\text{DTI} = \frac{\text{Pago mensual de la deuda}}{\text{Ingreso bruto mensual}}$$
+          </div>
+          <div class="f-vars">
+            <span>LTV bajo</span> → mayor equity del prestatario, menor riesgo de default, mayor recuperación en foreclosure<br>
+            <span>DTI bajo</span> → menor riesgo de default (prestatario tiene más margen)
+          </div>
+        </div>
+        <div class="ex-box">
+ <div class="ex-title">Ejemplo · Hipoteca $300K sobre inmueble $400K · Tasa 6% · 25 años · Ingreso $80K/año</div>
+          <div class="ex-body">
+            $$\text{LTV} = \frac{\$300{,}000}{\$400{,}000} = 75\%$$
+            PMT: N=300, I/Y=0.5%, PV=$300K → <strong>PMT = $1,932.90/mes</strong><br>
+            Ingreso mensual: $80,000 / 12 = $6,667
+            $$\text{DTI} = \frac{\$1{,}932.90}{\$6{,}667} \approx 29\%$$
+          </div>
+          <div class="ex-result">LTV = 75% · DTI = 29%</div>
+        </div>
+      </div>
+      <div>
+        <div class="cmp-strip" >
+          <div class="cmp-cell up">
+            <div class="cmp-head">Recourse (con recurso)</div>
+            <div class="cmp-rule">Recurso a otros activos</div>
+            <p>El prestamista puede reclamar otros activos del prestatario por el monto no cubierto en la ejecución. Reduce el incentivo a incumplir. Común en <strong>Europa</strong>.</p>
+          </div>
+          <div class="cmp-cell down">
+            <div class="cmp-head">Nonrecourse (sin recurso)</div>
+            <div class="cmp-rule">Solo el inmueble como colateral</div>
+            <p>Si el valor cae por debajo del saldo (<em>underwater</em>), el prestatario es más propenso al <strong>default estratégico</strong>. Común en <strong>EE.UU.</strong> (varía por estado).</p>
+          </div>
+        </div>
+        <div class="cmp-strip cmp-strip-3">
+          <div class="cmp-cell up">
+            <div class="cmp-head">Prime</div>
+            <p>Buen crédito, LTV bajo, DTI bajo.</p>
+          </div>
+          <div class="cmp-cell down">
+            <div class="cmp-head">Subprime</div>
+            <p>Menor calidad crediticia, mayor DTI/LTV, menor prioridad sobre colateral.</p>
+          </div>
+          <div class="cmp-cell neutral">
+            <div class="cmp-head">Conforming</div>
+            <p>Cumple estándares de suscripción para agency RMBS. Non-conforming si no los cumple.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3.3 RMBS y CMO -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">3.3</span>
+    <span class="section-title">RMBS: Agency vs. Non-Agency · WAM, WAC · CMO: Sequential Pay y PAC</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="cmp-strip" >
+          <div class="cmp-cell flat">
+            <div class="cmp-head">Agency RMBS</div>
+            <div class="cmp-rule">Garantía del gobierno o GSE</div>
+            <p>Garantizados por gobierno o empresa patrocinada por el gobierno (GSE). Hipotecas deben ser <strong>conforming</strong>. Garantías GSE ≠ plena fe y crédito del gobierno.</p>
+          </div>
+          <div class="cmp-cell down">
+            <div class="cmp-head">Non-Agency RMBS</div>
+            <div class="cmp-rule">Emisores privados, sin garantía</div>
+            <p>Emitidos por bancos; <strong>sin garantía</strong> del gobierno ni GSE. Incluyen mejoras crediticias (seguros, cartas de crédito, tranching). Señalados como catalizador de la crisis 2007-2009.</p>
+          </div>
+        </div>
+        <div class="formula-box">
+          <div class="f-label">Pass-Through Hipotecario: WAM y WAC</div>
+          <div class="f-eq">
+            $$\text{WAM} = \sum_i \frac{\text{Saldo}_i}{\text{Saldo Total}} \times \text{Meses a venc.}_i$$
+            $$\text{WAC} = \sum_i \frac{\text{Saldo}_i}{\text{Saldo Total}} \times \text{Tasa}_i$$
+          </div>
+          <div class="f-vars">
+            <span>Pass-through rate</span> = cupón del MBS &lt; WAC (se descuentan comisiones de administración y garantía)<br>
+            Ponderación por saldo de principal vigente de cada hipoteca
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="ex-box" >
+ <div class="ex-title">Ejercicio · WAM y WAC de pool con 3 hipotecas (saldos en miles)</div>
+          <div class="ex-body">
+            <table class="ref-table" >
+              <thead><tr><th>Hip.</th><th>Tasa</th><th>Saldo act.</th><th>Meses venc.</th></tr></thead>
+              <tbody>
+                <tr><td>A</td><td>2.6%</td><td>$90K</td><td>210</td></tr>
+                <tr><td>B</td><td>1.0%</td><td>$72K</td><td>100</td></tr>
+                <tr><td>C</td><td>5.4%</td><td>$247K</td><td>280</td></tr>
+              </tbody>
+            </table>
+            Total = $409K
+            $$\text{WAM} = \frac{90(210)+72(100)+247(280)}{409} \approx \mathbf{233\text{ meses}}$$
+            $$\text{WAC} = \frac{90(2.6\%)+72(1.0\%)+247(5.4\%)}{409} \approx \mathbf{4.01\%}$$
+          </div>
+        </div>
+        <div class="concept-card accent-mid">
+          <div class="cc-label mid">CMO: Sequential Pay y PAC Tranches</div>
+          <div class="cc-def">
+            <strong>Sequential pay CMO:</strong> los pagos de principal fluyen a las tranches en orden preestablecido; hasta que la primera tranche se paga por completo, el principal va solo a esa tranche. La tranche "corta" protege contra <em>extension risk</em>; la "larga", contra <em>contraction risk</em>.<br><br>
+            <strong>PAC (Planned Amortization Class):</strong> hace pagos predecibles mientras los prepagos estén dentro de un rango. La <em>support tranche</em> absorbe el exceso si prepagos aumentan, y es recortada si disminuyen, preservando el cronograma de la PAC.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="inner-divider"></div>
+
+    <div class="concept-card accent-navy">
+      <div class="cc-label">Otros Tramos CMO</div>
+      <div class="cc-def" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div><strong>Z-tranche (accrual).</strong> No recibe interés durante un período; en su lugar, acumula interés como principal extra (e.g., $100 × 1.05 = $105 al final del primer período con cupón 5%). Suele ser la tranche de menor rango.</div>
+        <div><strong>PO (Principal-only).</strong> Paga solo principal; es efectivamente un cupón cero. Tasas a la baja y prepagos más rápidos <em>benefician</em> al PO (cuanto antes se repaga, mayor el retorno anualizado).<br><br>
+        <strong>IO (Interest-only).</strong> Paga solo interés. Tasas a la baja y prepagos rápidos <em>perjudican</em> al IO.</div>
+        <div><strong>Floating-rate.</strong> Cupón ligado a tasa de referencia variable con cap y floor. Puede estructurarse como <em>inverse floater</em> (cupón sube cuando tasas bajan).<br><br>
+        <strong>Residual.</strong> Rango junior a todas las demás tranches; similar a la tranche equity de un ABS.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 3.4 CMBS -->
+<div class="section-block">
+  <div class="section-header">
+    <span class="section-num">3.4</span>
+    <span class="section-title">CMBS: Colateral Comercial, DSCR, Call Protection y Balloon Risk</span>
+  </div>
+  <div class="section-body">
+    <div class="grid-2">
+      <div>
+        <div class="concept-card accent-mid" >
+          <div class="cc-label mid">CMBS vs. RMBS</div>
+          <div class="cc-def">
+            Los <strong>CMBS</strong> se respaldan en hipotecas comerciales sobre inmuebles que generan ingresos: multifamiliares, naves industriales, centros comerciales, oficinas, hoteles.<br><br>
+            <strong>Menor diversificación:</strong> menos hipotecas que los RMBS; incluso un CMBS puede respaldarse en una sola hipoteca.<br><br>
+            <strong>Quién repaga:</strong> inversores inmobiliarios que dependen de sus inquilinos (empresas) y de los clientes de estos, no dueños-ocupantes.<br><br>
+            <strong>Cupones:</strong> fijos en EE.UU.; flotantes en Europa. El ingreso regular del colateral se denomina <em>WAMP</em> (análogo al WAC de RMBS).<br><br>
+            El análisis se centra en el <strong>riesgo de crédito del inmueble</strong>, no en el del prestatario.
+          </div>
+        </div>
+        <div class="formula-box">
+          <div class="f-label">Ratios de Riesgo CMBS</div>
+          <div class="f-eq">
+            $$\text{DSCR} = \frac{\text{Ingreso operativo neto}}{\text{Servicio de la deuda}}$$
+            $$\text{LTV} = \frac{\text{Monto del préstamo}}{\text{Valor de tasación}}$$
+          </div>
+          <div class="f-vars">
+            <span>NOI</span> = ingresos por alquiler − gastos operativos en efectivo − reserva de reemplazo (depreciación)<br>
+            <span>DSCR alto</span> → mayor protección para el prestamista<br>
+            <span>LTV alto</span> → mayor riesgo de default
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="concept-card accent-navy" >
+          <div class="cc-label">Call Protection (Protección contra Prepagos)</div>
+          <div class="cc-def">
+            Los CMBS brindan call protection a nivel del préstamo y a nivel de estructura:<br><br>
+            <strong>Prepayment lockout.</strong> Por un período (típicamente 2-5 años) el prestatario tiene prohibido prepagar el préstamo.<br><br>
+            <strong>Penalty points.</strong> Comisión de penalidad expresada en puntos; cada punto = 1% del principal prepagado.<br><br>
+            <strong>Defeasance.</strong> El prestatario compra una cartera de valores del gobierno suficiente para cubrir los pagos programados restantes, protegiendo al prestamista del prepago.<br><br>
+            <strong>A nivel de estructura:</strong> sequential pay tranching del pool (igual que en los CMO).
+          </div>
+        </div>
+        <div class="rule-callout red">
+          <strong>Balloon Risk.</strong> Las hipotecas comerciales típicamente no se amortizan por completo: al vencimiento queda un <em>balloon payment</em>. Si el prestatario no logra refinanciar, entra en default. El prestamista puede extender el plazo bajo un <em>workout period</em>. Como implica extender el plazo, es una forma de <strong>extension risk</strong> para el inversor de CMBS.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabla resumen -->
+<div class="section-block" >
+  <div class="section-header">
+    <span class="section-num">REF</span>
+    <span class="section-title">Tabla Resumen: Conceptos Clave de la Semana</span>
+  </div>
+  <div class="section-body">
+    <div class="table-scroll-wrap">
+      <table class="ref-table">
+        <thead>
+          <tr><th>Instrumento</th><th>Característica clave</th><th>Riesgo principal</th><th>Nota distintiva</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ABS (titulización)</strong></td>
+            <td>Pool vendido a SPE → bankruptcy remote; pool fijo a emisión</td>
+            <td>Flujos inciertos + riesgo de crédito del colateral</td>
+            <td>Mejoras internas: OC, excess spread, tranching waterfall</td>
+          </tr>
+          <tr>
+            <td><strong>Covered Bond</strong></td>
+            <td>Cover pool en balance; pool dinámico; sin SPE; doble recurso</td>
+            <td>Riesgo del emisor (además del pool)</td>
+            <td>Menor rendimiento que ABS; tipos: hard-bullet, soft-bullet, CPT</td>
+          </tr>
+          <tr>
+            <td><strong>CDO / CLO</strong></td>
+            <td>Collateral manager activo; colateral = obligaciones de deuda</td>
+            <td>Correlación de defaults en el pool</td>
+            <td>CBO = bonos; CLO = leveraged loans (hoy el más común)</td>
+          </tr>
+          <tr>
+            <td><strong>RMBS pass-through</strong></td>
+            <td>Derechos pro-rata sobre flujos del pool, neto de comisiones</td>
+            <td>Prepayment risk (contraction + extension)</td>
+            <td>WAC − comisiones = pass-through rate; WAM pondera saldos vigentes</td>
+          </tr>
+          <tr>
+            <td><strong>CMO sequential</strong></td>
+            <td>Principal fluye en orden a tranches; redistribuye riesgo de prepago</td>
+            <td>Tranche corta: extension risk; larga: contraction risk</td>
+            <td>PAC + support tranche: planificación de amortización dentro de un rango</td>
+          </tr>
+          <tr>
+            <td><strong>CMBS</strong></td>
+            <td>Hipotecas comerciales; análisis centrado en NOI del inmueble</td>
+            <td>Balloon risk → extension risk</td>
+            <td>DSCR = NOI / servicio deuda; call protection: lockout, penalty points, defeasance</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div><!-- end wrapper -->
+
+<button class="print-btn no-print" id="printBtn" aria-label="Imprimir"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.75 6.25V2.25h6.5v4M4.75 12.5h6.5v2.25h-6.5z"/><path d="M4.75 6.25h-1.5a1.5 1.5 0 0 0-1.5 1.5v3.25a1.5 1.5 0 0 0 1.5 1.5h1.5m6.5 0h1.5a1.5 1.5 0 0 0 1.5-1.5V7.75a1.5 1.5 0 0 0-1.5-1.5h-1.5"/></svg></button>
+<button class="scroll-top-btn no-print" id="scrollTopBtn" aria-label="Volver al inicio"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13.25V3.5M3.75 7.75L8 3.5l4.25 4.25"/></svg></button>
+<script>
+(function(){
+  var top = document.getElementById('scrollTopBtn');
+  var prt = document.getElementById('printBtn');
+  top.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+  prt.addEventListener('click', function(){ window.print(); });
+  function marca(){
+    var v = window.scrollY > 320;
+    top.classList.toggle('visible', v);
+    prt.classList.toggle('visible', v);
+  }
+  window.addEventListener('scroll', marca, {passive:true});
+  marca();
+})();
+</script>
+</body>
+</html>
