@@ -96,7 +96,6 @@ svg.ic{width:16px;height:16px;flex:none;display:block}
 }
 .brand-mark img{width:20px;height:auto;display:block}
 .brand-txt{font-family:var(--display);font-size:12px;font-weight:800;color:var(--white);letter-spacing:.02em;white-space:nowrap}
-.brand-sub{font-family:var(--ui);font-size:10px;color:var(--d-mute);letter-spacing:.08em;white-space:nowrap}
 
 #tabs{
   flex:1 1 0;min-width:0;display:flex;align-items:stretch;gap:0;
@@ -511,7 +510,7 @@ svg.ic{width:16px;height:16px;flex:none;display:block}
 }
 @media(max-width:560px){
   .weeks-grid{grid-template-columns:repeat(4,1fr)}
-  .brand-txt,.brand-sub{display:none}
+  .brand-txt{display:none}
   .brand{padding:0 12px}
   #botbar{padding:0 12px;gap:8px}
   .step{padding:0 14px}
@@ -562,10 +561,7 @@ svg.ic{width:16px;height:16px;flex:none;display:block}
   <header id="topbar">
     <div class="brand">
       <span class="brand-mark"><img src="assets/Logo UP.jpg" alt="Universidad del Pacífico"/></span>
-      <span>
-        <span class="brand-txt">Renta Fija</span>
-        <span class="brand-sub">1F0115 · 2026-II</span>
-      </span>
+      <span class="brand-txt">Renta Fija</span>
     </div>
     <div id="tabs" role="tablist" aria-label="Secciones del curso"></div>
   </header>
@@ -591,7 +587,7 @@ svg.ic{width:16px;height:16px;flex:none;display:block}
           <dl class="facts">
             <div class="fact"><dt>Inicio de clases</dt><dd>10 ago 2026<small>Cierre: 29 nov 2026</small></dd></div>
             <div class="fact"><dt>Horario</dt><dd>Lun 10:30 a 13:20<small>Jue 20:30 a 22:20</small></dd></div>
-            <div class="fact"><dt>Aulas</dt><dd>E-303 teoría<small>A-106 práctica</small></dd></div>
+            <div class="fact"><dt>Aulas</dt><dd>A-405 teoría<small>A-203 práctica</small></dd></div>
             <div class="fact"><dt>Créditos</dt><dd>4 créditos<small>3 h teoría, 2 h práctica</small></dd></div>
           </dl>
         </div>
@@ -709,8 +705,8 @@ svg.ic{width:16px;height:16px;flex:none;display:block}
               <tr><td><b>1. Examen Parcial</b></td><td class="r w num">25 %</td><td class="r d num">28 sep al 3 oct 2026</td></tr>
               <tr><td><b>2. Examen Final</b></td><td class="r w num">25 %</td><td class="r d num">23 al 29 nov 2026</td></tr>
               <tr class="grp"><td>3. Prácticas calificadas, controles de lectura y tareas de investigación</td><td class="r w num">50 %</td><td class="r d"></td></tr>
-              <tr class="sub"><td>3.1 Práctica Calificada 1, contenido de las semanas 1 a 6</td><td class="r w num">15 %</td><td class="r d num">17 sep 2026</td></tr>
-              <tr class="sub"><td>3.2 Práctica Calificada 2, contenido de las semanas 7 a 13</td><td class="r w num">15 %</td><td class="r d num">5 nov 2026</td></tr>
+              <tr class="sub"><td>3.1 Práctica Calificada 1, contenido de las semanas 1 a 5</td><td class="r w num">15 %</td><td class="r d num">17 sep 2026</td></tr>
+              <tr class="sub"><td>3.2 Práctica Calificada 2, contenido de las semanas 7 a 12</td><td class="r w num">15 %</td><td class="r d num">5 nov 2026</td></tr>
               <tr class="sub"><td>3.3 Trabajo grupal, presentación en clase</td><td class="r w num">10 %</td><td class="r d num">19 nov 2026</td></tr>
               <tr class="sub"><td>3.4 Participación en clase</td><td class="r w num">10 %</td><td class="r d">Permanente</td></tr>
             </tbody>
@@ -792,8 +788,8 @@ const ONEPAGERS_PUBLICADOS = [1,2,3,4,5,6,7,9,10,11,12,13];
 
 /* ═══════════════════════════════════════════════════════════════════
    2. CRONOGRAMA 2026-II
-   Fuente: Cronograma Renta Fija 2026-II. Lunes teoría en E-303,
-   jueves práctica en A-106.
+   Fuente: Cronograma Renta Fija 2026-II. Lunes teoría en A-405,
+   jueves práctica en A-203 (ver AULAS más abajo).
    ═══════════════════════════════════════════════════════════════════ */
 const CRONOGRAMA = [
   { n:1, unidad:1, corto:'Introducción',
@@ -831,14 +827,13 @@ const CRONOGRAMA = [
     bajada:'Ley de un solo precio, árboles binomiales y modelos de estructura temporal',
     teoria:{fecha:'14 set 2026', dia:'Lunes', sesion:'Clase Teórica 6'},
     practica:{fecha:'17 set 2026', dia:'Jueves', sesion:'PC1', eval:true,
-              detalle:'Práctica Calificada 1, contenido de las semanas 1 a 6'} },
+              detalle:'Práctica Calificada 1, contenido de las semanas 1 a 5'} },
 
   { n:7, unidad:3, corto:'Opciones',
     tema:'Valoración y Análisis de Bonos con Opciones',
     bajada:'Callable, putable, OAS, duración efectiva y convertibles',
     teoria:{fecha:'21 set 2026', dia:'Lunes', sesion:'Clase Teórica 7'},
-    practica:{fecha:'24 set 2026', dia:'Jueves', sesion:'PD6'},
-    nota:'La PD6 incluye ejercicios basados en el contenido de las semanas 6 y 7.' },
+    practica:{fecha:'24 set 2026', dia:'Jueves', sesion:'PD6'} },
 
   { n:8, tipo:'examen', corto:'Parciales',
     tema:'Exámenes Parciales',
@@ -851,7 +846,7 @@ const CRONOGRAMA = [
     bajada:'PD, LGD, pérdida esperada, spreads, calificaciones y notching',
     teoria:{fecha:'5 oct 2026', dia:'Lunes', sesion:'Clase Teórica 8'},
     practica:{fecha:'8 oct 2026', dia:'Jueves', sesion:'PD7'},
-    nota:'El 8 de octubre es feriado nacional, por lo que la PD7 será reprogramada.' },
+    nota:'La PD7 incluye ejercicios basados en el contenido de las semanas 6 y 7. El 8 de octubre es feriado nacional, por lo que la PD7 será reprogramada.' },
 
   { n:10, unidad:3, corto:'Crédito II',
     tema:'Riesgo de Crédito II: Modelos de Análisis Crediticio',
@@ -876,14 +871,14 @@ const CRONOGRAMA = [
     bajada:'MBS, ABS, CDO, vehículos de propósito especial y riesgo de prepago',
     teoria:{fecha:'2 nov 2026', dia:'Lunes', sesion:'Clase Teórica 12'},
     practica:{fecha:'5 nov 2026', dia:'Jueves', sesion:'PC2', eval:true,
-              detalle:'Práctica Calificada 2, contenido de las semanas 7 a 13'} },
+              detalle:'Práctica Calificada 2, contenido de las semanas 7 a 12'} },
 
   { n:14, unidad:4, corto:'Portafolios',
     tema:'Introducción a la Gestión de Portafolios de Renta Fija',
     bajada:'Estrategias activas y pasivas, inmunización, atribución y VaR',
     teoria:{fecha:'9 nov 2026', dia:'Lunes', sesion:'Clase Teórica 13'},
     practica:{fecha:'12 nov 2026', dia:'Jueves', sesion:'PD11'},
-    nota:'La PD11 incluye ejercicios basados en el contenido de las semanas 12 y 13.' },
+    nota:'La PD11 incluye ejercicios basados en el contenido de las semanas 13 y 14.' },
 
   { n:15, unidad:4, corto:'Perú',
     tema:'Mercado Peruano de Renta Fija',
@@ -898,6 +893,12 @@ const CRONOGRAMA = [
     texto:'El examen final pesa 25 % de la nota final y cubre todo el curso. En esta semana también se rinde la evaluación sustitutoria para quienes tengan una práctica o examen pendiente.',
     cubre:[1,2,3,4,5,6,7,9,10,11,12,13,14,15] }
 ];
+
+/* Aula y horario fijos de cada tipo de sesión */
+const AULAS = {
+  teoria:  {aula:'A-405', hora:'10:30 a 13:20'},
+  practica:{aula:'A-203', hora:'20:30 a 22:20'}
+};
 
 const UNIDADES = {
   1:'Unidad 1 · Fundamentos y estructura temporal',
@@ -925,8 +926,8 @@ function sesionHTML(s, tipoIcono, rol){
     (s.detalle ? '<div style="font-size:12.5px;color:var(--d-body)">' + s.detalle + '</div>' : '') +
     '<div class="ses-meta">' +
       '<span>' + icon('i-cal') + s.dia + '</span>' +
-      '<span>' + icon('i-pin') + (rol === 'teoria' ? 'E-303' : 'A-106') + '</span>' +
-      '<span>' + icon('i-clock') + (rol === 'teoria' ? '10:30 a 13:20' : '20:30 a 22:20') + '</span>' +
+      '<span>' + icon('i-pin') + AULAS[rol].aula + '</span>' +
+      '<span>' + icon('i-clock') + AULAS[rol].hora + '</span>' +
     '</div>' +
   '</div>';
 }

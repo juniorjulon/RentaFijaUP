@@ -34,6 +34,12 @@ Both surfaces share the same tokens. Anything outside this list is a bug.
 Tints are built with `rgba()` over these values (`--pale`, `--pale-mid`, `--t-mute`, and so
 on). `--vivid` is reserved for focus rings, text selection and the progress fill.
 
+**Annotation accents** (the only client-approved exception to the palette, defined in
+`assets/onepager.css`): `--teach` purple for "Desde cero" boxes (`.explain`), `--prof` amber
+for "Nota del profesor" (`.prof-note`), and `--ok` / `--ko` green and red for quiz feedback
+and simulated losses. They tell students they are leaving the running text. Use them as
+fills and label colors only, never as borders, and never for anything else.
+
 **Type**: three voices, declared as `--display`, `--ui` and `--body` / `--sans`.
 
 | Voice | Face | Used for |
@@ -83,6 +89,15 @@ Every `w#_onepager.html` follows the same order:
 4. `#conceptos` (section-block, `.concepts` list plus the `.applies` two-column block)
 5. `#onepager` divider, then the numbered modules (`#module-01`, `#module-02`, ...), each
    with its `.section-block` subsections numbered `1.1`, `1.2` and so on.
+
+**W13 is the interactive model.** It splits that same content into a sticky tabbed guide
+(`.tabbar`): Inicio (resumen, keywords, conceptos, ruta de estudio), Parte 1 to 3 (one per
+module, each closing with a quiz) and Repaso (tabla resumen and quiz progress). Below the
+tabs, `#subnav` lists the `[data-nav]` sections of the active part and highlights the one
+in view. Any `href="#id"` link opens the part that contains the target, so deep links like
+`w13_onepager.html#sec-cb` work. Interactive pieces: `.step-card` (click to reveal),
+`details.acc` accordions, `.toggle-group` scenarios, `.map-jump` links, calculators
+(`.widget`) and quizzes with score and retry. Printing shows every part expanded.
 
 Math is rendered with **MathJax 3** (`\( \)` inline, `\[ \]` and `$$ $$` display).
 `index.html` has no math and loads no math library.
