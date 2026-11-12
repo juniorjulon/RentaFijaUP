@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Visual CMO: Sequential-Pay vs. PAC & Support</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #e2e8f0;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #38bdf8;
+            border: 3px solid #0f172a;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+            transition: transform 0.15s ease;
+        }
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+        .water-wave {
+            transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bar-transition {
+            transition: height 0.35s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+        }
+        /* Flowing pipe animation */
+        @keyframes flowDown {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 24px; }
+        }
+        .pipe-flow {
+            background-image: linear-gradient(180deg, rgba(56, 189, 248, 0.7) 50%, rgba(15, 23, 42, 0.2) 50%);
+            background-size: 100% 12px;
+            animation: flowDown 0.6s linear infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-16 selection:bg-sky-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800/80 bg-slate-900/60 backdrop-blur-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-sky-500/20">
+                    <svg class="w-6 h-6 text-slate-950 font-bold" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold text-white tracking-tight">Laboratorio Visual de CMOs: Time Tranching</h1>
+                    <p class="text-xs text-slate-400">Comparativa interactiva: <span class="text-sky-400 font-medium">Sequential-Pay</span> vs. <span class="text-emerald-400 font-medium">PAC & Support Tranches</span> (Pool de $100M)</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 text-xs bg-slate-800/90 border border-slate-700 px-3 py-2 rounded-xl">
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-slate-300">Banda Protegida PAC: <strong class="text-emerald-400 mono">100 PSA – 300 PSA</strong></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-8">
+
+        <!-- SECTION 1: CONTROL PANEL (PSA SLIDER & SCENARIOS) -->
+        <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-2xl">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                
+                <!-- Left: Slider & Corridor Bar -->
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider font-semibold text-slate-400">Control de Velocidad de Prepago</span>
+                            <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                                Velocidad PSA del Pool Hipotecario
+                            </h2>
+                        </div>
+                        <div class="flex items-center gap-2 bg-slate-950 border border-slate-800 px-3.5 py-1.5 rounded-xl">
+                            <span id="psaBadgeValue" class="text-2xl font-extrabold mono text-sky-400">180 PSA</span>
+                            <span id="rateEnvBadge" class="text-xs px-2 py-0.5 rounded-md font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                En Banda PAC
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Slider with Visual Corridor -->
+                    <div class="relative pt-2 pb-1">
+                        <!-- Background Track showing zones -->
+                        <div class="w-full h-3 rounded-lg overflow-hidden flex border border-slate-700/80">
+                            <!-- 30 to 100 PSA (70 units / 470 = 14.9%) -->
+                            <div class="h-full bg-rose-500/30 border-r border-rose-500/50" style="width: 14.9%;" title="Extension Risk (<100 PSA)"></div>
+                            <!-- 100 to 300 PSA (200 units / 470 = 42.55%) -->
+                            <div class="h-full bg-emerald-500/35 border-r border-emerald-500/50" style="width: 42.55%;" title="Corredor PAC Protegido (100 - 300 PSA)"></div>
+                            <!-- 300 to 500 PSA (200 units / 470 = 42.55%) -->
+                            <div class="h-full bg-amber-500/30" style="width: 42.55%;" title="Contraction Risk Extremo (>300 PSA)"></div>
+                        </div>
+
+                        <input id="psaSlider" type="range" min="30" max="500" step="5" value="180" 
+                            class="w-full absolute top-1.5 left-0 z-10" aria-label="Velocidad de Prepago PSA">
+
+                        <!-- Tick Labels -->
+                        <div class="flex justify-between text-[11px] mono text-slate-400 mt-2 px-0.5">
+                            <span class="text-rose-400">30 PSA (Frenazo)</span>
+                            <span class="text-emerald-400 font-semibold" style="margin-left: -4%;">100 PSA (Límite Inf.)</span>
+                            <span class="text-emerald-400 font-semibold">300 PSA (Límite Sup.)</span>
+                            <span class="text-amber-400">500 PSA (Ola Masiva)</span>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Explanation Banner -->
+                    <div id="macroContextBox" class="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800 flex items-start gap-3 text-xs sm:text-sm">
+                        <div id="macroIcon" class="mt-0.5 text-lg">🛡️</div>
+                        <div>
+                            <p id="macroTitle" class="font-semibold text-white">Escenario dentro del Corredor PAC (100 – 300 PSA)</p>
+                            <p id="macroDesc" class="text-slate-300 mt-0.5 leading-relaxed">
+                                El tramo <strong>Support</strong> absorbe toda la variación de prepagos. El tramo <strong>PAC</strong> recibe exactamente su cuota programada sin sufrir ni extensión ni contracción.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Preset Scenario Buttons -->
+                <div class="lg:col-span-5 space-y-2.5">
+                    <span class="text-xs uppercase tracking-wider font-semibold text-slate-400 block">Escenarios Rápidos de Examen:</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <button onclick="setPSA(50)" class="scenario-btn text-left p-3 rounded-xl border border-slate-800 bg-slate-950/70 hover:bg-slate-800/80 hover:border-rose-500/50 transition group">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-rose-400 uppercase">↑ Suben Tasas</span>
+                                <span class="mono text-xs px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300">50 PSA</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white mt-1 group-hover:text-rose-200">Extension Risk Severo</p>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Nadie refinancia. El flujo cae por debajo de la banda PAC.</p>
+                        </button>
+
+                        <button onclick="setPSA(150)" class="scenario-btn text-left p-3 rounded-xl border border-slate-800 bg-slate-950/70 hover:bg-slate-800/80 hover:border-emerald-500/50 transition group">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-emerald-400 uppercase">≈ Tasas Estables</span>
+                                <span class="mono text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">150 PSA</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white mt-1 group-hover:text-emerald-200">Base dentro de Banda</p>
+                            <p class="text-[11px] text-slate-400 mt-0.5">El PAC cumple su calendario fijo; Support amortigua.</p>
+                        </button>
+
+                        <button onclick="setPSA(280)" class="scenario-btn text-left p-3 rounded-xl border border-slate-800 bg-slate-950/70 hover:bg-slate-800/80 hover:border-sky-500/50 transition group">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-sky-400 uppercase">↓ Caen Tasas</span>
+                                <span class="mono text-xs px-1.5 py-0.5 rounded bg-sky-500/20 text-sky-300">280 PSA</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white mt-1 group-hover:text-sky-200">Contraction en Banda</p>
+                            <p class="text-[11px] text-slate-400 mt-0.5">Ola de prepagos: Tramo A se acorta, pero el PAC sigue intacto.</p>
+                        </button>
+
+                        <button onclick="setPSA(450)" class="scenario-btn text-left p-3 rounded-xl border border-slate-800 bg-slate-950/70 hover:bg-slate-800/80 hover:border-amber-500/50 transition group">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-amber-400 uppercase">↓↓ Desplome Tasas</span>
+                                <span class="mono text-xs px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">450 PSA</span>
+                            </div>
+                            <p class="text-xs font-semibold text-white mt-1 group-hover:text-amber-200">PAC Roto (Busted PAC)</p>
+                            <p class="text-[11px] text-slate-400 mt-0.5">El Support se agota rápido y el PAC sufre Contraction Risk.</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: METÁFORA HIDRÁULICA (CAUDAL DE AGUA / PRINCIPAL) -->
+        <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5 border-b border-slate-800 pb-4">
+                <div>
+                    <span class="text-xs font-semibold uppercase tracking-wider text-sky-400">Metáfora Visual de las Cascadas (Waterfalls)</span>
+                    <h2 class="text-lg font-bold text-white">¿Cómo se reparte el Principal año a año? Selecciona un Año para inspeccionar:</h2>
+                </div>
+                <!-- Year Selector Pills -->
+                <div class="flex flex-wrap gap-1.5" id="yearPillsContainer">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- Hydraulic Box 1: Sequential Pay -->
+                <div class="bg-slate-950/80 border border-slate-800/90 rounded-xl p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-sky-500/15 text-sky-300 border border-sky-500/30">
+                                1. Cascada en Fila India (Sequential-Pay)
+                            </span>
+                            <span id="seqYearFlowLabel" class="text-xs mono text-slate-400">Flujo Año 2: $18.5M</span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-4">
+                            El 100% del agua (principal) cae al <strong>Tramo A</strong> hasta llenarlo ($40M). Recién cuando A se llena por completo, el agua pasa al <strong>Tramo B</strong> ($35M) y finalmente al <strong>Tramo C</strong> ($25M).
+                        </p>
+                    </div>
+
+                    <!-- 3 Sequential Buckets Visual -->
+                    <div class="grid grid-cols-3 gap-3 pt-2 items-end">
+                        <!-- Bucket A -->
+                        <div class="flex flex-col items-center">
+                            <div class="text-xs font-semibold text-sky-300 mb-1">Tramo A (Corto)</div>
+                            <div class="text-[11px] mono text-slate-400 mb-2">Meta: $40M</div>
+                            <div class="w-full max-w-[110px] h-36 rounded-b-xl border-2 border-t-0 border-sky-500/60 bg-slate-900/90 relative overflow-hidden flex items-end">
+                                <div id="bucketSeqA" class="w-full bg-gradient-to-t from-sky-600 to-sky-400/80 water-wave flex items-center justify-center" style="height: 50%;">
+                                </div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-1 drop-shadow">
+                                    <span id="bucketSeqAText" class="text-sm font-extrabold mono text-white">$20.0M</span>
+                                    <span id="bucketSeqAYearFlow" class="text-[10px] mono px-1.5 py-0.5 rounded bg-slate-950/80 text-sky-300 mt-1">+$10.0M este año</span>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-[11px] text-center text-slate-400">
+                                Protege: <strong class="text-emerald-400">Extensión</strong><br>
+                                Sufre: <strong class="text-rose-400">Contracción</strong>
+                            </div>
+                        </div>
+
+                        <!-- Bucket B -->
+                        <div class="flex flex-col items-center">
+                            <div class="text-xs font-semibold text-indigo-300 mb-1">Tramo B (Medio)</div>
+                            <div class="text-[11px] mono text-slate-400 mb-2">Meta: $35M</div>
+                            <div class="w-full max-w-[110px] h-36 rounded-b-xl border-2 border-t-0 border-indigo-500/60 bg-slate-900/90 relative overflow-hidden flex items-end">
+                                <div id="bucketSeqB" class="w-full bg-gradient-to-t from-indigo-600 to-indigo-400/80 water-wave flex items-center justify-center" style="height: 0%;">
+                                </div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-1 drop-shadow">
+                                    <span id="bucketSeqBText" class="text-sm font-extrabold mono text-white">$0.0M</span>
+                                    <span id="bucketSeqBYearFlow" class="text-[10px] mono px-1.5 py-0.5 rounded bg-slate-950/80 text-indigo-300 mt-1">+$0.0M este año</span>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-[11px] text-center text-slate-400">
+                                Espera a que A<br>llegue a $40M
+                            </div>
+                        </div>
+
+                        <!-- Bucket C -->
+                        <div class="flex flex-col items-center">
+                            <div class="text-xs font-semibold text-purple-300 mb-1">Tramo C (Largo)</div>
+                            <div class="text-[11px] mono text-slate-400 mb-2">Meta: $25M</div>
+                            <div class="w-full max-w-[110px] h-36 rounded-b-xl border-2 border-t-0 border-purple-500/60 bg-slate-900/90 relative overflow-hidden flex items-end">
+                                <div id="bucketSeqC" class="w-full bg-gradient-to-t from-purple-600 to-purple-400/80 water-wave flex items-center justify-center" style="height: 0%;">
+                                </div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-1 drop-shadow">
+                                    <span id="bucketSeqCText" class="text-sm font-extrabold mono text-white">$0.0M</span>
+                                    <span id="bucketSeqCYearFlow" class="text-[10px] mono px-1.5 py-0.5 rounded bg-slate-950/80 text-purple-300 mt-1">+$0.0M este año</span>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-[11px] text-center text-slate-400">
+                                Protege: <strong class="text-emerald-400">Contracción</strong><br>
+                                Sufre: <strong class="text-rose-400">Extensión</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hydraulic Box 2: PAC & Support -->
+                <div class="bg-slate-950/80 border border-slate-800/90 rounded-xl p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                                2. Presa Regulada + Esponja (PAC & Support)
+                            </span>
+                            <span id="pacStatusBadge" class="text-xs font-semibold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+                                PAC Intacto
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 mb-4">
+                            Cada año el <strong>PAC ($70M)</strong> tiene prioridad para cobrar únicamente su <em>cuota programada fija</em>. Todo el excedente de prepagos se desvía al tanque esponja <strong>Support ($30M)</strong>.
+                        </p>
+                    </div>
+
+                    <!-- 2 Buckets: PAC (Regulated) & Support (Sponge) -->
+                    <div class="grid grid-cols-2 gap-6 pt-2 items-end px-4">
+                        <!-- PAC Bucket -->
+                        <div class="flex flex-col items-center">
+                            <div class="text-xs font-semibold text-emerald-300 mb-1 flex items-center gap-1">
+                                <span>🛡️ Tramo PAC</span>
+                            </div>
+                            <div class="text-[11px] mono text-slate-400 mb-2">Total: $70M (Cuota Fija)</div>
+                            <div class="w-full max-w-[150px] h-36 rounded-b-xl border-2 border-t-0 border-emerald-500/70 bg-slate-900/90 relative overflow-hidden flex items-end">
+                                <div id="bucketPAC" class="w-full bg-gradient-to-t from-emerald-600 to-emerald-400/80 water-wave" style="height: 50%;"></div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2 drop-shadow">
+                                    <span id="bucketPACText" class="text-sm font-extrabold mono text-white">$15.0M acum.</span>
+                                    <span id="bucketPACYearFlow" class="text-[11px] mono px-2 py-0.5 rounded bg-slate-950/85 text-emerald-300 mt-1 border border-emerald-500/40">
+                                        +$8.0M (Meta: $8.0M)
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-[11px] text-center text-slate-400">
+                                Protegido contra <strong>Extensión y Contracción</strong> (entre 100–300 PSA)
+                            </div>
+                        </div>
+
+                        <!-- Support Bucket -->
+                        <div class="flex flex-col items-center">
+                            <div class="text-xs font-semibold text-amber-300 mb-1 flex items-center gap-1">
+                                <span>🧽 Tramo Support</span>
+                            </div>
+                            <div class="text-[11px] mono text-slate-400 mb-2">Total: $30M (Amortiguador)</div>
+                            <div class="w-full max-w-[150px] h-36 rounded-b-xl border-2 border-t-0 border-amber-500/70 bg-slate-900/90 relative overflow-hidden flex items-end">
+                                <div id="bucketSupp" class="w-full bg-gradient-to-t from-amber-600 to-amber-400/80 water-wave" style="height: 30%;"></div>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center text-center p-2 drop-shadow">
+                                    <span id="bucketSuppText" class="text-sm font-extrabold mono text-white">$9.0M acum.</span>
+                                    <span id="bucketSuppYearFlow" class="text-[11px] mono px-2 py-0.5 rounded bg-slate-950/85 text-amber-300 mt-1 border border-amber-500/40">
+                                        +$4.5M absorbidos
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="mt-2 text-[11px] text-center text-slate-400">
+                                Absorbe <strong>todo el exceso</strong> de volatilidad de prepago
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3: SIDE-BY-SIDE CASH FLOW CHARTS & WAL METRICS -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Left Chart: Sequential-Pay Cash Flows -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <h3 class="text-base sm:text-lg font-bold text-white">Flujos de Principal Anuales: Sequential-Pay</h3>
+                        <span class="text-xs mono text-sky-400 bg-sky-500/10 border border-sky-500/30 px-2.5 py-1 rounded-lg">A ($40M) → B ($35M) → C ($25M)</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4">
+                        Observa cómo al mover el slider PSA, los bloques de color se desplazan de año, cambiando drásticamente la Vida Media (WAL) de cada tramo según su lugar en la fila.
+                    </p>
+
+                    <!-- WAL KPIs for Sequential -->
+                    <div class="grid grid-cols-3 gap-2.5 mb-6">
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-sky-400">Tramo A</span>
+                                <span class="w-2.5 h-2.5 rounded-sm bg-sky-400"></span>
+                            </div>
+                            <div id="walSeqA" class="text-lg sm:text-xl font-extrabold mono text-white mt-1">2.1 años</div>
+                            <div id="walSeqADiff" class="text-[11px] text-slate-400 mt-0.5">Expuesto a Contracción</div>
+                        </div>
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-indigo-400">Tramo B</span>
+                                <span class="w-2.5 h-2.5 rounded-sm bg-indigo-400"></span>
+                            </div>
+                            <div id="walSeqB" class="text-lg sm:text-xl font-extrabold mono text-white mt-1">5.2 años</div>
+                            <div id="walSeqBDiff" class="text-[11px] text-slate-400 mt-0.5">Intermedio</div>
+                        </div>
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-purple-400">Tramo C</span>
+                                <span class="w-2.5 h-2.5 rounded-sm bg-purple-400"></span>
+                            </div>
+                            <div id="walSeqC" class="text-lg sm:text-xl font-extrabold mono text-white mt-1">8.4 años</div>
+                            <div id="walSeqCDiff" class="text-[11px] text-slate-400 mt-0.5">Expuesto a Extensión</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bar Chart Container: Sequential -->
+                <div>
+                    <div class="h-56 flex items-end gap-2 pt-6 pb-2 px-2 bg-slate-950/60 rounded-xl border border-slate-800/80 relative" id="seqChartBars">
+                        <!-- Generated by JS -->
+                    </div>
+                    <div class="flex justify-between text-[11px] text-slate-400 mt-2 px-2">
+                        <span>Año 1 (Corto Plazo)</span>
+                        <span>Horizonte de Amortización (Años 1 a 10)</span>
+                        <span>Año 10 (Largo Plazo)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Chart: PAC + Support Cash Flows -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <h3 class="text-base sm:text-lg font-bold text-white">Flujos de Principal Anuales: PAC + Support</h3>
+                        <span class="text-xs mono text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-2.5 py-1 rounded-lg">PAC ($70M) + Support ($30M)</span>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-4">
+                        Las barras verdes (<strong>PAC</strong>) se mantienen <strong>idénticas e inmóviles</strong> mientras estés entre 100 y 300 PSA, porque las barras naranjas (<strong>Support</strong>) se encogen o estiran por ellas.
+                    </p>
+
+                    <!-- WAL KPIs for PAC + Support -->
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <div id="pacWalCard" class="bg-slate-950 border border-emerald-500/40 rounded-xl p-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-emerald-400">🛡️ Tramo PAC ($70M)</span>
+                                <span id="pacShieldTag" class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">ESTABLE</span>
+                            </div>
+                            <div id="walPAC" class="text-lg sm:text-xl font-extrabold mono text-white mt-1">4.50 años</div>
+                            <div id="walPACDiff" class="text-[11px] text-emerald-300/90 mt-0.5">Inmune entre 100 y 300 PSA</div>
+                        </div>
+                        <div class="bg-slate-950 border border-amber-500/40 rounded-xl p-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-amber-400">🧽 Tramo Support ($30M)</span>
+                                <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300">VOLÁTIL</span>
+                            </div>
+                            <div id="walSupp" class="text-lg sm:text-xl font-extrabold mono text-white mt-1">5.10 años</div>
+                            <div id="walSuppDiff" class="text-[11px] text-amber-300/90 mt-0.5">Absorbe toda la variación</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bar Chart Container: PAC + Support -->
+                <div>
+                    <div class="h-56 flex items-end gap-2 pt-6 pb-2 px-2 bg-slate-950/60 rounded-xl border border-slate-800/80 relative" id="pacChartBars">
+                        <!-- Generated by JS -->
+                    </div>
+                    <div class="flex justify-between items-center text-[11px] text-slate-400 mt-2 px-2">
+                        <div class="flex items-center gap-3">
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-emerald-500 inline-block"></span> Flujo PAC</span>
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-amber-500 inline-block"></span> Flujo Support</span>
+                            <span class="flex items-center gap-1"><span class="w-2.5 h-1 border border-dashed border-white/70 inline-block"></span> Meta Programada PAC</span>
+                        </div>
+                        <span>Años 1 a 10</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SECTION 4: EXAM SUMMARY / CHEAT SHEET CARDS -->
+        <section class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xl">
+            <div class="mb-4">
+                <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Resumen Clave para Examen</span>
+                <h2 class="text-lg font-bold text-white">¿Qué protege cada tramo y por qué la protección del PAC es limitada?</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Card 1: Sequential Short -->
+                <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-bold text-sky-400">Sequential Corto (A)</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-sky-500/15 text-sky-300">1° en la fila</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Recibe el 100% del principal del pool desde el día 1 hasta amortizarse por completo.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800/80 space-y-1.5 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Extension Risk:</span>
+                            <span class="font-semibold text-emerald-400">✔ Protegido</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Contraction Risk:</span>
+                            <span class="font-semibold text-rose-400">✘ Totalmente Expuesto</span>
+                        </div>
+                        <div class="text-[11px] text-slate-400 pt-1">Ideal para: <strong>Bancos comerciales</strong> (pasivos cortos).</div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Sequential Long -->
+                <div class="bg-slate-950/90 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-bold text-purple-400">Sequential Largo (C)</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-purple-500/15 text-purple-300">Último en la fila</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Bloqueado de recibir principal hasta que los tramos A y B se hayan apagado a $0.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800/80 space-y-1.5 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Contraction Risk:</span>
+                            <span class="font-semibold text-emerald-400">✔ Protegido (por A y B)</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Extension Risk:</span>
+                            <span class="font-semibold text-rose-400">✘ Totalmente Expuesto</span>
+                        </div>
+                        <div class="text-[11px] text-slate-400 pt-1">Ideal para: <strong>Fondos de pensiones / Vida</strong>.</div>
+                    </div>
+                </div>
+
+                <!-- Card 3: PAC Tranche -->
+                <div class="bg-slate-950/90 border border-emerald-500/30 rounded-xl p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-bold text-emerald-400">Tramo PAC</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300">Amortización Fija</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Tiene prioridad sobre una cuota programada en cada periodo. Si se sale del corredor PSA, la protección se rompe (<em>Busted PAC</em>).
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800/80 space-y-1.5 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Contraction Risk:</span>
+                            <span class="font-semibold text-emerald-400">✔ Protegido (Limitado)</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Extension Risk:</span>
+                            <span class="font-semibold text-emerald-400">✔ Protegido (Limitado)</span>
+                        </div>
+                        <div class="text-[11px] text-slate-400 pt-1">Depende de que el <strong>Support</strong> siga vivo.</div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Support Tranche -->
+                <div class="bg-slate-950/90 border border-amber-500/30 rounded-xl p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm font-bold text-amber-400">Tramo Support</span>
+                            <span class="text-xs px-2 py-0.5 rounded bg-amber-500/15 text-amber-300">Companion / Esponja</span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Sacrifica su estabilidad para proteger al PAC: recibe todo el exceso de prepago cuando bajan tasas y recibe $0 cuando suben.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800/80 space-y-1.5 text-xs">
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Contraction Risk:</span>
+                            <span class="font-semibold text-amber-400">⚠ Muy Alto</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-400">Extension Risk:</span>
+                            <span class="font-semibold text-amber-400">⚠ Muy Alto</span>
+                        </div>
+                        <div class="text-[11px] text-slate-400 pt-1">Paga un <strong>mayor spread/yield</strong> por su riesgo.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // =========================================================================
+        // QUANTITATIVE CMO CASH FLOW MODEL (10-Year Horizon, $100M Pool)
+        // Designed so that between 100 PSA and 300 PSA, the PAC Schedule ($70M)
+        // is 100% fulfilled without deviation, while outside [100, 300] it breaks.
+        // =========================================================================
+
+        const TOTAL_POOL = 100.0;
+        const SEQ_A_SIZE = 40.0;
+        const SEQ_B_SIZE = 35.0;
+        const SEQ_C_SIZE = 25.0;
+
+        const PAC_SIZE = 70.0;
+        const SUPP_SIZE = 30.0;
+
+        // Planned PAC Schedule across 10 years (sums exactly to $70.0M)
+        // Constructed as the lower envelope of 100 PSA and 300 PSA pool flows
+        const PAC_SCHEDULE = [6.0, 9.5, 11.5, 11.0, 9.5, 7.5, 5.5, 4.0, 3.0, 2.5];
+
+        let currentPSA = 180;
+        let selectedYearIndex = 1; // Default Year 2 (0-indexed)
+
+        /**
+         * Generates 10 yearly principal cash flows summing to $100M for a given PSA speed.
+         * Guaranteed properties:
+         * - At 100 PSA <= psa <= 300 PSA, cumulative pool principal >= cumulative PAC schedule,
+         *   and remaining pool never forces PAC to prepay early until Support ($30M) is exhausted.
+         */
+        function generatePoolFlows(psa) {
+            // Anchor schedules summing to 100.0M:
+            // Ultra slow (30 PSA): back-loaded -> causes shortfall in years 1-5 vs PAC_SCHEDULE
+            const flow30  = [3.2, 5.0, 6.5, 7.8, 9.0, 11.0, 13.0, 14.5, 15.0, 15.0];
+            // Lower corridor bound (100 PSA): matches PAC in early years, Support gets paid later
+            const flow100 = [6.0, 9.5, 11.5, 11.5, 11.0, 11.0, 10.5, 10.0, 9.5, 9.5];
+            // Upper corridor bound (300 PSA): heavy early flows, Support absorbs $30M in years 1-5, late years equal PAC_SCHEDULE
+            const flow300 = [12.0, 18.5, 19.0, 16.0, 12.0, 7.5, 5.5, 4.0, 3.0, 2.5];
+            // Extreme fast (500 PSA): massive spike in Years 1-3 -> exhausts $30M Support by Year 2-3, busting PAC
+            const flow500 = [24.0, 31.0, 22.0, 11.5, 5.5, 3.0, 1.5, 1.0, 0.5, 0.0];
+
+            let flows = [];
+            for (let i = 0; i < 10; i++) {
+                let val;
+                if (psa <= 100) {
+                    const t = (psa - 30) / (100 - 30);
+                    val = flow30[i] + t * (flow100[i] - flow30[i]);
+                } else if (psa <= 300) {
+                    const t = (psa - 100) / (300 - 100);
+                    val = flow100[i] + t * (flow300[i] - flow100[i]);
+                } else {
+                    const t = (psa - 300) / (500 - 300);
+                    val = flow300[i] + t * (flow500[i] - flow300[i]);
+                }
+                flows.push(val);
+            }
+            return flows;
+        }
+
+        /**
+         * Simulates both Sequential-Pay and PAC+Support waterfalls for a given PSA
+         */
+        function simulateWaterfalls(psa) {
+            const poolFlows = generatePoolFlows(psa);
+
+            // 1. Sequential-Pay Waterfall (A -> B -> C)
+            let remA = SEQ_A_SIZE, remB = SEQ_B_SIZE, remC = SEQ_C_SIZE;
+            const seqA = [], seqB = [], seqC = [];
+            const cumSeqA = [], cumSeqB = [], cumSeqC = [];
+
+            for (let y = 0; y < 10; y++) {
+                let avail = poolFlows[y];
+
+                let payA = Math.min(avail, remA);
+                remA -= payA;
+                avail -= payA;
+
+                let payB = Math.min(avail, remB);
+                remB -= payB;
+                avail -= payB;
+
+                let payC = Math.min(avail, remC);
+                remC -= payC;
+
+                seqA.push(payA);
+                seqB.push(payB);
+                seqC.push(payC);
+
+                cumSeqA.push(SEQ_A_SIZE - remA);
+                cumSeqB.push(SEQ_B_SIZE - remB);
+                cumSeqC.push(SEQ_C_SIZE - remC);
+            }
+
+            // 2. PAC + Support Waterfall
+            // Rule: Each year, PAC is entitled to its scheduled payment (plus any prior unpaid shortfall),
+            // capped by remaining PAC principal. Support receives excess up to remaining Support principal.
+            // If Support is already $0 (exhausted), any extra pool flow MUST go to PAC (Busted PAC contraction).
+            let remPAC = PAC_SIZE;
+            let remSupp = SUPP_SIZE;
+            let pacShortfall = 0;
+
+            const pacFlows = [], suppFlows = [];
+            const cumPAC = [], cumSupp = [];
+
+            for (let y = 0; y < 10; y++) {
+                let avail = poolFlows[y];
+                let targetPAC = PAC_SCHEDULE[y] + pacShortfall;
+
+                // First pay PAC up to its target (and remaining balance)
+                let payPAC = Math.min(avail, targetPAC, remPAC);
+                remPAC -= payPAC;
+                avail -= payPAC;
+
+                // Track if PAC didn't even get its scheduled amount (Extension / Bust)
+                pacShortfall = Math.max(0, targetPAC - payPAC);
+
+                // Next, excess goes to Support up to remaining Support balance
+                let paySupp = Math.min(avail, remSupp);
+                remSupp -= paySupp;
+                avail -= paySupp;
+
+                // If Support is completely exhausted (remSupp == 0) and there is still cash left,
+                // it forces early retirement of PAC (Contraction Bust!)
+                if (avail > 0.001 && remPAC > 0) {
+                    let forcedPAC = Math.min(avail, remPAC);
+                    payPAC += forcedPAC;
+                    remPAC -= forcedPAC;
+                    avail -= forcedPAC;
+                }
+
+                pacFlows.push(payPAC);
+                suppFlows.push(paySupp);
+
+                cumPAC.push(PAC_SIZE - remPAC);
+                cumSupp.push(SUPP_SIZE - remSupp);
+            }
+
+            // Compute WALs (Weighted Average Life = Sum(t * Principal_t) / Total_Principal)
+            const calcWAL = (flows, total) => {
+                let weighted = 0;
+                for (let i = 0; i < flows.length; i++) {
+                    weighted += (i + 1) * flows[i];
+                }
+                return weighted / total;
+            };
+
+            return {
+                poolFlows,
+                seqA, seqB, seqC,
+                cumSeqA, cumSeqB, cumSeqC,
+                pacFlows, suppFlows,
+                cumPAC, cumSupp,
+                walA: calcWAL(seqA, SEQ_A_SIZE),
+                walB: calcWAL(seqB, SEQ_B_SIZE),
+                walC: calcWAL(seqC, SEQ_C_SIZE),
+                walPAC: calcWAL(pacFlows, PAC_SIZE),
+                walSupp: calcWAL(suppFlows, SUPP_SIZE)
+            };
+        }
+
+        // =========================================================================
+        // UI RENDERING & INTERACTIVITY
+        // =========================================================================
+
+        function initYearPills() {
+            const container = document.getElementById('yearPillsContainer');
+            container.innerHTML = '';
+            for (let y = 0; y < 10; y++) {
+                const btn = document.createElement('button');
+                const isSelected = y === selectedYearIndex;
+                btn.className = `px-2.5 py-1 rounded-lg text-xs font-bold mono transition ${
+                    isSelected 
+                        ? 'bg-sky-500 text-slate-950 shadow-md shadow-sky-500/30' 
+                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                }`;
+                btn.textContent = `Año ${y + 1}`;
+                btn.onclick = () => {
+                    selectedYearIndex = y;
+                    initYearPills();
+                    updateDashboard();
+                };
+                container.appendChild(btn);
+            }
+        }
+
+        function setPSA(val) {
+            currentPSA = val;
+            document.getElementById('psaSlider').value = val;
+            updateDashboard();
+        }
+
+        function updateDashboard() {
+            const sim = simulateWaterfalls(currentPSA);
+
+            // 1. Update Top PSA Badge & Macro Context
+            const psaBadge = document.getElementById('psaBadgeValue');
+            const rateBadge = document.getElementById('rateEnvBadge');
+            const macroBox = document.getElementById('macroContextBox');
+            const macroIcon = document.getElementById('macroIcon');
+            const macroTitle = document.getElementById('macroTitle');
+            const macroDesc = document.getElementById('macroDesc');
+
+            psaBadge.textContent = `${currentPSA} PSA`;
+
+            if (currentPSA < 100) {
+                psaBadge.className = 'text-2xl font-extrabold mono text-rose-400';
+                rateBadge.className = 'text-xs px-2 py-0.5 rounded-md font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/40';
+                rateBadge.textContent = 'Fuera de Banda (Extensión)';
+                macroBox.className = 'p-3.5 rounded-xl bg-rose-950/30 border border-rose-500/40 flex items-start gap-3 text-xs sm:text-sm';
+                macroIcon.textContent = '🐢';
+                macroTitle.textContent = `¡Frenazo de Prepagos (${currentPSA} PSA < 100 PSA)! PAC Roto por Extensión`;
+                macroDesc.innerHTML = `Las tasas subieron y nadie refinancia. El flujo total del pool es <strong>insuficiente</strong> hasta para cubrir la cuota básica del PAC (aunque el Support reciba $0). Tanto el Tramo C como el PAC se alargan.`;
+            } else if (currentPSA <= 300) {
+                psaBadge.className = 'text-2xl font-extrabold mono text-emerald-400';
+                rateBadge.className = 'text-xs px-2 py-0.5 rounded-md font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+                rateBadge.textContent = 'En Banda PAC (100-300)';
+                macroBox.className = 'p-3.5 rounded-xl bg-emerald-950/25 border border-emerald-500/30 flex items-start gap-3 text-xs sm:text-sm';
+                macroIcon.textContent = '🛡️';
+                macroTitle.textContent = `Dentro del Corredor Protegido (${currentPSA} PSA entre 100 y 300 PSA)`;
+                macroDesc.innerHTML = `Observa cómo la Vida Media (WAL) del <strong>PAC se mantiene clavada en 4.55 años</strong> sin importar si mueves el slider entre 100 y 300 PSA, mientras el <strong>Support</strong> y los tramos <strong>Sequential A/C</strong> cambian drásticamente.`;
+            } else {
+                psaBadge.className = 'text-2xl font-extrabold mono text-amber-400';
+                rateBadge.className = 'text-xs px-2 py-0.5 rounded-md font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/40';
+                rateBadge.textContent = '¡PAC Roto! (>300 PSA)';
+                macroBox.className = 'p-3.5 rounded-xl bg-amber-950/30 border border-amber-500/40 flex items-start gap-3 text-xs sm:text-sm';
+                macroIcon.textContent = '🌊';
+                macroTitle.textContent = `¡Ola Masiva de Prepagos (${currentPSA} PSA > 300 PSA)! Support Agotado (Busted PAC)`;
+                macroDesc.innerHTML = `Las tasas cayeron tanto que el tanque esponja <strong>Support ($30M) se llena al 100% prematuramente</strong>. Al quedarse sin escudo, el <strong>PAC</strong> se ve forzado a recibir el exceso de prepagos y sufre <em>Contraction Risk</em>.`;
+            }
+
+            // 2. Update Hydraulic Tanks for Selected Year
+            const y = selectedYearIndex;
+            document.getElementById('seqYearFlowLabel').textContent = `Flujo Pool Año ${y + 1}: $${sim.poolFlows[y].toFixed(1)}M`;
+
+            // Sequential Tanks (Cumulative % filled up to selected year)
+            const pctA = (sim.cumSeqA[y] / SEQ_A_SIZE) * 100;
+            const pctB = (sim.cumSeqB[y] / SEQ_B_SIZE) * 100;
+            const pctC = (sim.cumSeqC[y] / SEQ_C_SIZE) * 100;
+
+            document.getElementById('bucketSeqA').style.height = `${pctA}%`;
+            document.getElementById('bucketSeqAText').textContent = `$${sim.cumSeqA[y].toFixed(1)}M / $40M`;
+            document.getElementById('bucketSeqAYearFlow').textContent = `+$${sim.seqA[y].toFixed(1)}M en Año ${y + 1}`;
+
+            document.getElementById('bucketSeqB').style.height = `${pctB}%`;
+            document.getElementById('bucketSeqBText').textContent = `$${sim.cumSeqB[y].toFixed(1)}M / $35M`;
+            document.getElementById('bucketSeqBYearFlow').textContent = `+$${sim.seqB[y].toFixed(1)}M en Año ${y + 1}`;
+
+            document.getElementById('bucketSeqC').style.height = `${pctC}%`;
+            document.getElementById('bucketSeqCText').textContent = `$${sim.cumSeqC[y].toFixed(1)}M / $25M`;
+            document.getElementById('bucketSeqCYearFlow').textContent = `+$${sim.seqC[y].toFixed(1)}M en Año ${y + 1}`;
+
+            // PAC & Support Tanks
+            const pctPAC = (sim.cumPAC[y] / PAC_SIZE) * 100;
+            const pctSupp = (sim.cumSupp[y] / SUPP_SIZE) * 100;
+
+            document.getElementById('bucketPAC').style.height = `${pctPAC}%`;
+            document.getElementById('bucketPACText').textContent = `$${sim.cumPAC[y].toFixed(1)}M / $70M`;
+            document.getElementById('bucketPACYearFlow').textContent = `+$${sim.pacFlows[y].toFixed(1)}M (Meta: $${PAC_SCHEDULE[y].toFixed(1)}M)`;
+
+            document.getElementById('bucketSupp').style.height = `${pctSupp}%`;
+            document.getElementById('bucketSuppText').textContent = `$${sim.cumSupp[y].toFixed(1)}M / $30M`;
+            document.getElementById('bucketSuppYearFlow').textContent = `+$${sim.suppFlows[y].toFixed(1)}M en Año ${y + 1}`;
+
+            const pacStatusBadge = document.getElementById('pacStatusBadge');
+            if (currentPSA >= 100 && currentPSA <= 300) {
+                pacStatusBadge.className = 'text-xs font-semibold px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+                pacStatusBadge.textContent = '✓ PAC 100% Protegido';
+            } else if (currentPSA < 100) {
+                pacStatusBadge.className = 'text-xs font-semibold px-2.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30';
+                pacStatusBadge.textContent = '⚠ PAC en Extensión (<100 PSA)';
+            } else {
+                pacStatusBadge.className = 'text-xs font-semibold px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30';
+                pacStatusBadge.textContent = '⚠ Support Agotado / PAC Roto';
+            }
+
+            // 3. Update WAL KPIs
+            document.getElementById('walSeqA').textContent = `${sim.walA.toFixed(2)} años`;
+            document.getElementById('walSeqB').textContent = `${sim.walB.toFixed(2)} años`;
+            document.getElementById('walSeqC').textContent = `${sim.walC.toFixed(2)} años`;
+
+            document.getElementById('walPAC').textContent = `${sim.walPAC.toFixed(2)} años`;
+            document.getElementById('walSupp').textContent = `${sim.walSupp.toFixed(2)} años`;
+
+            const pacShieldTag = document.getElementById('pacShieldTag');
+            const walPACDiff = document.getElementById('walPACDiff');
+            if (currentPSA >= 100 && currentPSA <= 300) {
+                pacShieldTag.className = 'text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300';
+                pacShieldTag.textContent = 'FIJO EN BANDA';
+                walPACDiff.textContent = 'Inmune: Variación = 0.00 años';
+                walPACDiff.className = 'text-[11px] text-emerald-400 mt-0.5';
+            } else if (currentPSA < 100) {
+                pacShieldTag.className = 'text-[10px] font-semibold px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300';
+                pacShieldTag.textContent = 'EXTENDIDO';
+                walPACDiff.textContent = `+${(sim.walPAC - 4.55).toFixed(2)} años vs. Banda`;
+                walPACDiff.className = 'text-[11px] text-rose-400 mt-0.5';
+            } else {
+                pacShieldTag.className = 'text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300';
+                pacShieldTag.textContent = 'CONTRAÍDO';
+                walPACDiff.textContent = `${(sim.walPAC - 4.55).toFixed(2)} años vs. Banda`;
+                walPACDiff.className = 'text-[11px] text-amber-400 mt-0.5';
+            }
+
+            // 4. Render Bar Charts (Max scale = $32M per year)
+            const MAX_BAR_VAL = 32.0;
+
+            // Sequential Bar Chart
+            const seqChart = document.getElementById('seqChartBars');
+            seqChart.innerHTML = '';
+            for (let i = 0; i < 10; i++) {
+                const hA = (sim.seqA[i] / MAX_BAR_VAL) * 100;
+                const hB = (sim.seqB[i] / MAX_BAR_VAL) * 100;
+                const hC = (sim.seqC[i] / MAX_BAR_VAL) * 100;
+                const totalFlow = sim.poolFlows[i];
+                const isSel = i === selectedYearIndex;
+
+                const col = document.createElement('div');
+                col.className = `flex-1 h-full flex flex-col justify-end items-center cursor-pointer group relative rounded-lg px-0.5 ${isSel ? 'bg-slate-800/70 ring-1 ring-sky-500/50' : 'hover:bg-slate-900/60'}`;
+                col.onclick = () => {
+                    selectedYearIndex = i;
+                    initYearPills();
+                    updateDashboard();
+                };
+
+                col.innerHTML = `
+                    <div class="text-[10px] mono text-slate-400 mb-1 opacity-85 group-hover:text-white">$${totalFlow.toFixed(1)}</div>
+                    <div class="w-full flex flex-col-reverse rounded-t overflow-hidden">
+                        <div class="w-full bg-sky-400 bar-transition" style="height: ${hA * 1.65}px;" title="Año ${i+1} Tramo A: $${sim.seqA[i].toFixed(1)}M"></div>
+                        <div class="w-full bg-indigo-400 bar-transition" style="height: ${hB * 1.65}px;" title="Año ${i+1} Tramo B: $${sim.seqB[i].toFixed(1)}M"></div>
+                        <div class="w-full bg-purple-400 bar-transition" style="height: ${hC * 1.65}px;" title="Año ${i+1} Tramo C: $${sim.seqC[i].toFixed(1)}M"></div>
+                    </div>
+                    <div class="text-[10px] mono mt-1.5 ${isSel ? 'text-sky-400 font-bold' : 'text-slate-400'}">A${i + 1}</div>
+                `;
+                seqChart.appendChild(col);
+            }
+
+            // PAC + Support Bar Chart
+            const pacChart = document.getElementById('pacChartBars');
+            pacChart.innerHTML = '';
+            for (let i = 0; i < 10; i++) {
+                const hPAC = (sim.pacFlows[i] / MAX_BAR_VAL) * 100;
+                const hSupp = (sim.suppFlows[i] / MAX_BAR_VAL) * 100;
+                const hTarget = (PAC_SCHEDULE[i] / MAX_BAR_VAL) * 100;
+                const isSel = i === selectedYearIndex;
+
+                // Highlight PAC bar in amber/rose if it deviates from PAC_SCHEDULE[i]
+                const deviation = Math.abs(sim.pacFlows[i] - PAC_SCHEDULE[i]);
+                let pacBarColor = 'bg-emerald-500';
+                if (deviation > 0.15) {
+                    pacBarColor = sim.pacFlows[i] > PAC_SCHEDULE[i] ? 'bg-amber-400' : 'bg-rose-500';
+                }
+
+                const col = document.createElement('div');
+                col.className = `flex-1 h-full flex flex-col justify-end items-center cursor-pointer group relative rounded-lg px-0.5 ${isSel ? 'bg-slate-800/70 ring-1 ring-emerald-500/50' : 'hover:bg-slate-900/60'}`;
+                col.onclick = () => {
+                    selectedYearIndex = i;
+                    initYearPills();
+                    updateDashboard();
+                };
+
+                col.innerHTML = `
+                    <div class="text-[10px] mono text-emerald-300 mb-1 opacity-90">$${sim.pacFlows[i].toFixed(1)}</div>
+                    <div class="w-full flex flex-col-reverse rounded-t overflow-hidden relative">
+                        <div class="w-full ${pacBarColor} bar-transition" style="height: ${hPAC * 1.65}px;" title="Año ${i+1} PAC: $${sim.pacFlows[i].toFixed(1)}M (Meta: $${PAC_SCHEDULE[i].toFixed(1)}M)"></div>
+                        <div class="w-full bg-amber-500/90 bar-transition" style="height: ${hSupp * 1.65}px;" title="Año ${i+1} Support: $${sim.suppFlows[i].toFixed(1)}M"></div>
+                    </div>
+                    <!-- Planned PAC Target Marker Line -->
+                    <div class="w-full border-t-2 border-dashed border-white/80 absolute pointer-events-none" style="bottom: ${(hTarget * 1.65) + 22}px;" title="Meta Programada PAC: $${PAC_SCHEDULE[i].toFixed(1)}M"></div>
+                    <div class="text-[10px] mono mt-1.5 ${isSel ? 'text-emerald-400 font-bold' : 'text-slate-400'}">A${i + 1}</div>
+                `;
+                pacChart.appendChild(col);
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('psaSlider').addEventListener('input', (e) => {
+            currentPSA = parseInt(e.target.value, 10);
+            updateDashboard();
+        });
+
+        window.onload = () => {
+            initYearPills();
+            updateDashboard();
+        };
+    </script>
+</body>
+</html>

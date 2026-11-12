@@ -10,10 +10,10 @@ course delivered as static HTML. Content is in Spanish. There is no build step.
 - **index.html**: course map. One MAIN tab plus 16 week tabs, all generated at runtime
   from a `CRONOGRAMA` array. Week tabs carry no teaching content: each one is a launcher
   that shows the schedule of that week and links to its one-pager.
-- **w#_onepager.html**: one document per week (1 to 7 and 9 to 13 exist; 8 and 16 are exam
-  weeks, 14 and 15 are not published yet). Each one holds the full development of the topic.
+- **w#_onepager.html**: one document per week (1 to 7 and 9 to 14 exist; 8 and 16 are exam
+  weeks, 15 is not published yet). Each one holds the full development of the topic.
 - **assets/onepager.css**: the single stylesheet every one-pager links. Editing it changes
-  all twelve documents at once. `index.html` keeps its own inline `<style>` because it is a
+  all thirteen documents at once. `index.html` keeps its own inline `<style>` because it is a
   different surface (dark app shell), but it uses the same tokens.
 - **assets/Logo UP.jpg**: institutional mark, shown on a white plaque over dark surfaces.
 - **Cronograma.pdf** and the syllabus PDF are the source of truth for dates, topics and
@@ -98,6 +98,14 @@ in view. Any `href="#id"` link opens the part that contains the target, so deep 
 `w13_onepager.html#sec-cb` work. Interactive pieces: `.step-card` (click to reveal),
 `details.acc` accordions, `.toggle-group` scenarios, `.map-jump` links, calculators
 (`.widget`) and quizzes with score and retry. Printing shows every part expanded.
+
+**W14 follows the same model** and adds reusable pieces, all styled in `assets/onepager.css`:
+`.btn-row`/`.btn-chip` presets, `.act-btn`, step-by-step rule checkers (`.runner` with hidden
+`tr.is-rule` rows), diverging bars (`.dv-bars`), and inline SVG charts (`.chart-box` with
+`svg.cx` and a `.chart-tip` tooltip) drawn at their real pixel width and redrawn on resize and
+tab change. Several `.quiz` blocks can share one `data-quiz` key; the tab chip and Repaso sum
+them. W14 embeds month-end US Treasury yields from `data/bloomberg.json`. W13 section 3.6
+holds the CMO lab (sequential pay vs. PAC and support, ported from `PAC_support_simulador.html`).
 
 Math is rendered with **MathJax 3** (`\( \)` inline, `\[ \]` and `$$ $$` display).
 `index.html` has no math and loads no math library.

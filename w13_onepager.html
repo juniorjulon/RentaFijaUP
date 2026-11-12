@@ -32,6 +32,8 @@ window.MathJax = {
     <g id="i-key" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="11" r="2.75"/><path d="M7 9 13.5 2.5M11.25 4.75l1.75 1.75M9.75 6.25 11 7.5"/></g>
     <g id="i-calc" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="1.75" width="10" height="12.5" rx="1.75"/><path d="M5.5 4.5h5v2h-5zM5.75 9.25h.01M8 9.25h.01M10.25 9.25h.01M5.75 11.75h.01M8 11.75h.01M10.25 11.75h.01"/></g>
     <g id="i-sliders" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2.25 4.5h4.25M9.5 4.5h4.25M2.25 11.5h7.25M12.5 11.5h1.25"/><circle cx="8" cy="4.5" r="1.5"/><circle cx="11" cy="11.5" r="1.5"/></g>
+    <g id="i-play" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.25v9.5L12.5 8z"/></g>
+    <g id="i-pause" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5.5 3.5v9M10.5 3.5v9"/></g>
     <g id="i-quiz" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.25" y="2.25" width="11.5" height="11.5" rx="2.5"/><path d="M5.25 8.25l2 2 3.75-4"/></g>
     <g id="i-info" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6.25"/><path d="M8 7.25v4M8 4.9h.01"/></g>
     <g id="i-check" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.25 8.5l3 3 6.5-7"/></g>
@@ -112,7 +114,7 @@ window.MathJax = {
     <div class="route-grid">
       <a class="route-card" href="#parte-1"><span class="route-k">Parte 1</span><span class="route-t">El proceso de titulización</span><span class="route-d">Proceso en 3 pasos, beneficios para cada grupo, caso Fred Motor y bankruptcy remote.</span><span class="route-m">4 secciones · quiz de 2 preguntas</span></a>
       <a class="route-card" href="#parte-2"><span class="route-k">Parte 2</span><span class="route-t">ABS: instrumentos y mercado</span><span class="route-d">Mapa del universo ABS, covered bonds, mejoras crediticias, tarjetas, solar y CDO/CLO.</span><span class="route-m">5 secciones · 2 simuladores · quiz de 3 preguntas</span></a>
-      <a class="route-card" href="#parte-3"><span class="route-k">Parte 3</span><span class="route-t">MBS: valores hipotecarios</span><span class="route-d">Riesgo de prepago, SMM/CPR/PSA, LTV y DTI, pass-through, CMO y CMBS.</span><span class="route-m">7 secciones · 4 calculadoras · quiz de 4 preguntas</span></a>
+      <a class="route-card" href="#parte-3"><span class="route-k">Parte 3</span><span class="route-t">MBS: valores hipotecarios</span><span class="route-d">Riesgo de prepago, SMM/CPR/PSA, LTV y DTI, pass-through, CMO y CMBS.</span><span class="route-m">7 secciones · 4 calculadoras · laboratorio CMO · quiz de 4 preguntas</span></a>
     </div>
     <p>Mientras lees, los cuadros con color te avisan que sales del texto normal:</p>
     <div class="legend">
@@ -928,7 +930,7 @@ window.MathJax = {
                       <a class="map-jump" href="#sec-cmo">ver 3.6</a>
                       <ul>
                         <li><span class="node dim">Sequential pay</span><span class="node-desc">la "fila de cobro": el corto carga contracción, el largo carga extensión</span></li>
-                        <li><span class="node dim">PAC + Support</span><span class="node-desc">pagos predecibles para el PAC; el support es su "paragolpes"</span></li>
+                        <li><span class="node dim">PAC + Support</span><span class="node-desc">pagos predecibles para el PAC; el support es su "paragolpes"</span><a class="map-jump" href="#sec-cmo-lab">ver laboratorio</a></li>
                         <li><span class="node dim">Z-tranche</span><span class="node-desc">no cobra interés al inicio: lo capitaliza ($100 → $105)</span></li>
                         <li><span class="node dim">PO / IO</span><span class="node-desc">solo principal o solo interés: reaccionan en direcciones <b>opuestas</b> al prepago</span></li>
                         <li><span class="node dim">Floating · inverse · residual</span><span class="node-desc">cupón flotante con cap/floor · cupón inverso a tasas · equity del CMO</span></li>
@@ -1389,10 +1391,161 @@ window.MathJax = {
             <div class="w-res"><div class="r-label">Recibe el support</div><div class="r-val" id="supGet">$4 MM</div></div>
           </div>
           <p class="w-note" id="pacNote" aria-live="polite"></p>
-          <p class="w-note">Nota: el simulador muestra <strong>un solo año</strong> con el support completo ($30 MM disponibles). En la realidad el collar se define sobre velocidades de prepago sostenidas (por ejemplo, un rango de PSA) y el support se va consumiendo año tras año; por eso un PAC puede romperse aunque ningún año individual parezca extremo.</p>
+          <p class="w-note">Nota: el simulador muestra <strong>un solo año</strong> con el support completo ($30 MM disponibles). En la realidad el collar se define sobre velocidades de prepago sostenidas (por ejemplo, un rango de PSA) y el support se va consumiendo año tras año; por eso un PAC puede romperse aunque ningún año individual parezca extremo. Para verlo año por año, usa el laboratorio de 10 años. <a class="map-jump" href="#sec-cmo-lab">ver laboratorio</a></p>
         </div>
       </div>
     </details>
+
+    <h3 class="sub-h" id="sec-cmo-lab" data-nav="3.6 Laboratorio CMO">Laboratorio · Sequential pay vs. PAC y support a lo largo de 10 años</h3>
+    <p>El mismo pool hipotecario de <strong>$100 MM</strong> se puede repartir de dos formas. En un <b>sequential pay</b>, el principal llena en fila al Tramo A ($40 MM), luego al B ($35 MM) y al final al C ($25 MM). En una estructura <b>PAC + support</b>, el PAC ($70 MM) cobra cada año su cuota planificada y el support ($30 MM) se queda con todo lo demás. Mueve la velocidad de prepago y mira quién absorbe el cambio.</p>
+
+    <div class="widget" id="labWidget">
+      <span class="widget-tag"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-sliders"/></svg>Laboratorio · Time tranching con un pool de $100 MM</span>
+      <h4>Elige la velocidad de prepago del pool; el collar del PAC va de 100 a 300 PSA</h4>
+
+      <div class="lab-psa">
+        <div class="lab-psa-head">
+          <label for="labPsa">Velocidad de prepago del pool</label>
+          <span class="lab-psa-val" id="labPsaVal">180 PSA</span>
+          <span class="lab-badge" id="labBadge">PAC dentro del collar</span>
+        </div>
+        <div class="lab-track">
+          <div class="lab-corridor" aria-hidden="true"><span class="z-out z-lo"></span><span class="z-band"></span><span class="z-out z-hi"></span></div>
+          <input type="range" id="labPsa" min="30" max="500" step="5" value="180" aria-describedby="labBadge">
+        </div>
+        <div class="lab-ticks" aria-hidden="true">
+          <span class="tk-30"><b>30 PSA</b><br>prepago muy lento</span>
+          <span class="tk-100"><b>100 PSA</b><br>límite inferior</span>
+          <span class="tk-300"><b>300 PSA</b><br>límite superior</span>
+          <span class="tk-500"><b>500 PSA</b><br>ola de prepagos</span>
+        </div>
+      </div>
+
+      <div class="btn-row" id="labPresets" role="group" aria-label="Escenarios de tasas">
+        <button type="button" class="btn-chip" data-psa="50">Suben las tasas · 50 PSA</button>
+        <button type="button" class="btn-chip" data-psa="150">Tasas estables · 150 PSA</button>
+        <button type="button" class="btn-chip" data-psa="280">Bajan las tasas · 280 PSA</button>
+        <button type="button" class="btn-chip" data-psa="450">Se desploman las tasas · 450 PSA</button>
+      </div>
+      <div class="result-banner" id="labMacro" aria-live="polite"></div>
+
+      <div class="chart-box">
+        <div class="lab-head">
+          <div class="chart-cap">Principal acumulado de cada tramo hasta el año elegido</div>
+          <div class="lab-years" id="labYears" role="group" aria-label="Año a inspeccionar">
+            <button type="button" class="act-btn lab-play" id="labPlay"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-play"/></svg><span>Reproducir</span></button>
+          </div>
+        </div>
+        <div class="chart-sub" id="labYearTxt"></div>
+        <div class="split">
+          <div class="read-card">
+            <div class="cc-label">Sequential pay · la fila</div>
+            <div class="tanks" id="labSeqTanks"></div>
+          </div>
+          <div class="read-card">
+            <div class="cc-label">PAC + support · sueldo fijo y socio variable</div>
+            <div class="tanks" id="labPacTanks"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="split">
+        <div class="chart-box" id="labSeqBox">
+          <div class="chart-cap">Principal anual por tramo: sequential pay ($ MM)</div>
+          <div class="chart-legend"><span><i class="k-dot k-a"></i>Tramo A</span><span><i class="k-dot k-mid"></i>Tramo B</span><span><i class="k-dot"></i>Tramo C</span></div>
+          <svg class="cx" id="labSeqSvg" viewBox="0 0 520 230" role="img" aria-label="Principal anual de los tramos A, B y C en los años 1 a 10"></svg>
+          <div class="chart-tip" aria-hidden="true"></div>
+        </div>
+        <div class="chart-box" id="labPacBox">
+          <div class="chart-cap">Principal anual: PAC + support ($ MM)</div>
+          <div class="chart-legend"><span><i class="k-dot"></i>PAC</span><span><i class="k-dot k-mid"></i>Support</span><span><i class="k-dot k-ko"></i>Desvío del PAC</span><span><i class="k-tick"></i>Cronograma del PAC</span></div>
+          <svg class="cx" id="labPacSvg" viewBox="0 0 520 230" role="img" aria-label="Principal anual del PAC y del support en los años 1 a 10, con el cronograma planificado del PAC"></svg>
+          <div class="chart-tip" aria-hidden="true"></div>
+        </div>
+      </div>
+      <p class="hint"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-info"/></svg>Haz clic en una barra para inspeccionar ese año en los tanques.</p>
+
+      <div class="w-results">
+        <div class="w-res"><div class="r-label">WAL Tramo A</div><div class="r-val" id="labWA"></div><div class="r-sub">expuesto a contracción</div></div>
+        <div class="w-res"><div class="r-label">WAL Tramo B</div><div class="r-val" id="labWB"></div><div class="r-sub">intermedio</div></div>
+        <div class="w-res"><div class="r-label">WAL Tramo C</div><div class="r-val" id="labWC"></div><div class="r-sub">expuesto a extensión</div></div>
+        <div class="w-res hl"><div class="r-label">WAL PAC</div><div class="r-val" id="labWP"></div><div class="r-sub" id="labWPd"></div></div>
+        <div class="w-res"><div class="r-label">WAL Support</div><div class="r-val" id="labWS"></div><div class="r-sub">absorbe la variación</div></div>
+      </div>
+
+      <div class="chart-box" id="labWalBox">
+        <div class="chart-cap">Vida promedio (WAL) de cada tramo según la velocidad de prepago</div>
+        <div class="chart-sub">La zona sombreada es el collar del PAC: ahí su WAL queda plana. Haz clic en el gráfico para mover la velocidad.</div>
+        <div class="chart-legend"><span><i></i>PAC</span><span><i class="k-mid"></i>Support</span><span><i class="k-mute"></i>Tramos A, B y C del sequential</span></div>
+        <svg class="cx" id="labWalSvg" viewBox="0 0 640 250" role="img" aria-label="Vida promedio de los tramos según la velocidad PSA entre 30 y 500"></svg>
+        <div class="chart-tip" aria-hidden="true"></div>
+      </div>
+      <p class="w-note">Modelo ilustrativo: los flujos anuales del pool se construyen con anclas a 30, 100, 300 y 500 PSA, interpoladas en forma lineal, y el cronograma del PAC ($6.0, 9.5, 11.5, 11.0, 9.5, 7.5, 5.5, 4.0, 3.0 y 2.5 MM) es la envolvente inferior de los flujos a 100 y 300 PSA. La WAL es \(\sum t \cdot P_t / \sum P_t\), con \(P_t\) el principal recibido en el año \(t\).</p>
+    </div>
+
+    <p class="hint"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-info"/></svg>Retos: resuélvelos con el laboratorio antes de abrir la respuesta.</p>
+    <div class="grid-3">
+      <div class="step-card">
+        <span class="step-n">RETO 1</span>
+        <div class="step-title">Lleva el control de 100 a 300 PSA. ¿Cambia la WAL del PAC?</div>
+        <div class="step-brief">Fíjate también en el support y en el Tramo A.</div>
+        <div class="step-more" id="reto-1"><b>No: se queda en 4.55 años</b> en todo el collar, porque cada año cobra exactamente su cronograma. Toda la variación la absorbe el support, cuya WAL cae de 8.07 a 2.63 años. En el sequential, el Tramo A pasa de 2.83 a 1.94 años: nadie lo protege.</div>
+        <button type="button" class="step-toggle" aria-expanded="false" aria-controls="reto-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-plus"/></svg><span>Ver detalle</span></button>
+      </div>
+      <div class="step-card">
+        <span class="step-n">RETO 2</span>
+        <div class="step-title">Pon 450 PSA. ¿En qué año se agota el support y qué le pasa al PAC?</div>
+        <div class="step-brief">Mira los tanques año por año con el botón Reproducir.</div>
+        <div class="step-more" id="reto-2"><b>Se agota en el año 2</b> (recibe $15 MM en cada uno de los dos primeros años). Desde el año 3 no queda paragolpes: el PAC recibe $21.3 MM frente a los $11.5 MM de su cronograma y su WAL cae a 3.63 años. Es un <b>PAC roto por contracción</b>.</div>
+        <button type="button" class="step-toggle" aria-expanded="false" aria-controls="reto-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-plus"/></svg><span>Ver detalle</span></button>
+      </div>
+      <div class="step-card">
+        <span class="step-n">RETO 3</span>
+        <div class="step-title">Con 50 PSA, ¿quién sufre más la extensión: el Tramo C o el PAC?</div>
+        <div class="step-brief">Compara las WAL con las de 150 PSA.</div>
+        <div class="step-more" id="reto-3"><b>Ambos se alargan, pero por motivos distintos.</b> El Tramo C pasa de 8.90 a 9.54 años: es el último de la fila. El PAC pasa de 4.55 a 5.20 años: con tan poco prepago, el pool no alcanza ni para su cronograma aunque el support reciba $0 hasta el año 7. <b>PAC roto por extensión.</b></div>
+        <button type="button" class="step-toggle" aria-expanded="false" aria-controls="reto-3"><svg viewBox="0 0 16 16" aria-hidden="true"><use href="#i-plus"/></svg><span>Ver detalle</span></button>
+      </div>
+    </div>
+
+    <div class="cmp-strip cmp-strip-4 lab-sum">
+      <div class="cmp-cell up">
+        <div class="cmp-head">Sequential corto (A)</div>
+        <p>Primero en la fila: recibe todo el principal desde el año 1.</p>
+        <ul class="bullets">
+          <li><svg class="t-ok" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><use href="#i-check"/></svg> Protegido contra <b>extensión</b></li>
+          <li><svg class="t-ko" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><use href="#i-x"/></svg> Expuesto a <b>contracción</b></li>
+          <li>Para: bancos, con pasivos cortos</li>
+        </ul>
+      </div>
+      <div class="cmp-cell down">
+        <div class="cmp-head">Sequential largo (C)</div>
+        <p>Último en la fila: cobra principal solo cuando A y B llegan a cero.</p>
+        <ul class="bullets">
+          <li><svg class="t-ok" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><use href="#i-check"/></svg> Protegido contra <b>contracción</b></li>
+          <li><svg class="t-ko" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><use href="#i-x"/></svg> Expuesto a <b>extensión</b></li>
+          <li>Para: fondos de pensiones y aseguradoras de vida</li>
+        </ul>
+      </div>
+      <div class="cmp-cell up">
+        <div class="cmp-head">PAC</div>
+        <p>Cobra primero su cuota planificada; fuera del collar, la protección se rompe.</p>
+        <ul class="bullets">
+          <li><svg class="t-ok" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><use href="#i-check"/></svg> Contracción: protegido, con límite</li>
+          <li><svg class="t-ok" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><use href="#i-check"/></svg> Extensión: protegido, con límite</li>
+          <li>Depende de que el support siga vivo</li>
+        </ul>
+      </div>
+      <div class="cmp-cell down">
+        <div class="cmp-head">Support</div>
+        <p>Recibe todo el exceso cuando las tasas bajan y $0 cuando suben.</p>
+        <ul class="bullets">
+          <li><svg class="t-ko" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><use href="#i-alert"/></svg> Contracción: muy alta</li>
+          <li><svg class="t-ko" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><use href="#i-alert"/></svg> Extensión: muy alta</li>
+          <li>Paga un <b>mayor yield</b> por ese riesgo</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1747,6 +1900,238 @@ document.querySelectorAll('.wTbl').forEach(function(inp){ inp.addEventListener('
 
 calcOC(); calcWF(); calcMortgage(); calcSMM(); calcPAC(); calcWAMWAC();
 
+/* Laboratorio CMO: sequential pay vs. PAC y support en 10 años (pool de $100 MM) */
+(function(){
+  var SCHED = [6.0, 9.5, 11.5, 11.0, 9.5, 7.5, 5.5, 4.0, 3.0, 2.5];
+  var F30  = [3.2, 5.0, 6.5, 7.8, 9.0, 11.0, 13.0, 14.5, 15.0, 15.0];
+  var F100 = [6.0, 9.5, 11.5, 11.5, 11.0, 11.0, 10.5, 10.0, 9.5, 9.5];
+  var F300 = [12.0, 18.5, 19.0, 16.0, 12.0, 7.5, 5.5, 4.0, 3.0, 2.5];
+  var F500 = [24.0, 31.0, 22.0, 11.5, 5.5, 3.0, 1.5, 1.0, 0.5, 0.0];
+  var SEQ = [{n: 'Tramo A · corto', size: 40}, {n: 'Tramo B · medio', size: 35}, {n: 'Tramo C · largo', size: 25}];
+  var cs = getComputedStyle(document.documentElement);
+  var C = {}; ['navy','mid','ko','steel','ink','white'].forEach(function(k){ C[k] = cs.getPropertyValue('--' + k).trim(); });
+  C.a = 'rgba(0,84,176,.6)';
+  var COLSEQ = [C.a, C.mid, C.navy], MENOS = '−', NS = 'http://www.w3.org/2000/svg';
+  var psa = 180, anio = 1, timer = null;
+
+  function S(tag, at, p){ var e = document.createElementNS(NS, tag); for (var k in at) e.setAttribute(k, at[k]); if (p) p.appendChild(e); return e; }
+  function T(txt, at, p){ var e = S('text', at, p); e.textContent = txt; return e; }
+  function lienzo(svg, defW, H){ var w = svg.getBoundingClientRect().width, W = w > 60 ? Math.round(w) : defW; svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); return W; }
+  function vaciar(svg){ while (svg.firstChild) svg.removeChild(svg.firstChild); }
+  function tip(box, svg, html, x, y){
+    var t = box.querySelector('.chart-tip'), r = svg.getBoundingClientRect(), b = box.getBoundingClientRect(), vb = svg.viewBox.baseVal;
+    var px = r.left - b.left + x * r.width / vb.width, py = r.top - b.top + y * r.height / vb.height;
+    t.innerHTML = html; t.classList.add('show');
+    var w = t.offsetWidth, h = t.offsetHeight, left = px + 14, top = py - h - 10;
+    if (left + w > box.clientWidth - 4) left = px - w - 14;
+    if (left < 4) left = 4; if (top < 4) top = py + 16;
+    t.style.left = left + 'px'; t.style.top = top + 'px';
+  }
+  function untip(box){ box.querySelector('.chart-tip').classList.remove('show'); }
+  function mm(x){ return '$' + x.toFixed(1); }
+
+  function pool(p){
+    return F30.map(function(_, i){
+      if (p <= 100) return F30[i] + (p - 30) / 70 * (F100[i] - F30[i]);
+      if (p <= 300) return F100[i] + (p - 100) / 200 * (F300[i] - F100[i]);
+      return F300[i] + (p - 300) / 200 * (F500[i] - F300[i]);
+    });
+  }
+  function simular(p){
+    var fl = pool(p), rem = SEQ.map(function(s){ return s.size; }), seq = [[], [], []];
+    fl.forEach(function(v){ for (var k = 0; k < 3; k++){ var x = Math.min(v, rem[k]); rem[k] -= x; v -= x; seq[k].push(x); } });
+    var rp = 70, rs = 30, falta = 0, pac = [], sup = [], agota = null;
+    fl.forEach(function(v, i){
+      var meta = SCHED[i] + falta, pp = Math.min(v, meta, rp);
+      rp -= pp; v -= pp; falta = Math.max(0, meta - pp);
+      var ss = Math.min(v, rs); rs -= ss; v -= ss;
+      if (rs <= 1e-9 && agota === null && ss > 0) agota = i + 1;
+      if (v > 0.001 && rp > 0){ var f = Math.min(v, rp); pp += f; rp -= f; }
+      pac.push(pp); sup.push(ss);
+    });
+    function wal(f, t){ return f.reduce(function(s, x, i){ return s + (i + 1) * x; }, 0) / t; }
+    function acum(f){ var c = 0; return f.map(function(x){ return c += x; }); }
+    return { pool: fl, seq: seq, pac: pac, sup: sup, agota: agota,
+      cseq: seq.map(acum), cpac: acum(pac), csup: acum(sup),
+      wal: [wal(seq[0], 40), wal(seq[1], 35), wal(seq[2], 25), wal(pac, 70), wal(sup, 30)] };
+  }
+  /* curvas de WAL para todo el rango de velocidades: se calculan una sola vez */
+  var CURVAS = [];
+  for (var p = 30; p <= 500; p += 5) CURVAS.push({psa: p, wal: simular(p).wal});
+
+  var el = function(id){ return document.getElementById(id); };
+  var box = el('labWidget');
+  if (!box) return;
+
+  /* tanques */
+  function tanque(nombre, color){
+    var d = document.createElement('div'); d.className = 'tank';
+    d.innerHTML = '<div class="tank-name">' + nombre + '</div><div class="tank-box"><i class="tank-fill"></i></div><div class="tank-val"></div><div class="tank-sub"></div>';
+    d.querySelector('.tank-fill').style.background = color;
+    return d;
+  }
+  var tSeq = SEQ.map(function(s, k){ var t = tanque(s.n, COLSEQ[k]); el('labSeqTanks').appendChild(t); return t; });
+  var tPac = tanque('PAC · $70 MM', C.navy), tSup = tanque('Support · $30 MM', C.mid);
+  el('labPacTanks').appendChild(tPac); el('labPacTanks').appendChild(tSup);
+  function llenar(t, frac, val, sub){
+    t.querySelector('.tank-fill').style.transform = 'scaleY(' + Math.max(0, Math.min(1, frac)) + ')';
+    t.querySelector('.tank-val').textContent = val;
+    t.querySelector('.tank-sub').innerHTML = sub;
+  }
+
+  /* selector de año y reproducción */
+  var chips = [];
+  for (var y = 1; y <= 10; y++) (function(y){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'btn-chip lab-year'; b.textContent = 'Año ' + y;
+    b.addEventListener('click', function(){ parar(); anio = y; pintar(); });
+    el('labYears').appendChild(b); chips.push(b);
+  })(y);
+  var play = el('labPlay');
+  function parar(){
+    if (timer){ clearInterval(timer); timer = null; }
+    play.querySelector('span').textContent = 'Reproducir';
+    play.querySelector('use').setAttribute('href', '#i-play');
+  }
+  play.addEventListener('click', function(){
+    if (timer){ parar(); return; }
+    if (anio >= 10) anio = 1; else anio++;
+    pintar();
+    play.querySelector('span').textContent = 'Pausar';
+    play.querySelector('use').setAttribute('href', '#i-pause');
+    timer = setInterval(function(){ if (anio >= 10){ parar(); return; } anio++; pintar(); }, 1000);
+  });
+
+  /* barras anuales apiladas */
+  function barras(svgId, boxId, capas, extra){
+    var svg = el(svgId), bx = el(boxId), H = 230, W = lienzo(svg, 520, H), m = {l: 34, r: 8, t: 14, b: 26}, base = H - m.b;
+    var ys = function(v){ return base - v / 32 * (base - m.t); }, slot = (W - m.l - m.r) / 10, bw = Math.min(slot * 0.58, 24);
+    vaciar(svg);
+    [0, 8, 16, 24, 32].forEach(function(v){
+      S('line', {x1: m.l, x2: W - m.r, y1: ys(v), y2: ys(v), 'class': v ? 'grid' : 'zero'}, svg);
+      T(v, {x: m.l - 7, y: ys(v) + 3.5, 'text-anchor': 'end'}, svg);
+    });
+    for (var i = 0; i < 10; i++) (function(i){
+      var x = m.l + (i + 0.5) * slot, sel = i + 1 === anio;
+      if (sel) S('rect', {x: x - slot / 2 + 2, y: m.t - 6, width: slot - 4, height: base - m.t + 6, rx: 6, fill: 'rgba(0,84,176,.07)'}, svg);
+      var acum = 0;
+      capas(i).forEach(function(c){
+        if (c.v <= 0.02) return;
+        var y0 = ys(acum), y1 = ys(acum + c.v), h = Math.max(y0 - y1 - 2, 0.8);
+        var r = S('rect', {x: x - bw / 2, y: y1, width: bw, height: h, rx: 2, fill: c.col}, svg);
+        if (c.op) r.setAttribute('fill-opacity', c.op);
+        acum += c.v;
+      });
+      if (extra) extra(svg, i, x, bw, ys);
+      T(i + 1, {x: x, y: base + 16, 'text-anchor': 'middle', 'class': sel ? 't-strong' : ''}, svg);
+      var hit = S('rect', {x: x - slot / 2, y: m.t, width: slot, height: base - m.t + 20, 'class': 'hit'}, svg);
+      hit.style.cursor = 'pointer';
+      hit.addEventListener('mousemove', function(){ tip(bx, svg, capas(i).tip, x, ys(Math.min(acum, 31))); });
+      hit.addEventListener('mouseleave', function(){ untip(bx); });
+      hit.addEventListener('click', function(){ parar(); anio = i + 1; pintar(); });
+    })(i);
+  }
+
+  /* WAL según la velocidad PSA */
+  function graficoWal(){
+    var svg = el('labWalSvg'), bx = el('labWalBox'), H = 250, W = lienzo(svg, 640, H), m = {l: 54, r: 14, t: 22, b: 30};
+    var xs = function(p){ return m.l + (p - 30) / 470 * (W - m.l - m.r); }, ys = function(v){ return H - m.b - v / 10 * (H - m.t - m.b); };
+    vaciar(svg);
+    S('rect', {x: xs(100), y: m.t, width: xs(300) - xs(100), height: H - m.t - m.b, fill: 'rgba(0,84,176,.08)'}, svg);
+    T('Collar del PAC', {x: (xs(100) + xs(300)) / 2, y: m.t - 7, 'text-anchor': 'middle', 'class': 't-strong'}, svg);
+    [0, 2, 4, 6, 8, 10].forEach(function(v){
+      S('line', {x1: m.l, x2: W - m.r, y1: ys(v), y2: ys(v), 'class': v ? 'grid' : 'zero'}, svg);
+      T(v + ' años', {x: m.l - 7, y: ys(v) + 3.5, 'text-anchor': 'end'}, svg);
+    });
+    [30, 100, 200, 300, 400, 500].forEach(function(p){ T(p + ' PSA', {x: xs(p), y: H - 10, 'text-anchor': p === 30 ? 'start' : p === 500 ? 'end' : 'middle'}, svg); });
+    function linea(k){ return CURVAS.map(function(c, i){ return (i ? 'L' : 'M') + xs(c.psa).toFixed(1) + ',' + ys(c.wal[k]).toFixed(1); }).join(''); }
+    [0, 1, 2].forEach(function(k){ S('path', {d: linea(k), fill: 'none', stroke: C.steel, 'stroke-width': 1.75}, svg); });
+    [[0, 150], [1, 380], [2, 470]].forEach(function(q){
+      var c = CURVAS.filter(function(c){ return c.psa === q[1]; })[0];
+      T(['A', 'B', 'C'][q[0]], {x: xs(q[1]), y: ys(c.wal[q[0]]) - 7, 'text-anchor': 'middle'}, svg);
+    });
+    S('path', {d: linea(4), fill: 'none', stroke: C.mid, 'stroke-width': 2, 'stroke-linejoin': 'round'}, svg);
+    S('path', {d: linea(3), fill: 'none', stroke: C.navy, 'stroke-width': 2.5, 'stroke-linejoin': 'round'}, svg);
+    var act = simular(psa).wal, xa = xs(psa);
+    S('line', {x1: xa, x2: xa, y1: m.t, y2: H - m.b, stroke: C.ink, 'stroke-width': 1, 'stroke-opacity': .45}, svg);
+    S('circle', {cx: xa, cy: ys(act[4]), r: 4.5, fill: C.mid, 'class': 'ring'}, svg);
+    S('circle', {cx: xa, cy: ys(act[3]), r: 5, fill: C.navy, 'class': 'ring'}, svg);
+    var izq = xa > W - 120;
+    T('PAC ' + act[3].toFixed(2), {x: xa + (izq ? -9 : 9), y: ys(act[3]) + (act[3] >= act[4] ? -8 : 14), 'text-anchor': izq ? 'end' : 'start', 'class': 't-strong'}, svg);
+    T('Support ' + act[4].toFixed(2), {x: xa + (izq ? -9 : 9), y: ys(act[4]) + (act[4] > act[3] ? -8 : 14), 'text-anchor': izq ? 'end' : 'start', 'class': 't-strong'}, svg);
+    var cross = S('line', {x1: 0, x2: 0, y1: m.t, y2: H - m.b, 'class': 'crosshair', visibility: 'hidden'}, svg);
+    var hit = S('rect', {x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, 'class': 'hit'}, svg);
+    function cerca(evt){
+      var r = svg.getBoundingClientRect(), x = (evt.clientX - r.left) * svg.viewBox.baseVal.width / r.width;
+      return Math.max(30, Math.min(500, Math.round(((x - m.l) / (W - m.l - m.r) * 470 + 30) / 5) * 5));
+    }
+    hit.addEventListener('mousemove', function(evt){
+      var p = cerca(evt), c = CURVAS[(p - 30) / 5], x = xs(p);
+      cross.setAttribute('x1', x); cross.setAttribute('x2', x); cross.setAttribute('visibility', 'visible');
+      tip(bx, svg, '<b>' + p + ' PSA</b><br><i style="background:' + C.navy + '"></i>PAC: <b>' + c.wal[3].toFixed(2) + '</b> años<br><i style="background:' + C.mid + '"></i>Support: <b>' + c.wal[4].toFixed(2) + '</b><br>A: ' + c.wal[0].toFixed(2) + ' · B: ' + c.wal[1].toFixed(2) + ' · C: ' + c.wal[2].toFixed(2), x, ys(c.wal[3]));
+    });
+    hit.addEventListener('mouseleave', function(){ cross.setAttribute('visibility', 'hidden'); untip(bx); });
+    hit.addEventListener('click', function(evt){ fijarPSA(cerca(evt)); });
+  }
+
+  var presets = [].slice.call(el('labPresets').querySelectorAll('.btn-chip'));
+  presets.forEach(function(b){ b.addEventListener('click', function(){ fijarPSA(+b.dataset.psa); }); });
+  function fijarPSA(p){ psa = p; el('labPsa').value = p; pintar(); }
+  el('labPsa').addEventListener('input', function(){ psa = +el('labPsa').value; pintar(); });
+
+  function pintar(){
+    var s = simular(psa), i = anio - 1, enBanda = psa >= 100 && psa <= 300;
+    el('labPsaVal').textContent = psa + ' PSA';
+    var badge = el('labBadge');
+    badge.textContent = enBanda ? 'PAC dentro del collar' : psa < 100 ? 'PAC roto por extensión' : 'PAC roto por contracción';
+    badge.classList.toggle('is-broken', !enBanda);
+    presets.forEach(function(b){ var on = +b.dataset.psa === psa; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+    var macro;
+    if (psa < 100) macro = '<b>Prepago muy lento (' + psa + ' PSA, bajo el collar): PAC roto por extensión.</b> Las tasas subieron y casi nadie refinancia. El pool no alcanza ni para el cronograma del PAC, aunque el support reciba $0: el PAC se alarga a ' + s.wal[3].toFixed(2) + ' años y el Tramo C, último de la fila, a ' + s.wal[2].toFixed(2) + '.';
+    else if (enBanda) macro = '<b>Dentro del collar (' + psa + ' PSA, entre 100 y 300).</b> El PAC cobra exactamente su cronograma y su WAL queda fija en ' + s.wal[3].toFixed(2) + ' años; el support absorbe toda la variación (' + s.wal[4].toFixed(2) + ' años). En el sequential, nadie protege al Tramo A: su WAL es ' + s.wal[0].toFixed(2) + ' años.';
+    else macro = '<b>Ola de prepagos (' + psa + ' PSA, sobre el collar): el support se agota en el año ' + s.agota + '.</b> Sin paragolpes, el exceso de principal va directo al PAC, que se paga antes de lo planificado: su WAL cae a ' + s.wal[3].toFixed(2) + ' años. PAC roto por contracción.';
+    el('labMacro').innerHTML = macro;
+
+    chips.forEach(function(b, k){ var on = k === i; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+    el('labYearTxt').textContent = 'Año ' + anio + ': el pool entrega ' + mm(s.pool[i]) + ' MM de principal (cronograma del PAC: ' + mm(SCHED[i]) + ' MM).';
+    tSeq.forEach(function(t, k){
+      var c = s.cseq[k][i], f = s.seq[k][i];
+      llenar(t, c / SEQ[k].size, mm(c) + ' MM', 'de $' + SEQ[k].size + ' MM<br>' + (f > 0.05 ? '<b>+' + mm(f) + '</b> este año' : c >= SEQ[k].size - 0.05 ? 'ya se pagó completo' : k && s.cseq[k - 1][i] < SEQ[k - 1].size - 0.05 ? 'espera su turno' : '+$0.0 este año'));
+    });
+    var dev = s.pac[i] - SCHED[i];
+    llenar(tPac, s.cpac[i] / 70, mm(s.cpac[i]) + ' MM', 'de $70 MM<br><b>+' + mm(s.pac[i]) + '</b> este año' + (Math.abs(dev) > 0.05 ? '<br><span class="t-ko">' + (dev > 0 ? 'recibe ' + mm(dev) + ' de más' : 'le faltan ' + mm(-dev)) + '</span>' : '<br>justo su cronograma'));
+    llenar(tSup, s.csup[i] / 30, mm(s.csup[i]) + ' MM', 'de $30 MM<br>' + (s.csup[i] >= 29.95 && s.sup[i] < 0.05 ? '<span class="t-ko">agotado</span>' : '<b>+' + mm(s.sup[i]) + '</b> este año'));
+
+    barras('labSeqSvg', 'labSeqBox', function(k){
+      var c = [0, 1, 2].map(function(t){ return {v: s.seq[t][k], col: COLSEQ[t]}; });
+      c.tip = '<b>Año ' + (k + 1) + '</b> · pool ' + mm(s.pool[k]) + '<br>A: <b>' + mm(s.seq[0][k]) + '</b> · B: <b>' + mm(s.seq[1][k]) + '</b> · C: <b>' + mm(s.seq[2][k]) + '</b>';
+      return c;
+    });
+    barras('labPacSvg', 'labPacBox', function(k){
+      var d = s.pac[k] - SCHED[k], c;
+      if (d > 0.05) c = [{v: SCHED[k], col: C.navy}, {v: d, col: C.ko}, {v: s.sup[k], col: C.mid}];
+      else if (d < -0.05) c = [{v: s.pac[k], col: C.navy}, {v: -d, col: C.ko, op: .28}, {v: s.sup[k], col: C.mid}];
+      else c = [{v: s.pac[k], col: C.navy}, {v: s.sup[k], col: C.mid}];
+      c.tip = '<b>Año ' + (k + 1) + '</b><br>PAC: <b>' + mm(s.pac[k]) + '</b> (cronograma ' + mm(SCHED[k]) + ')<br>Support: <b>' + mm(s.sup[k]) + '</b>' + (Math.abs(d) > 0.05 ? '<br>' + (d > 0 ? 'Exceso que recibe el PAC: ' + mm(d) : 'Faltante del PAC: ' + mm(-d)) : '');
+      return c;
+    }, function(svg, k, x, bw, ys){
+      S('line', {x1: x - bw / 2 - 5, x2: x + bw / 2 + 5, y1: ys(SCHED[k]), y2: ys(SCHED[k]), stroke: C.ink, 'stroke-width': 2}, svg);
+    });
+    el('labWA').textContent = s.wal[0].toFixed(2) + ' años';
+    el('labWB').textContent = s.wal[1].toFixed(2) + ' años';
+    el('labWC').textContent = s.wal[2].toFixed(2) + ' años';
+    el('labWP').textContent = s.wal[3].toFixed(2) + ' años';
+    var dw = s.wal[3] - 4.55;
+    el('labWPd').textContent = Math.abs(dw) < 0.005 ? 'fija en el collar' : (dw > 0 ? '+' : MENOS) + Math.abs(dw).toFixed(2) + ' años vs. el collar';
+    el('labWS').textContent = s.wal[4].toFixed(2) + ' años';
+    graficoWal();
+  }
+  window.labRedibujar = pintar;
+  var pend = null;
+  window.addEventListener('resize', function(){ clearTimeout(pend); pend = setTimeout(pintar, 150); });
+  pintar();
+})();
+
 /* ═══════════════════════════════════════════════════════════════
    2. PASOS, ACORDEONES Y ESCENARIOS
    ═══════════════════════════════════════════════════════════════ */
@@ -1880,6 +2265,7 @@ window.addEventListener('afterprint', function(){
     });
     actual = panel;
     armarSubnav(panel);
+    if (window.labRedibujar) labRedibujar();
     espiar();
   }
 
